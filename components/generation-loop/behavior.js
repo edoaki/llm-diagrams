@@ -1,0 +1,1 @@
+function mount(root) { return () => {}; }

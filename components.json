@@ -1,0 +1,14 @@
+[
+  {
+    "id": "token-embeddings",
+    "title": "トークン化と位置情報"
+  },
+  {
+    "id": "gpt-representations",
+    "title": "文章から、文脈を含む表現へ"
+  },
+  {
+    "id": "generation-loop",
+    "title": "次トークンを選び、入力に戻す"
+  }
+]
