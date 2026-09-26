@@ -44,7 +44,17 @@
 [data-sub="2"] .dc-edge.is-self{opacity:.55}
 .dc-node{fill:#fbfcfd;stroke:var(--pale-blue);stroke-width:2;transform-box:fill-box;transform-origin:center;transition:fill .5s,stroke .5s,opacity .5s,transform .5s}
 .dc-node[data-state=active]{stroke:var(--pale-orange)}
-.dc-node.is-source[data-state=cached]{fill:#dde9f3;stroke:var(--blue)}
+.dc-node[data-state=cached]{fill:#f6f8fa;stroke:var(--blue);stroke-opacity:.35;transition:r .65s ease-in-out,stroke-opacity .65s ease-in-out,fill .65s ease-in-out,stroke .65s ease-in-out,transform .65s ease-in-out}
+/* Keep outlines inside the shape so changing their colour never enlarges its silhouette. */
+circle.dc-node{clip-path:circle(50%) fill-box}
+rect.dc-node{clip-path:inset(0 round 3px) fill-box}
+circle.dc-node[data-state=cached]{r:7.2px}
+rect.dc-node[data-state=cached]{transform:scale(.8)}
+.dc-node.is-highlighted[data-state=cached]{stroke-opacity:1}
+circle.dc-node.is-highlighted[data-state=cached]{r:9px}
+rect.dc-node.is-highlighted[data-state=cached]{transform:scale(1)}
+.dc-node.is-past[data-state=cached]{fill:#dce7f0}
+.dc-node.is-past[data-state=active]{fill:#f7e3d2}
 .dc-node.is-source[data-state=active]{fill:#fcdfc4;stroke:var(--orange)}
 .dc-node.is-target{fill:var(--orange);stroke:var(--orange)}
 .dc-node.is-pending{fill:#fff;stroke-dasharray:4 3;transform:scale(.85)}
@@ -111,3 +121,16 @@ figure.decoder{border:0;overflow:visible;border-radius:0}
 .article .decoder section{margin:0}
 .article .decoder .dc-panels section{padding:0}
 .dc-head text{paint-order:stroke;stroke:#f6f8fa;stroke-width:4px;stroke-linejoin:round}
+
+/* Cached points never travel: only the source layer changes emphasis. */
+.dc-cached-trails{stroke:var(--blue);stroke-width:1.5;opacity:.3}
+.dc-cached-point.is-preview-hidden{display:none}
+.dc-cached-point circle{clip-path:circle(50%) fill-box;r:3px;fill:#f6f8fa;stroke:var(--blue);stroke-opacity:.35;transition:r .65s ease-in-out,stroke-opacity .65s ease-in-out,fill .65s ease-in-out,stroke .65s ease-in-out}
+.dc-cached-point.is-past circle{fill:#dce7f0}
+.dc-trails circle{fill:#f7e3d2;stroke:var(--orange);stroke-opacity:.45;opacity:1}
+.dc-cached-point.is-highlighted circle{r:6px;stroke-opacity:1}
+.dc-cached-point text{opacity:0;transition:opacity .65s ease-in-out;paint-order:stroke;stroke:#f6f8fa;stroke-width:4px;stroke-linejoin:round}
+.dc-cached-point.is-highlighted text{opacity:1}
+
+/* A shared reading state fills the corresponding blue representations in both panels. */
+.is-reading .dc-node.is-highlighted[data-state=cached],.is-reading .dc-cached-point.is-highlighted circle{fill:var(--blue);stroke:var(--blue)}

@@ -57,11 +57,11 @@ body[data-page="llm"] #attention .figure-scroll>svg{max-width:540px;max-height:3
 .tf-vector-word{opacity:0;transition:opacity .4s;pointer-events:none}
 .tf-numeric .tf-vector-word,.tf-dot-hold .tf-vector-word{opacity:1}
 .tf-output-moving .tf-output-chain{opacity:1}
-.tf-linear,.tf-scores,.tf-softmax,.tf-probabilities{opacity:0;transition:opacity .7s ease}
-.tf-output-linear .tf-linear,.tf-output-scores .tf-scores,.tf-output-softmax .tf-softmax,.tf-output-ready .tf-probabilities{opacity:1}
+.tf-linear,.tf-scores,.tf-probabilities{opacity:0;transition:opacity .7s ease}
+.tf-output-linear .tf-linear,.tf-output-scores .tf-scores,.tf-output-ready .tf-probabilities{opacity:1}
 .tf-probabilities rect{transform:scaleX(0);transform-box:fill-box;transform-origin:left;transition:transform 1.1s ease}
 .tf-output-ready .tf-probabilities rect{transform:scaleX(1)}
-@media(prefers-reduced-motion:reduce){.tf-vector-word,.tf-linear,.tf-scores,.tf-softmax,.tf-probabilities,.tf-probabilities rect{transition:none}}
+@media(prefers-reduced-motion:reduce){.tf-vector-word,.tf-linear,.tf-scores,.tf-probabilities,.tf-probabilities rect{transition:none}}
 
 /* One label survives every representation change, anchored to the same column. */
 .tf-word{opacity:1!important;font-weight:700;transform:translateY(0);transition:transform .7s ease,fill .7s ease}
@@ -75,9 +75,9 @@ body[data-page="llm"] #attention .figure-scroll>svg{max-width:540px;max-height:3
 .tf-candidate rect{transition:width 1.2s cubic-bezier(.4,0,.2,1)}
 @media(prefers-reduced-motion:reduce){.tf-word,.tf-numeric .tf-column,.tf-candidate rect{transition:none}}
 /* Leaving a phase hides it immediately, including rapid replay/navigation. */
-.tf-linear,.tf-scores,.tf-softmax{transition:none}
-.tf-output-linear .tf-linear,.tf-output-scores .tf-scores,.tf-output-softmax .tf-softmax{transition:opacity .7s ease}
-@media(prefers-reduced-motion:reduce){.tf-linear,.tf-scores,.tf-softmax{transition:none!important}}
+.tf-linear,.tf-scores{transition:none}
+.tf-output-linear .tf-linear,.tf-output-scores .tf-scores{transition:opacity .7s ease}
+@media(prefers-reduced-motion:reduce){.tf-linear,.tf-scores{transition:none!important}}
 
 .tf-initializing *{transition:none!important}
 .tf-sentence .tf-space ellipse{transition:none}

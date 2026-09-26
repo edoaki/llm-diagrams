@@ -5,7 +5,7 @@
  const reduced=matchMedia('(prefers-reduced-motion: reduce)');
  let caseIndex=0,current=0,timers=[],clearMerge=null;
  // One tempo for every spatial move, with a brief pause after dots form.
- const MOVE=1200,BEAT=900,DOT_HOLD=300;d.style.setProperty('--tf-move',MOVE+'ms');
+ const MOVE=1200,BEAT=900,DOT_HOLD=300,SCORE_HOLD=2400;d.style.setProperty('--tf-move',MOVE+'ms');
  const outputStage=layers.length+2,finalStage=outputStage-1;
  const layerLabel=layer=>layer===data.model.numLayers?'N':layer;
  const stages=['文章','ベクトル化（埋め込み）',...layers.map(l=>`第${layerLabel(l)}層`),'出力'];
@@ -97,7 +97,7 @@
   clearMerge?.();clearMerge=null;timers.forEach(clearTimeout);timers=[];
   const previous=current;current=stage;
   frame(stage===outputStage?280+c().candidates.length*36:430);
-  d.classList.remove('tf-numeric','tf-output-morph','tf-output-ready','tf-output-moving','tf-pe-visible','tf-pe-merge','tf-position-added','tf-dot-forming','tf-dot-hold','tf-space-moving','tf-output-linear','tf-output-scores','tf-output-softmax','tf-leaving-space');
+  d.classList.remove('tf-numeric','tf-output-morph','tf-output-ready','tf-output-moving','tf-pe-visible','tf-pe-merge','tf-position-added','tf-dot-forming','tf-dot-hold','tf-space-moving','tf-output-linear','tf-output-scores','tf-leaving-space');
   scaleOutput(false);
   d.classList.toggle('tf-sentence',stage===0);d.classList.toggle('tf-final-layer',stage===finalStage);
   qa('[data-layer]').forEach(b=>b.setAttribute('aria-pressed',String(+b.dataset.layer===stage)));
@@ -120,14 +120,14 @@
   }else if(stage===outputStage){
    values(true,finalStage);if(previous!==finalStage)place(finalStage);d.classList.add('tf-output-moving');
    const morph=()=>{d.classList.add('tf-output-morph');q('.tf-last').style.transform='translate(260px,65px)';};
-   if(reduced.matches){morph();d.classList.add('tf-output-linear','tf-output-scores','tf-output-softmax','tf-output-ready');scaleOutput(true);}
+   if(reduced.matches){morph();d.classList.add('tf-output-linear','tf-output-scores','tf-output-ready');scaleOutput(true);}
    else {
     const delay=previous===finalStage?60:MOVE,arrive=delay+MOVE;
     later(morph,delay);
     later(()=>d.classList.add('tf-output-linear'),arrive);
     later(()=>d.classList.add('tf-output-scores'),arrive+BEAT);
-    later(()=>{d.classList.add('tf-output-softmax');q('.tf-chart-title').textContent='softmax でスコアを確率に変換';},arrive+BEAT*2);
-    later(()=>{d.classList.add('tf-output-ready');scaleOutput(true);},arrive+BEAT*3);
+    // Hold the scores, then turn the same bars directly into probabilities.
+    later(()=>{d.classList.add('tf-output-ready');scaleOutput(true);},arrive+BEAT+SCORE_HOLD);
    }
   }else{
    if(stage>=2&&previous<=1&&!reduced.matches){d.classList.add('tf-space-moving');later(()=>d.classList.remove('tf-space-moving'),MOVE+100);}

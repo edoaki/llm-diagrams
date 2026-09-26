@@ -203,7 +203,17 @@ main.article details details{background:var(--tint)}
 [data-sub="2"] .dc-edge.is-self{opacity:.55}
 .dc-node{fill:#fbfcfd;stroke:var(--pale-blue);stroke-width:2;transform-box:fill-box;transform-origin:center;transition:fill .5s,stroke .5s,opacity .5s,transform .5s}
 .dc-node[data-state=active]{stroke:var(--pale-orange)}
-.dc-node.is-source[data-state=cached]{fill:#dde9f3;stroke:var(--blue)}
+.dc-node[data-state=cached]{fill:#f6f8fa;stroke:var(--blue);stroke-opacity:.35;transition:r .65s ease-in-out,stroke-opacity .65s ease-in-out,fill .65s ease-in-out,stroke .65s ease-in-out,transform .65s ease-in-out}
+/* Keep outlines inside the shape so changing their colour never enlarges its silhouette. */
+circle.dc-node{clip-path:circle(50%) fill-box}
+rect.dc-node{clip-path:inset(0 round 3px) fill-box}
+circle.dc-node[data-state=cached]{r:7.2px}
+rect.dc-node[data-state=cached]{transform:scale(.8)}
+.dc-node.is-highlighted[data-state=cached]{stroke-opacity:1}
+circle.dc-node.is-highlighted[data-state=cached]{r:9px}
+rect.dc-node.is-highlighted[data-state=cached]{transform:scale(1)}
+.dc-node.is-past[data-state=cached]{fill:#dce7f0}
+.dc-node.is-past[data-state=active]{fill:#f7e3d2}
 .dc-node.is-source[data-state=active]{fill:#fcdfc4;stroke:var(--orange)}
 .dc-node.is-target{fill:var(--orange);stroke:var(--orange)}
 .dc-node.is-pending{fill:#fff;stroke-dasharray:4 3;transform:scale(.85)}
@@ -270,6 +280,19 @@ figure.decoder{border:0;overflow:visible;border-radius:0}
 .article .decoder section{margin:0}
 .article .decoder .dc-panels section{padding:0}
 .dc-head text{paint-order:stroke;stroke:#f6f8fa;stroke-width:4px;stroke-linejoin:round}
+
+/* Cached points never travel: only the source layer changes emphasis. */
+.dc-cached-trails{stroke:var(--blue);stroke-width:1.5;opacity:.3}
+.dc-cached-point.is-preview-hidden{display:none}
+.dc-cached-point circle{clip-path:circle(50%) fill-box;r:3px;fill:#f6f8fa;stroke:var(--blue);stroke-opacity:.35;transition:r .65s ease-in-out,stroke-opacity .65s ease-in-out,fill .65s ease-in-out,stroke .65s ease-in-out}
+.dc-cached-point.is-past circle{fill:#dce7f0}
+.dc-trails circle{fill:#f7e3d2;stroke:var(--orange);stroke-opacity:.45;opacity:1}
+.dc-cached-point.is-highlighted circle{r:6px;stroke-opacity:1}
+.dc-cached-point text{opacity:0;transition:opacity .65s ease-in-out;paint-order:stroke;stroke:#f6f8fa;stroke-width:4px;stroke-linejoin:round}
+.dc-cached-point.is-highlighted text{opacity:1}
+
+/* A shared reading state fills the corresponding blue representations in both panels. */
+.is-reading .dc-node.is-highlighted[data-state=cached],.is-reading .dc-cached-point.is-highlighted circle{fill:var(--blue);stroke:var(--blue)}
 
 .ng-demo{--ink:#173b3a;--teal:#157a72;--muted:#60716f;--line:#d8e5e1;margin:0!important;padding:0!important;border:1px solid var(--line)!important;border-radius:22px!important;overflow:hidden;background:#f7faf7!important;color:var(--ink);font-family:system-ui,-apple-system,sans-serif;box-shadow:0 14px 45px #163c3410}
 .ng-demo *{box-sizing:border-box}.ng-demo [hidden]{display:none!important}
@@ -1385,14 +1408,14 @@ END EDITABLE DIAGRAM DATA -->
  function mount(root){
   const select=root.hasAttribute('data-case-select'),onlyLast=root.dataset.cycles==='last',uid='dc'+ ++mounted;
   const cases=select?data.cases:[data.cases[0]];
-  // The layer just below the last is drawn too, so the final step is a single layer; measured data needs its points.
-  const rows=[...layers];
-  if(N-1>rows.at(-2)&&(illustrative||cases.every(c=>c.tokens.every(t=>t.points[String(N-1)]))))rows.splice(-1,0,N-1);
+  // Show three layers on each side of the break; measured data needs points for added rows.
+  const extraRows=[3,N-2,N-1].filter(L=>L>0&&L<=N&&(illustrative||cases.every(c=>c.tokens.every(t=>t.points[String(L)]))));
+  const rows=[...new Set([...layers,...extraRows])].sort((a,b)=>a-b);
   const count=rows.length,full=[0,...rows];
   // Row index k whose distance from the row below skips layers (the axis break), or -1.
   const gapK=full.findIndex((v,k)=>k>0&&v>full[k-1]+1);
   // When layers are skipped, the top rows are named by position from the end rather than by number.
-  const layerName=L=>!L?'埋め込み':gapK>0&&L===N?'第N層':gapK>0&&L===N-1?'第N−1層':`第${L}層`;
+  const layerName=L=>!L?'埋め込み':gapK>0&&L===N?'第N層':gapK>0&&L===N-1?'第N−1層':gapK>0&&L===N-2?'第N−2層':`第${L}層`;
   const label=k=>layerName(full[k]);
   // Phases in a cycle: embedding, each drawn layer, the output layer, then (all cycles) the choice.
   const OUTPUT=count+1,PICK=count+2,perCycle=count+(onlyLast?2:3);
@@ -1403,7 +1426,7 @@ END EDITABLE DIAGRAM DATA -->
   const $=s=>root.querySelector(s),$$=s=>[...root.querySelectorAll(s)];
 
   // ---- 01 network geometry: fixed across cases so switching sentences does not rescale the drawing.
-  const ROW=56,GAP=84,LEFT=76,bg='#f6f8fa';
+  const ROW=36,GAP=56,LEFT=76,bg='#f6f8fa';
   const ys=[];ys[count]=34;
   for(let k=count;k>0;k--)ys[k-1]=ys[k]+(k===gapK?GAP:ROW);
   const y=k=>ys[k],wordY=y(0)+34,H=wordY+12,midY=(y(0)+y(count))/2;
@@ -1424,28 +1447,38 @@ END EDITABLE DIAGRAM DATA -->
   const SW=360,SH=340;
   const toSpace=([u,v])=>[28+u*(SW-56),22+v*(SH-50)];
   const spaceOf=c=>{
-   if(!illustrative)return c.tokens.map(t=>full.map(L=>toSpace(t.points[String(L)])));
+   if(!illustrative)return c.tokens.map(t=>Array.from({length:N+1},(_,L)=>t.points[String(L)]?toSpace(t.points[String(L)]):null));
    // Each token gets its own steps from a generator seeded by its text and position, so the layout is stable across reloads.
    const rng=seed=>{let h=2166136261;for(const ch of seed)h=Math.imul(h^ch.charCodeAt(0),16777619);return()=>{h=Math.imul(h^h>>>15,2246822507);h=Math.imul(h^h>>>13,3266489909);return((h^=h>>>16)>>>0)/4294967296;};};
    const clamp=p=>p.map(v=>Math.min(.92,Math.max(.08,v)));
    const move=(p,r,len)=>{const a=r()*2*Math.PI;return clamp([p[0]+len*Math.cos(a),p[1]+len*Math.sin(a)]);};
-   const goals=[];
+   const occupied=[];
    return c.tokens.map((t,i)=>{
     const r=rng(t.text+'#'+i),path=[clamp(t.points[0])];
     // Before the break (or on every row when nothing is skipped): small steps whose size and direction differ per token.
     const last=gapK<0?count:gapK-1;
     for(let k=1;k<=last;k++)path.push(move(path.at(-1),r,.04+.1*r()));
     if(gapK<0)return path.map(toSpace);
-    // Across the skipped layers: a large jump to a place pulled toward the previous word, so neighbours and order change.
-    let goal,tries=0;
-    do{
-     const free=[.12+.76*r(),.12+.76*r()],prevGoal=goals[i-1];
-     goal=clamp(prevGoal?free.map((v,d)=>.65*v+.35*prevGoal[d]):free);
-    }while(tries++<60&&(Math.hypot(goal[0]-path.at(-1)[0],goal[1]-path.at(-1)[1])<.3||goals.some(g=>Math.hypot(goal[0]-g[0],goal[1]-g[1])<.16)));
-    goals.push(goal);
-    // After the break: the remaining rows reach the goal in moderate steps of their own.
-    const tail=[goal];
-    for(let k=count;k>gapK;k--)tail.unshift(move(tail[0],r,.05+.07*r()));
+    // Sample irregular local paths, retaining space between whole paths (not just their endpoints).
+    let latePath,best=-1;
+    for(let attempt=0;attempt<600;attempt++){
+     const candidate=[[.12+.76*r(),.12+.76*r()]],angle=r()*Math.PI*2,turn=r()<.5?-1:1;
+     const bend=.65+.35*r(),angles=[angle,angle+turn*bend,angle+turn*(bend-(.55+.45*r()))];
+     for(let j=1;j<4;j++){
+      const a=angles[j-1],len=.04+.025*r(),p=candidate.at(-1);
+      candidate.push([p[0]+len*Math.cos(a),p[1]+len*Math.sin(a)]);
+     }
+     if(candidate.some(p=>p.some(v=>v<.09||v>.91)))continue;
+     const clearance=occupied.length?Math.min(...candidate.flatMap(p=>occupied.map(q=>Math.hypot(p[0]-q[0],p[1]-q[1])))):1;
+     if(clearance>best){best=clearance;latePath=candidate;}
+     if(clearance>.21)break;
+    }
+    occupied.push(...latePath);
+    const tail=latePath.slice(0,count-gapK+1).reverse();
+    // Omitted rows still have their own local steps beyond the last early row.
+    for(let L=full[last]+1;L<full[gapK];L++)path.push(move(path.at(-1),r,.04+.1*r()));
+    // The virtual predecessor of N−2 forms a short local history near the final cluster.
+    for(let L=full[gapK]-1;L>=Math.max(full[last]+1,N-3);L--)path[L]=latePath[N-L];
     path.push(...tail);
     return path.map(toSpace);
    });
@@ -1453,7 +1486,7 @@ END EDITABLE DIAGRAM DATA -->
   const space=$('.dc-space');
   let grid='';
   for(let k=0;k<=6;k++)grid+=`<line x1="${28+k*(SW-56)/6}" y1="14" x2="${28+k*(SW-56)/6}" y2="${SH-20}" stroke="#e7edf1"/><line x1="20" y1="${22+k*(SH-50)/6}" x2="${SW-20}" y2="${22+k*(SH-50)/6}" stroke="#e7edf1"/>`;
-  space.innerHTML=`<g>${grid}</g><g class="dc-trails"></g><g class="dc-heads"></g><text class="dc-space-layer" x="${SW-24}" y="${SH-30}" text-anchor="end"></text>`;
+  space.innerHTML=`<g>${grid}</g><g class="dc-cached-trails"></g><g class="dc-trails"></g><g class="dc-cached"></g><g class="dc-heads"></g><text class="dc-space-layer" x="${SW-24}" y="${SH-30}" text-anchor="end"></text>`;
   const heads=$('.dc-heads'),probs=$('.dc-probs');
 
   // ---- per-case state
@@ -1476,34 +1509,72 @@ END EDITABLE DIAGRAM DATA -->
    }
    edges.innerHTML=e;nodesG.innerHTML=nd;
    wordsG.innerHTML=words.slice(0,onlyLast?n:n+1).map((w,i)=>text(x(i),wordY,esc(w),`text-anchor="middle" class="dc-word" data-word="${i}"`)).join('');
-   heads.replaceChildren();builtFor='';spaceCycle=-1;
+   heads.replaceChildren();$('.dc-cached').replaceChildren();builtFor='';spaceCycle=-1;
    $$('[data-dc-case]').forEach(b=>b.setAttribute('aria-pressed',String(+b.dataset.dcCase===ci)));
   }
 
-  // glide: the dots move from their previous layer; a new cycle starts from the embeddings, so they are placed there directly.
-  function renderSpace(cur,lay,glide){
-   const color=i=>i<cur.t?blue:orange,at=(i,k)=>spacePts[i][k];
+  // Only the current token moves. Cached representations stay fixed; preview their path two steps ahead of the highlighted layer.
+  function renderSpace(cur,lay,cachedLay,glide){
+   const color=i=>i<cur.t?blue:orange,at=(i,k)=>spacePts[i][full[k]],actual=(i,L)=>spacePts[i][L];
+   const highlightedLayer=cachedLay;
+   const late=gapK>0&&full[lay]>=full[gapK];
+   const previewFrom=late?Math.max(0,N-3):0;
+   const previewTo=late?N:Math.min(N,(cachedLay>=0?cachedLay:full[lay])+2);
+   let cachedTrails='';
+   for(let i=0;i<cur.t;i++)for(let k=previewFrom+1;k<=previewTo;k++){
+    if(!actual(i,k-1)||!actual(i,k))continue;
+    const [ax,ay]=actual(i,k-1),[bx,by]=actual(i,k);
+    cachedTrails+=`<line data-cached-edge="${i}-${k}" x1="${r1(ax)}" y1="${r1(ay)}" x2="${r1(bx)}" y2="${r1(by)}"/>`;
+   }
+   $('.dc-cached-trails').innerHTML=cachedTrails;
    let trails='';
-   for(let i=0;i<=cur.t;i++){
-    // Only the stretch since the skipped layers stays drawn, so no trail floats away from its point.
-    const from=gapK>0&&lay>=gapK?gapK:0;
+   {const i=cur.t;
+    // The current token keeps a local history too; late layers replace the embedding-era trail.
+    const from=previewFrom,to=full[lay];
     trails+=`<g data-space-token="${i}">`;
-    for(let k=from+1;k<=lay;k++){const [ax,ay]=at(i,k-1),[bx,by]=at(i,k);trails+=`<line x1="${r1(ax)}" y1="${r1(ay)}" x2="${r1(bx)}" y2="${r1(by)}" stroke="${color(i)}" stroke-width="1.5" opacity=".55"/>`;}
-    for(let k=from;k<lay;k++){const [px,py]=at(i,k);trails+=`<circle cx="${r1(px)}" cy="${r1(py)}" r="3" fill="${color(i)}" opacity=".45"/>`;}
+    for(let L=from+1;L<=to;L++){
+     if(!actual(i,L-1)||!actual(i,L))continue;
+     const [ax,ay]=actual(i,L-1),[bx,by]=actual(i,L);
+     trails+=`<line data-trail-layer="${L}" x1="${r1(ax)}" y1="${r1(ay)}" x2="${r1(bx)}" y2="${r1(by)}" stroke="${color(i)}" stroke-width="1.5" opacity=".55"/>`;
+    }
+    for(let L=from;L<to;L++){
+     if(!actual(i,L))continue;
+     const [px,py]=actual(i,L);
+     trails+=`<circle data-trail-layer="${L}" cx="${r1(px)}" cy="${r1(py)}" r="3" fill="${color(i)}" opacity=".45"/>`;
+    }
     trails+='</g>';
    }
    $('.dc-trails').innerHTML=trails;
    $('.dc-space-layer').textContent=label(lay);
    // Points may overlap; only the labels are placed around their dots to stay readable.
-   const boxes=[],dots=[...Array(cur.t+1).keys()].map(j=>at(j,lay));
+   const boxes=[],dots=[];
+   for(let i=0;i<=cur.t;i++)for(let L=previewFrom;L<=(i<cur.t?previewTo:full[lay]);L++)if(actual(i,L))dots.push(actual(i,L));
    const place=(i,[hx,hy])=>{
     const w=words[i].trim().length*7.6+6;
     const options=[[0,-11,'middle',hx-w/2,hy-24],[0,21,'middle',hx-w/2,hy+8],[10,5,'start',hx+8,hy-8],[-10,5,'end',hx-8-w,hy-8]];
-    const free=o=>!boxes.some(b=>o[3]<b[0]+b[2]&&b[0]<o[3]+w&&o[4]<b[1]+15&&b[1]<o[4]+15)&&!dots.some(([dx,dy],j)=>j!==i&&dx>o[3]-5&&dx<o[3]+w+5&&dy>o[4]-5&&dy<o[4]+20);
+    const free=o=>!boxes.some(b=>o[3]<b[0]+b[2]&&b[0]<o[3]+w&&o[4]<b[1]+15&&b[1]<o[4]+15)&&!dots.some(([dx,dy])=>(dx!==hx||dy!==hy)&&dx>o[3]-5&&dx<o[3]+w+5&&dy>o[4]-5&&dy<o[4]+20);
     const o=options.find(free)||options[0];boxes.push([o[3],o[4],w]);return o;
    };
-   [...heads.children].forEach(h=>{if(+h.dataset.head>cur.t)h.remove();});
-   for(let i=0;i<=cur.t;i++){
+   const cached=$('.dc-cached');
+   for(let i=0;i<cur.t;i++)for(let k=0;k<=N;k++){
+    if(!actual(i,k))continue;
+    let h=cached.querySelector(`[data-cached="${i}-${k}"]`);
+    const [hx,hy]=actual(i,k);
+    if(!h){
+     h=document.createElementNS(NS,'g');h.setAttribute('class','dc-cached-point');h.dataset.cached=`${i}-${k}`;
+     h.dataset.k=k;h.style.transform=`translate(${r1(hx)}px,${r1(hy)}px)`;
+     h.innerHTML=`<circle r="5" fill="${blue}" stroke="#fff" stroke-width="1.5"/>${text(0,-11,esc(words[i]),'text-anchor="middle" style="font-weight:600"')}`;
+     cached.append(h);
+    }
+    h.classList.toggle('is-preview-hidden',k<previewFrom||k>previewTo);
+    h.classList.toggle('is-highlighted',k===highlightedLayer);
+    h.classList.toggle('is-past',k<(highlightedLayer<0?N+1:highlightedLayer));
+    h.querySelector('circle').setAttribute('r',k===highlightedLayer?6:3);
+    if(k===highlightedLayer){const tx=h.querySelector('text'),o=place(i,[hx,hy]);tx.style.fill=blue;tx.setAttribute('x',o[0]);tx.setAttribute('y',o[1]);tx.setAttribute('text-anchor',o[2]);}
+   }
+   [...cached.children].forEach(h=>{if(+h.dataset.cached.split('-')[0]>=cur.t)h.remove();});
+   [...heads.children].forEach(h=>{if(+h.dataset.head!==cur.t)h.remove();});
+   {const i=cur.t;
     let h=heads.querySelector(`[data-head="${i}"]`);
     const [hx,hy]=at(i,lay);
     if(!h){
@@ -1513,10 +1584,11 @@ END EDITABLE DIAGRAM DATA -->
      if(!motion.matches)h.animate([{opacity:0},{opacity:1}],{duration:400});
     }else if(!glide)h.getAnimations().forEach(a=>a.cancel());
     else if(+h.dataset.k!==lay&&!motion.matches){
-     // Crossing the skipped layers (or any multi-row jump) is a long glide.
-     const k0=+h.dataset.k,far=Math.abs(k0-lay)>1||Math.max(k0,lay)===gapK;
+     const k0=+h.dataset.k,warp=gapK>0&&Math.min(k0,lay)<gapK&&Math.max(k0,lay)>=gapK;
      h.getAnimations().forEach(a=>a.cancel());
-     h.animate([at(i,k0),at(i,lay)].map(([px,py])=>({transform:`translate(${r1(px)}px,${r1(py)}px)`})),{duration:far?1600:650,easing:'ease-in-out'});
+     const [from,to]=[at(i,k0),at(i,lay)].map(([px,py])=>`translate(${r1(px)}px,${r1(py)}px)`);
+     // Across omitted layers, show the destination immediately.
+     if(!warp)h.animate([{transform:from},{transform:to}],{duration:650,easing:'ease-in-out'});
     }
     h.dataset.k=lay;h.style.transform=`translate(${r1(hx)}px,${r1(hy)}px)`;
     h.querySelector('.dc-dot').setAttribute('fill',color(i));
@@ -1534,8 +1606,10 @@ END EDITABLE DIAGRAM DATA -->
    // The row after the axis break is reached through the omitted layers, so no information is drawn flowing into it.
    const flows=layerPhase&&done!==gapK;
    const ready=picked||output&&sub===2;
+   const cachedLayer=layerPhase?full[done]-1:phase===0?0:-1;
    root.dataset.step=step;root.dataset.layer=full[done];root.dataset.sub=sub;
    root.classList.toggle('is-output',output&&!picked);root.classList.toggle('is-ready',ready);root.classList.toggle('is-picked',picked);
+   root.classList.toggle('is-reading',layerPhase&&sub>=1);
    const shown=(i,k)=>i<t||i===t&&k<=done;
    // Circles used in this step stay saturated: the new node and, while a layer is computed, every node it reads from the row below.
    $$('.dc-node').forEach(el=>{
@@ -1543,7 +1617,9 @@ END EDITABLE DIAGRAM DATA -->
     el.dataset.state=i<t?'cached':'active';
     el.classList.toggle('is-hidden',!shown(i,k));
     el.classList.toggle('is-target',target);
+    el.classList.toggle('is-past',i<t?full[k]<(cachedLayer<0?N+1:cachedLayer):k<done);
     el.classList.toggle('is-source',flows&&k===done-1&&i<=t);
+    el.classList.toggle('is-highlighted',i<t&&full[k]===cachedLayer);
     el.classList.toggle('is-pending',target&&flows&&sub<2);
     if(!target)el.classList.remove('dc-made');
    });
@@ -1574,10 +1650,16 @@ END EDITABLE DIAGRAM DATA -->
    });
    // The final representation grows out of its node and moves beside the output layer.
    const vector=t===n-1?data.ngram.features[c.key]:c.tokens[t].layers[String(N)];
+   // The illustrative card is a fixed-width vector glyph, matching the embedded N-gram card.
+   const glyphSize=data.ngram.features[c.key].length;
+   const cardVector=data.model.status==='illustrative'&&vector.length!==glyphSize?Array.from({length:glyphSize},(_,j)=>{
+    const p=j*(vector.length-1)/Math.max(1,glyphSize-1),a=Math.floor(p),b=Math.ceil(p);
+    return (vector[a]*(1-(p-a))+vector[b]*(p-a))/Math.max(1,...vector.map(Math.abs));
+   }):vector;
    const [vx,vy]=output?[cardLeft,midY]:[x(t),y(count)];
    card.style.transform=`translate(${r1(vx)}px,${r1(vy)}px) scale(${output?1:.1})`;
    card.querySelector('.dc-card-word').textContent=words[t].trim();
-   card.querySelector('.dc-card-vector').innerHTML=vector.map((v,j)=>`<rect x="${r1(j*20-vector.length*10+2)}" y="14" width="16" height="11" rx="2" opacity="${r1(Math.max(.15,Math.min(1,Math.abs(v))))}"><title>${format(v)}</title></rect>`).join('');
+   card.querySelector('.dc-card-vector').innerHTML=cardVector.map((v,j)=>`<rect x="${r1(j*20-cardVector.length*10+2)}" y="14" width="16" height="11" rx="2" opacity="${r1(Math.max(.15,Math.min(1,Math.abs(v))))}"><title>${format(v)}</title></rect>`).join('');
    // Probabilities replace the space once only the final representation remains.
    const best=Math.max(...cur.cs.map(v=>v.probability));
    $('.dc-right').classList.toggle('is-probs',output);
@@ -1589,8 +1671,8 @@ END EDITABLE DIAGRAM DATA -->
     row.classList.toggle('is-muted',picked&&r!==cur.chosen);
     row.querySelector('.dc-fill').style.width=`${ready?p*100:0}%`;
    });
-   const glide=spaceCycle===cycle;spaceCycle=cycle;
-   renderSpace(cur,flows&&sub<2?done-1:done,glide);
+   const glide=spaceCycle===cycle&&!root.classList.contains('dc-instant');spaceCycle=cycle;
+   renderSpace(cur,flows&&sub<2?done-1:done,cachedLayer,glide);
    network.setAttribute('aria-label',output?`${words[t].trim()}の${label(count)}の表現から、次のトークンの確率を出す`:`${words[t].trim()}の${label(done)}を計算`);
    if(effect==='made')replay($('.dc-node.is-target'),'dc-made');
    if(effect==='enter'&&phase===0)replay($('.dc-node.is-target'),'dc-made');
