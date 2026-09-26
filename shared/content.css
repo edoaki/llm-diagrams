@@ -1,0 +1,67 @@
+/* Shared editorial structure; page-specific visuals retain their existing styling. */
+.article section { scroll-margin-top: 5rem; }
+.article > h2[id] { margin: 3.25rem 0 1.5rem; scroll-margin-top: 5rem; }
+.sidenav .nav-category { margin: 1rem .6rem .25rem; color: var(--nav-category); font-size: .75rem; }
+.sidenav a[data-parent] { padding-left: 2.5rem; }
+.sidenav small { display: inline; margin-left: .35rem; font-size: .67rem; color: #6a716b; }
+.publication-status { padding: .8rem 1rem; border-left: 3px solid #9ca98d; background: var(--tint); font-size: .9rem; }
+.publication-status p { margin: .4rem 0; }
+.legacy-links { margin-top: 2rem; padding: .6rem 1rem; border: 1px solid var(--line); border-radius: .4rem; }
+.article .cards { display: block; }
+.article .cards p { margin: .7rem 0; }
+figure > p > a > img, figure > p > img { max-width: 100%; height: auto; }
+.article table { min-width: 0; }
+@media (max-width: 820px) { .publication-status { font-size: .85rem; } }
+.article section[id$="sources"] ul { font-size: 13px; }
+
+.sidenav a[data-parent]::before { content: "↳ "; color: var(--nav-child); }
+
+/* Colour roles for figures (docs/policy/03-figures.md#色の役割): input data, output (prediction),
+   learned parameters, answer and loss, and everything else. Always pair colour with a direct label.
+   Figures stay light in the dark theme, so they keep the light values; prose outside them gets lighter inks. */
+:root,[data-theme=dark] :is(figure,.demo,.light-island){--role-input:#255f9e;--role-input-tint:#eef2f7;--role-input-line:#9db7d3;--role-output:#2c7a4f;--role-output-tint:#eef4f1;--role-output-line:#a0c3b0;--role-param:#a8407f;--role-param-tint:#f8f0f5;--role-param-line:#d8a9c5;--role-loss:#a9540f;--role-loss-tint:#f8f1ec;--role-loss-line:#d8b293;--role-neutral:#5d6d60;--role-neutral-tint:#f2f3f2;--role-neutral-line:#b6bdb7}
+:root[data-theme=dark]{--role-input:#8db8e8;--role-input-tint:#273238;--role-input-line:#50697f;--role-output:#86c9a0;--role-output-tint:#25352c;--role-output-line:#4d715b;--role-param:#e59ac6;--role-param-tint:#352e32;--role-param-line:#7c5a6e;--role-loss:#eaa46a;--role-loss-tint:#352f23;--role-loss-line:#7f5f40;--role-neutral:#a7b5a9;--role-neutral-tint:#2b322e;--role-neutral-line:#5d6760}
+/* Pick a role, then say how to paint it: .r-box (tinted shape), .r-line (stroke only), .r-mark (solid), .r-text, .r-chip. */
+.r-input{--r:var(--role-input);--r-tint:var(--role-input-tint);--r-line:var(--role-input-line)}
+.r-output{--r:var(--role-output);--r-tint:var(--role-output-tint);--r-line:var(--role-output-line)}
+.r-param{--r:var(--role-param);--r-tint:var(--role-param-tint);--r-line:var(--role-param-line)}
+.r-loss{--r:var(--role-loss);--r-tint:var(--role-loss-tint);--r-line:var(--role-loss-line)}
+.r-neutral{--r:var(--role-neutral);--r-tint:var(--role-neutral-tint);--r-line:var(--role-neutral-line)}
+svg .r-box{fill:var(--r-tint);stroke:var(--r)}
+svg .r-line{fill:none;stroke:var(--r)}
+svg .r-mark{fill:var(--r)}
+.r-text{color:var(--r);fill:var(--r)}
+.r-chip{display:inline-block;padding:0 .5em;border:1px solid var(--r-line);border-radius:4px;background:var(--r-tint);color:var(--r);font-weight:650;line-height:1.7;white-space:nowrap}
+
+/* Illustrated paper explanation (docs/policy/02-papers-and-sources.md#図付き解説の型). */
+.article .paper-explainer{margin:40px 0;padding:6px 24px 10px;border:1px solid var(--line);border-top:3px solid var(--green);border-radius:8px;background:var(--surface)}
+.paper-explainer::before{content:"論文解説";display:block;margin-top:14px;color:var(--green);font-size:11px;font-weight:700;letter-spacing:.14em}
+.article .paper-explainer>h3{margin:4px 0 2px;scroll-margin-top:92px}
+.paper-explainer>.paper-meta{margin:0 0 18px;color:var(--muted);font-size:13px;line-height:1.8}
+.paper-explainer>h4{margin:26px 0 4px;color:var(--th-ink);font-size:13px;font-weight:700;letter-spacing:.04em}
+.paper-explainer>h4+p{margin-top:4px}
+.paper-explainer figure{margin:18px 0}
+/* Input → output pair: each side takes its colour role; a leading bold word becomes the side's label. */
+.io-pair{display:grid;grid-template-columns:minmax(0,1fr) auto minmax(0,1fr);gap:10px;align-items:stretch;margin:16px 0}
+.io-pair::before{content:"→";grid-column:2;grid-row:1;align-self:center;color:var(--muted);font-size:20px}
+.io-pair>.io-in,.io-pair>.io-out{min-width:0;padding:10px 16px;border:1px solid var(--r-line);border-radius:8px;background:var(--r-tint)}
+.io-pair>.io-in{--r:var(--role-input);--r-tint:var(--role-input-tint);--r-line:var(--role-input-line);grid-column:1;grid-row:1}
+.io-pair>.io-out{--r:var(--role-output);--r-tint:var(--role-output-tint);--r-line:var(--role-output-line);grid-column:3;grid-row:1}
+.io-pair p{margin:6px 0;font-size:14px;line-height:1.8}
+.io-pair>div>p:first-child>strong:first-child{display:block;color:var(--r);font-size:12px;letter-spacing:.06em}
+.io-pair img{display:block;max-width:100%;height:auto;margin:6px auto;border-radius:4px}
+@media(max-width:520px){.article .paper-explainer{padding:4px 16px 8px}.io-pair{grid-template-columns:minmax(0,1fr)}.io-pair::before{content:"↓";grid-column:1;grid-row:2;justify-self:center}.io-pair>.io-in{grid-column:1;grid-row:1}.io-pair>.io-out{grid-column:1;grid-row:3}}
+
+/* Toggles in the body: optional depth that the main line never depends on (docs/policy/01-overall.md#トグル折りたたみ). */
+main.article details{margin:24px 0;padding:0 20px;border:1px solid var(--line);border-radius:8px;background:var(--surface)}
+main.article details>summary{display:flex;align-items:center;gap:12px;min-height:48px;margin:0 -20px;padding:10px 20px;border-radius:7px;list-style:none;color:var(--ink);font-size:15px;font-weight:650;line-height:1.6;cursor:pointer}
+main.article details>summary::-webkit-details-marker{display:none}
+main.article details>summary::before{content:"";flex:none;width:7px;height:7px;margin:0 3px 0 1px;border-right:2px solid var(--green);border-bottom:2px solid var(--green);transform:rotate(-45deg);transition:transform .15s}
+main.article details>summary:hover{background:var(--tint)}
+main.article details[open]{padding-bottom:6px}
+main.article details[open]>summary{margin-bottom:8px;border-bottom:1px solid var(--line);border-radius:7px 7px 0 0}
+main.article details[open]>summary::before{transform:rotate(45deg)}
+main.article details details{background:var(--tint)}
+@media(max-width:520px){main.article details{padding:0 14px}main.article details>summary{margin:0 -14px;padding:10px 14px;font-size:14px}}
+@media(prefers-reduced-motion:reduce){main.article details>summary::before{transition:none}}
+@media print{main.article details>summary::before{display:none}}

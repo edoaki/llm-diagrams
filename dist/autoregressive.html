@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="ja"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>トークン化と位置情報</title>
+<html lang="ja"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>同じ文章の続きを一つずつ作る</title>
 <style>:root{--ink:#243b30;--muted:#657568;--green:#35664d;--paper:#ffffff;--line:#e3e7e5;--tint:#f6f8f7;--blue:#4d7897;--accent:#ba7147;--surface:#fff;--highlight:#f1dd97;--panel:#f8f9f8;--note:#f6f8f7;--th:#f5f7f6;--th-ink:#456044;font-family:Inter,"Hiragino Kaku Gothic ProN","Noto Sans JP",system-ui,sans-serif;color:var(--ink);background:var(--paper);font-synthesis:none;font-size:16px}*{box-sizing:border-box}body{margin:0}a{color:var(--green);text-underline-offset:4px}a:hover{color:#183f2b}button,input,select{font:inherit}button{cursor:pointer}button,a,input,summary,select{touch-action:manipulation}:focus-visible{outline:3px solid #7ba889;outline-offset:4px}html{scroll-padding-top:90px}p,li{line-height:1.95}p{margin:16px 0}strong{font-weight:700}li+li{margin-top:9px}ul{padding-left:1.4em}h1,h2,h3{line-height:1.55;letter-spacing:.012em}h1{font-size:clamp(30px,3.3vw,46px);font-weight:650;margin:15px 0 22px}h2{font-size:25px;margin:0 0 24px;font-weight:650}h3{font-size:19px;margin:31px 0 13px}small{font-size:12px}.skip{position:absolute;left:12px;top:-80px;background:white;padding:10px;z-index:10}.skip:focus{top:10px}.topbar{height:64px;border-bottom:1px solid var(--line);background:#fffffff5;position:sticky;top:0;z-index:5;display:flex;align-items:center;justify-content:space-between;padding:0 30px;gap:16px}.brand{font-weight:700;text-decoration:none;letter-spacing:.08em;font-size:12px}.brand span{color:var(--muted);font-weight:450;letter-spacing:0;margin-left:16px}.layout{max-width:1540px;margin:auto;display:grid;grid-template-columns:245px minmax(0,1fr) 190px;gap:40px;padding:0 32px}.sidenav{position:sticky;top:64px;align-self:start;height:calc(100dvh - 64px);overflow:auto;padding:30px 12px 30px 0;scrollbar-width:thin}.sidenav .nav-label{font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);margin:0 12px 18px}.sidenav a{display:block;text-decoration:none;font-size:12px;line-height:1.65;padding:8px 12px;border-radius:5px;margin:2px 0}.sidenav a[aria-current=page]{background:#f0f5f2;color:#244d36;font-weight:700;border-left:3px solid var(--green)}.sidenav summary{font-size:12px;font-weight:650;color:#52694f;padding:15px 10px 7px;cursor:pointer}.sidenav details a{padding-left:22px}.article{min-width:0;padding:54px 0 36px;max-width:900px;width:100%}.eyebrow{color:var(--green);font-size:11px;letter-spacing:.17em;text-transform:uppercase;font-weight:700}.lead{font-size:17px;line-height:2;color:#556b59;max-width:48em}.hero{border-bottom:1px solid var(--line);padding-bottom:32px;margin-bottom:42px}.meta{color:var(--muted);font-size:12px;margin-top:22px}.article section{margin:52px 0;scroll-margin-top:92px}.article section+section{padding-top:16px}.toc{align-self:start;position:sticky;top:96px;border-left:1px solid var(--line);padding-left:18px;margin-top:62px;font-size:11px;max-height:calc(100dvh - 125px);overflow:auto}.toc strong{font-size:10px;letter-spacing:.1em;color:var(--muted)}.toc a{display:block;color:var(--muted);text-decoration:none;line-height:1.65;margin:14px 0}.toc a.active{color:var(--green);font-weight:700}.note{background:var(--note);border-left:3px solid #91a879;padding:20px 24px;margin:25px 0}.note>strong{font-size:13px;color:#42643d}.note p{margin:8px 0 0;font-size:14px}.cards{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}.card{display:block;padding:24px;border:1px solid var(--line);border-radius:8px;background:white;text-decoration:none;color:var(--ink);transition:background .15s,border-color .15s}.card:hover{background:#f7f9f8;border-color:#a2b394}.card-kicker{font-size:10px;color:var(--muted);letter-spacing:.12em}.card h3{font-size:17px;margin:11px 0}.card h3 span{float:right;font-weight:400;color:var(--green)}.card p{font-size:13px;line-height:1.85;color:var(--muted);margin:0}.equation{background:var(--panel);border:1px solid var(--line);padding:22px 24px;overflow:auto;font-size:17px;border-radius:5px;white-space:normal}.table-scroll{max-width:100%;overflow:auto;margin:25px 0}table{width:100%;border-collapse:collapse;text-align:left;font-size:13px;line-height:1.9}th{background:var(--th);color:var(--th-ink);font-weight:650}td,th{padding:14px 16px;vertical-align:top;border-bottom:1px solid var(--line)}th:first-child,td:first-child{min-width:125px}td:first-child{font-weight:600}figure{margin:28px 0;border:1px solid var(--line);border-radius:8px;background:#fff;overflow:hidden}.figure-scroll{padding:18px 12px 4px;overflow:auto}figure svg{display:block;width:100%;height:auto;min-width:560px}figcaption{font-size:12px;line-height:1.85;color:var(--muted);padding:15px 20px;background:#fafbfa;border-top:1px solid var(--line)}figure img{display:block;max-width:100%;height:auto;margin:auto;padding:12px}.compare{display:grid;grid-template-columns:1fr 1fr;gap:15px}.compare figure{margin:0}.references{font-size:13px}.pager{border-top:1px solid var(--line);padding-top:26px;display:flex;justify-content:space-between;gap:24px;margin-top:56px}.pager a{font-size:14px;text-decoration:none;line-height:1.8;max-width:48%}.pager small{display:block;color:var(--muted);font-size:10px;letter-spacing:.09em}.footer{font-size:11px;color:var(--muted);line-height:1.9;padding-top:30px}.demo{margin:26px 0;padding:22px;background:#fafbfa;border:1px solid var(--line);border-radius:8px}.demo label{font-size:13px;display:inline-flex;align-items:center;gap:12px;flex-wrap:wrap}.demo input[type=range]{accent-color:var(--green);max-width:100%}.demo output{font-variant-numeric:tabular-nums}.demo button,.demo select{border:1px solid #b8c6af;background:white;color:var(--green);padding:8px 14px;border-radius:5px;margin:5px 4px 5px 0}.demo button[aria-pressed=true]{background:var(--green);color:white}.demo .result{font-size:14px;line-height:1.9}.matrix{display:grid;gap:5px;width:max-content;margin:20px 0}.cell{width:42px;height:42px;display:grid;place-items:center;background:white;border:1px solid #d8e0cf;font-variant-numeric:tabular-nums}.cell.selected{background:#c9debe;border-color:#5a8053}.cell.masked{background:#e8e9e5;color:#727a6f}.scene-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}.scene-grid figure{margin:0}.scene-grid img{width:100%;padding:0}.scene-grid svg{min-width:0}.stat-row{display:flex;gap:26px;padding:18px 0;color:var(--muted);font-size:12px}.stat-row strong{color:var(--ink);font-size:23px;font-weight:500;display:block}.mobile-menu{display:none}.sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0)}audio{max-width:100%;display:block;margin:15px 0}.paper-label{display:inline-block;font-size:10px;letter-spacing:.08em;color:#855329;background:#f6ebde;padding:4px 9px;border-radius:3px}.full-width{grid-column:1/-1}
 @media(min-width:1600px){.layout{gap:52px}}@media(max-width:1200px){.layout{grid-template-columns:210px minmax(0,1fr);gap:35px}.toc{display:none}}@media(max-width:820px){.topbar{padding:0 18px}.brand span{display:none}.layout{display:block;padding:0 24px}.sidenav{display:none;position:fixed;top:64px;left:0;width:285px;z-index:4;background:var(--paper);padding:24px;border-right:1px solid var(--line);box-shadow:20px 0 30px #20372f22}.sidenav.open{display:block}.mobile-menu{display:inline-block}.article{padding-top:35px}.hero{margin-bottom:32px}.lead{font-size:15px}.article section{margin:40px 0}h2{font-size:23px}.cards{gap:12px}.card{padding:19px}}@media(max-width:520px){.layout{padding:0 19px}.cards,.compare,.scene-grid{grid-template-columns:1fr}.card h3{font-size:18px}h1{font-size:31px}p,li{font-size:15px;line-height:1.95}.note{padding:16px 18px}.equation{font-size:17px;padding:18px}.demo{padding:16px}figcaption{padding:12px 15px}.stat-row{gap:22px}.scene-grid svg{min-width:0}}@media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important;transition:none!important}}@media print{.topbar,.sidenav,.toc,.pager,.demo button,.footer{display:none}.layout{display:block;padding:0}.article{max-width:none;padding:0}body{font-size:11pt;background:white}.hero{padding-bottom:10px}figure,table,.note{break-inside:avoid}figure svg{min-width:0}.article section{margin:24px 0}.cards{grid-template-columns:1fr 1fr}a{color:inherit}.equation{white-space:normal}}
 @media(max-width:820px){.figure-scroll:after{content:'図は横にスクロールできます →';display:block;font-size:10px;color:#718267;padding:8px 5px;position:sticky;left:0}figure svg{min-width:720px}.demo svg{min-width:0}}
@@ -157,42 +157,7 @@ main.article details details{background:var(--tint)}
 @media (prefers-reduced-motion: reduce) { .ld-fill { transition: none; } }
 @media print { .ld-controls { display: none; } }
 
-/* Transformer: contextual representations across layers. */
-.tf-intro{padding:22px 24px 0}.tf-kicker{font-size:10px;letter-spacing:.16em;color:var(--muted)}.tf-intro p{font-size:23px;letter-spacing:.015em;line-height:1.5;margin:9px 0 19px;font-weight:600}.tf-controls{padding:0 24px 20px;border-bottom:1px solid var(--line);display:flex;flex-wrap:wrap;justify-content:space-between;gap:10px}.tf-steps,.tf-playback{display:flex;gap:5px}.tf-controls button{border:1px solid #b8c6af;background:white;color:var(--green);padding:7px 11px;border-radius:5px;font-size:12px}.tf-steps button[aria-pressed=true],.tf-play[aria-pressed=true]{background:var(--green);color:white}.tf-controls button:disabled{opacity:.35;cursor:default}.tf-stage{display:grid;grid-template-columns:minmax(0,1fr) 200px;align-items:center;padding:10px 20px 18px 4px;gap:6px}.tf-space svg{min-width:0;width:100%}.tf-token{transition:transform 1000ms cubic-bezier(.4,0,.2,1)}.tf-counter{font-size:10px;color:var(--green);letter-spacing:.13em;margin:0}.tf-stage-copy h3{font-size:18px;margin:8px 0 10px}.tf-stage-copy p.tf-stage-description{font-size:13px;line-height:1.9;min-height:125px;margin:0}.tf-cycle{margin-top:18px;padding:14px 12px;border-left:2px solid #b9cbae;background:#f5f7ef;font-size:12px;line-height:1.7;color:#4b674a}.tf-cycle span{color:#6f8762}.tf-static{display:grid;grid-template-columns:1fr 1fr;gap:22px;padding:24px}.tf-static>div{min-width:0}.tf-static svg{min-width:0}.tf-static p{font-size:12px;line-height:1.8}.tf-enhanced .tf-static{display:none}
-@media(max-width:600px){.tf-stage{grid-template-columns:1fr;padding:5px 15px 20px}.tf-stage-copy{border-top:1px solid var(--line);padding:16px 6px 0}.tf-stage-copy p.tf-stage-description{min-height:0}.tf-cycle{display:none}.tf-intro{padding:18px 18px 0}.tf-intro p{font-size:20px}.tf-controls{padding:0 18px 17px}.tf-controls button{padding:8px 10px}.tf-static{grid-template-columns:1fr}}
-@media(prefers-reduced-motion:reduce){.tf-token{transition:none}}
-@media print{.tf-live{display:none!important}.tf-enhanced .tf-static{display:grid}.tf-static{grid-template-columns:1fr 1fr}.tf-representation{break-inside:auto}.tf-static>div{break-inside:avoid}}
-
-
-.tf-steps{flex-wrap:wrap}.tf-sentence .tf-space ellipse,.tf-sentence .tf-token circle,.tf-sentence .tf-space svg>text{opacity:0}.tf-sentence .tf-token text{fill:#294337;stroke:none}.tf-space ellipse,.tf-token circle{transition:opacity .5s}
-
-.tf-halo{display:none}.tf-final-layer .tf-token.tf-last .tf-halo{display:block}.tf-final-layer .tf-token:not(.tf-last){opacity:.4}.tf-token{transition:transform 1000ms cubic-bezier(.4,0,.2,1),opacity .5s}.tf-ellipsis{align-self:center;padding:0 3px}.tf-output svg{width:100%;min-width:0}.tf-space[hidden],.tf-output[hidden]{display:none!important}
-
-/* Keep teaching diagrams at a readable scale even on very wide screens. */
-body[data-page="llm"] .figure-scroll>svg{display:block;width:100%;max-width:760px;max-height:560px;min-width:0;margin:auto}
-body[data-page="llm"] #attention .figure-scroll>svg{max-width:540px;max-height:390px}
-.tf-stage{grid-template-columns:minmax(0,520px) 200px;justify-content:center}.tf-representation .tf-live{max-width:790px;margin:auto}
-.tf-vector-shape{transition:x .7s,y .7s,width .7s,height .7s,rx .7s,fill-opacity .5s,opacity .5s}
-.tf-numbers,.tf-output-chain{opacity:0;transition:opacity .4s}.tf-word{transition:opacity .4s}
-.tf-sentence .tf-vector-shape{opacity:0}
-.tf-numeric .tf-word{opacity:0}.tf-numeric .tf-column{opacity:1}.tf-numeric .tf-vector-shape{opacity:0}
-.tf-numeric .tf-space ellipse,.tf-numeric .tf-space svg>text{opacity:0}
-.tf-output-moving .tf-token:not(.tf-last),.tf-output-moving .tf-space ellipse,.tf-output-moving .tf-space svg>text{opacity:0}
-.tf-output-morph .tf-token.tf-last .tf-vector-shape{x:-85px;y:-23px;width:170px;height:46px;rx:4px;fill-opacity:.15;stroke:#b2703c}
-.tf-output-morph .tf-token.tf-last .tf-numbers{opacity:1}
-.tf-output-morph .tf-token.tf-last .tf-word{transform:translate(-35px,-40px)}
-.tf-output-ready .tf-output-chain{opacity:1}
-@media(max-width:600px){.tf-stage{grid-template-columns:1fr}.tf-stage-copy{padding-top:10px}}
-@media(prefers-reduced-motion:reduce){.tf-token,.tf-vector-shape,.tf-numbers,.tf-word,.tf-output-chain{transition:none}}
-
-.tf-numeric .tf-token{transition:transform .35s ease}.tf-numeric .tf-column{transition:opacity .35s .25s}
-@media(prefers-reduced-motion:reduce){.tf-numeric .tf-token,.tf-numeric .tf-numbers{transition:none}}
-
-.tf-column{opacity:0;transition:opacity .35s}.tf-sentence .tf-column text{fill:inherit}
-@media(prefers-reduced-motion:reduce){.tf-column{transition:none}}
-
-.tf-cycle{text-align:center}.tf-cycle>span{display:block;line-height:1;padding:8px 0;font-size:18px}.tf-cycle>div{color:#4b674a}
-.embedding-content{padding:22px}.embedding-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:14px}.embedding-grid section{margin:0!important;padding:16px!important;background:#f7f9f4;border-radius:8px}.embedding-grid h3{overflow-wrap:anywhere}.embedding-grid b{font-family:monospace;font-size:14px}.embedding-grid small{font-size:11px;font-weight:400}.embedding-content>p{overflow-wrap:anywhere}
+/* Original styles are in shared/learning-demos.css. */
 
 /* Only the surrounding page is sized for standalone viewing. */
 main.article{margin:auto;padding:24px;max-width:948px}
@@ -1078,7 +1043,21 @@ END EDITABLE DIAGRAM DATA -->
   }
 }
 </script>
-<figure class="embedding-demo"><div class="embedding-content"></div><noscript>文章をトークンに分け、埋め込みへ変換します。数値を表示するにはJavaScriptを有効にしてください。</noscript><figcaption></figcaption></figure>
+<figure class="learning-demo" id="ar-demo" aria-labelledby="ar-title">
+ <div class="ld-body">
+  <p class="ld-eyebrow">生成した結果が、次の入力になる</p>
+  <strong class="ld-title" id="ar-title">同じ文章の続きを一つずつ作る</strong>
+  <p class="ld-legend">ここまでの入力</p><div class="ld-sequence" aria-label="生成済みのトークン"></div>
+  <p class="ld-candidate">JavaScriptを有効にすると候補を表示します。</p>
+  <p class="ld-status" role="status">まだ次のトークンを選んでいません。選んだ結果を入力へ戻します。</p>
+  <div class="ld-controls" hidden>
+   <label>比較する入力 <select aria-label="比較する入力"></select></label>
+   <button type="button" data-next>一つ生成</button><button type="button" data-play aria-pressed="false">順に再生</button><button type="button" data-reset>リセット</button>
+  </div>
+ </div>
+ <figcaption>数値はHTML内のデータから読み込みます。</figcaption>
+ <noscript>本文の手順と学習用の表で、生成と学習の違いを読めます。</noscript>
+</figure>
 </main><script>/* Shared reader is embedded in every standalone HTML; no fetch or external assets. */
 'use strict';
 (() => {
@@ -1142,9 +1121,29 @@ END EDITABLE DIAGRAM DATA -->
  window.Diagram={data,layers,additive,format,percent,esc,vec,steps,note};
 })();
 
+'use strict';
 (() => {
- const {data,additive,esc,vec,note}=window.Diagram,c=data.cases[0];
- document.querySelector('.embedding-content').innerHTML=`<h2>トークン化と位置情報</h2><p>${esc(c.prompt)}</p><p>${esc(data.model.positionEncoding.label)}${additive?'：埋め込みに位置ベクトルを加算':'：埋め込みへの位置ベクトル加算は表示しません'}</p><div class="embedding-grid">${c.tokens.map((t,i)=>`<section><h3>${esc(t.text)} <small>位置 ${i}</small></h3><p>埋め込み<br><b>${vec(t.embedding)}</b></p>${additive?`<p>＋ 位置ベクトル<br><b>${vec(t.position)}</b></p>`:''}<p>層への入力<br><b>${vec(t.input)}</b></p></section>`).join('')}</div><p>このトークン列をTransformerへ渡します。</p>`;
- document.querySelector('figcaption').textContent=note()+` 表示成分は${data.model.componentIndices.slice(0,2).join('・')}（0始まり）です。表示値の切り捨てにより、表示された加算結果に差が出る場合があります。`;
+ const {data,steps,percent,note}=window.Diagram;
+ const root=document.querySelector('#ar-demo'),q=s=>root.querySelector(s);
+ const select=q('select'),next=q('[data-next]'),play=q('[data-play]');
+ const reduced=matchMedia('(prefers-reduced-motion: reduce)');let step=0,timer=null;
+ select.replaceChildren(...data.cases.map((c,i)=>{const o=document.createElement('option');o.value=i;o.textContent=c.label;return o;}));
+ const frames=()=>steps(data.cases[+select.value]);
+ function stop(){clearInterval(timer);timer=null;play.textContent=reduced.matches?'再生（1段ずつ）':'順に再生';play.setAttribute('aria-pressed','false');}
+ function render(){
+  const fs=frames(),done=step===fs.length,f=fs[Math.min(step,fs.length-1)];
+  const words=[...f.tokens.map(t=>t.text),...(done?[f.candidates[f.selectedIndex].text]:[])];
+  q('.ld-sequence').replaceChildren(...words.map(t=>{const el=document.createElement('span');el.className='ld-token';el.textContent=t;return el;}));
+  q('.ld-candidate').textContent=done?'記録した生成区間の終わりです。':'次の候補：'+f.candidates.map(c=>c.text+' '+percent(c.probability)).join(' ／ ');
+  q('[role="status"]').textContent=done?'記録の終わりで停止しました。EOSを選んだことを意味する表示ではありません。':step?'選んだトークンを入力へ追加し、次の確率を表示しています。':'選んだ結果を入力へ戻します。';
+  next.disabled=done;play.disabled=done;select.disabled=step>0;
+ }
+ function advance(){if(step<frames().length)step++;if(step===frames().length)stop();render();}
+ next.addEventListener('click',()=>{stop();advance();});
+ play.addEventListener('click',()=>{if(timer){stop();return;}if(step===frames().length)return;if(reduced.matches){advance();return;}play.textContent='停止';play.setAttribute('aria-pressed','true');timer=setInterval(advance,1400);});
+ q('[data-reset]').addEventListener('click',()=>{stop();step=0;render();});select.addEventListener('change',render);
+ document.addEventListener('visibilitychange',()=>{if(document.hidden)stop();});reduced.addEventListener('change',stop);
+ q('figcaption').textContent=note()+' 記録された選択を順に再生します。モデルをブラウザで実行しているわけではありません。';
+ q('.ld-controls').hidden=false;stop();render();
 })();
 </script></body></html>

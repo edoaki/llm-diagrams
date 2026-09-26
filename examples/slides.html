@@ -1,25 +1,4 @@
 <!doctype html>
-<html lang="ja">
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>スライドへの埋め込み例</title>
-<script src="../dist/gpt-representations.js" defer></script>
-<style>
-body{margin:0;padding:24px;background:#18251f;color:white;font-family:system-ui,sans-serif}.slide{max-width:1000px;margin:auto}h1{font-size:28px}nav{display:flex;align-items:center;gap:16px;margin:20px 0}button{font:inherit;padding:8px 18px;cursor:pointer}output{min-width:6em}llm-gpt-representations{width:100%}
-</style>
-<main class="slide">
-<h1>文字から、文脈を含む表現へ</h1>
-<llm-gpt-representations id="diagram" stage="0"></llm-gpt-representations>
-<nav aria-label="スライドから図を操作"><button id="prev" type="button">前の段階</button><output id="status" aria-live="polite"></output><button id="next" type="button">次の段階</button></nav>
-<p>図内のボタンでも操作できます。スライド側からは stage 属性で段階を指定します。</p>
-</main>
-<script>
-const diagram=document.getElementById('diagram');
-let stage=0;
-function sync(){document.getElementById('status').textContent=`段階 ${stage+1} / 7`;document.getElementById('prev').disabled=stage===0;document.getElementById('next').disabled=stage===6;}
-diagram.addEventListener('stagechange',e=>{stage=e.detail.stage;sync();});
-document.getElementById('prev').onclick=()=>diagram.setAttribute('stage',Math.max(0,stage-1));
-document.getElementById('next').onclick=()=>diagram.setAttribute('stage',Math.min(6,stage+1));
-sync();
-</script>
-</html>
+<html lang="ja"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>HTMLをスライドに埋め込む例</title>
+<style>body{margin:0;font-family:system-ui,sans-serif}main{max-width:1000px;margin:auto;padding:20px}iframe{width:100%;height:850px;border:0}</style>
+<main><h1>各層での表現の更新</h1><p>単独HTMLをiframeで表示しています。図内のボタンで操作できます。</p><iframe src="../dist/gpt-representations.html" title="文章から、文脈を含む表現へ"></iframe></main></html>

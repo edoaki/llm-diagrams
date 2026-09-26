@@ -1,34 +1,48 @@
-# LLM diagrams
+# GPTのアニメーション
 
-GPTの説明図を、図ごとに独立して編集・配布・埋め込みできるよう分離したリポジトリです。
+文章、ベクトル、各層の表現、次トークンの予測を操作して確認する教材です。各図はCSS・JavaScript・データを内蔵したHTMLで、**HTMLを1つ渡すだけで、オフラインで動きます**。
 
-## 開く・渡す
+## 公開・配布
 
-`index.html` をブラウザで直接開くと一覧を表示します。サーバーは不要です。
+[GitHub Pagesの一覧](https://edoaki.github.io/llm-diagrams/) ／ [GitHubリポジトリ](https://github.com/edoaki/llm-diagrams)
 
-「文字から空間が動く」図は **`dist/gpt-representations.html`** です。このHTMLファイル1個を渡すだけで、オフラインで操作できます。
+| 図 | 単独配布ファイル |
+| --- | --- |
+| 文章 → 埋め込み → 各層 → 次トークンの確率 | [dist/gpt-representations.html](dist/gpt-representations.html) |
+| notの有無を比較する空間図 | [dist/gpt-representations-not.html](dist/gpt-representations-not.html) |
+| 続きを一つずつ生成 | [dist/autoregressive.html](dist/autoregressive.html) |
+| 過去の表現を保ちながら次のトークンを計算 | [dist/decoder-kv-cache.html](dist/decoder-kv-cache.html) |
+| トークン化と位置情報 | [dist/token-embeddings.html](dist/token-embeddings.html) |
+| 生成の一巡 | [dist/generation-loop.html](dist/generation-loop.html) |
+| N-gram → 並べ替え → 傾向 → Transformer | [dist/ngram-to-llm.html](dist/ngram-to-llm.html) |
 
-| 図 | 単独配布ファイル | 編集場所 |
-| --- | --- | --- |
-| トークン化と位置情報 | `dist/token-embeddings.html` | `components/token-embeddings/` |
-| 文章→ベクトル→各層→出力 | `dist/gpt-representations.html` | `components/gpt-representations/` |
-| 次トークンを入力に戻す | `dist/generation-loop.html` | `components/generation-loop/` |
+`index.html` は一覧です。各HTMLを単独で配布できます。`examples/slides.html` はiframeで埋め込む例です。公開はmainブランチのルートをGitHub Pagesのソースとし、`.nojekyll`で生成済みファイルをそのまま配信します。
 
-## コンポーネントとして使う
+## 数値を編集する
 
-必要な図のJSファイル1個をコピーし、HTMLで読み込みます。フレームワークや外部ライブラリは不要です。
+全図のデータの原本は **[components/gpt-representations-not/template.html](components/gpt-representations-not/template.html) の先頭の `id="diagram-data"`** です。文章・token・埋め込み・位置情報・各層の値・描画用座標・候補確率・N-gramの表をここにまとめています。描画処理に数値を重複して書く必要はありません。
 
-```html
-<script src="./gpt-representations.js" defer></script>
-<llm-gpt-representations></llm-gpt-representations>
-<llm-gpt-representations></llm-gpt-representations>
+- 共通入力は `The capital of France is` と `The capital of France is not`。生成の図もこの続きを使います。
+- 現在のベクトル・確率・座標は説明用です。sin/cos位置ベクトルは0始まりの位置から計算した先頭2成分を保持しています。モデル全体の実測結果ではありません。
+- 生の精度を保持し、画面だけ小数3桁で切り捨てます。末尾のゼロは省略し、負数は0方向へ切り捨てます。％は変換後に切り捨てます。
+- 総層数から第1・第2・最終層を表示します。現在の32層は仮の設定です。中間層は「…」で省略します。
+- 加算型の位置情報では埋め込みへ加算する動きを表示します。RoPEなどでは加算の動きを表示しません。
+- N-gramの頻度表、並べ替えの説明用スコア、Transformerの出力を区別しています。LLM確率をN-gramの実測頻度として扱いません。
+- 配布HTMLも同じデータ欄だけで編集できます。ただしリポジトリ側は原本を編集して再ビルドします。
+
+## 実測値を依頼する
+
+1. [先輩のローカルモデル環境へ貼る指示](docs/prompt-extract.md)と配布HTMLを渡す。
+2. 返ってきたJSON・取得レポートを添えて、[このリポジトリ側へ貼る指示](docs/prompt-import.md)を使う。
+3. 詳細は[データ仕様と差し替え手順](docs/real-values.md)を参照する。
+
+```sh
+node scripts/import-measurements.mjs /path/to/measurements.json
+npm run build
+npm test
 ```
 
-Shadow DOMでCSS・SVG ID・操作状態を分離しています。同じページに複数置いても独立して動きます。ほかの図は `llm-token-embeddings`、`llm-generation-loop` を使います。
-
-単独HTMLはCSSとJSも内蔵します。JavaScript無効時はDeclarative Shadow DOM対応ブラウザで静的な各段階を表示します。JSだけを埋め込む形式はJavaScriptが必要です。印刷時は各層を静的に表示し、「動きを減らす」設定にも対応します。
-
-## 編集・検証
+## 開発・検証
 
 Node.js 22.17以上とnpmを使用します。
 
@@ -39,48 +53,10 @@ npm run build
 npm test
 ```
 
-- `components/<id>/template.html`: 図のHTML・SVG・説明用データ
-- `components/<id>/style.css`: 図固有の表示
-- `components/<id>/behavior.js`: `mount(root)` と後始末関数
-- `shared/base.css`: 図の最低限の共通スタイル
-- `components.json`: 図の登録一覧
-- `dist/`: 自己完結したHTMLとWeb Component用JS（生成物）
+`components/<id>/` に各図のHTML・CSS・挙動、`shared/` に共通CSSとデータ読み込み・表示処理があります。ビルドが原本のデータを検証し、全HTMLへ埋め込みます。`dist/` と `index.html` は生成物として管理します。
 
-新しい図は上記3ファイルを作り `components.json` に登録します。生成ファイルを直接編集せず、`npm run build` で更新します。ビルド自体はNode.jsの標準機能のみで実行できます。
+テストは単独HTMLのオフライン動作、960/390/320px、各場面、not比較、加算のタイミング、キャンセル、生成の再生・停止、データのみの置換（トークン数・層数・RoPE・精度・説明文・候補強調）を確認します。スクリーンショットはGit管理外の`test-results/`に保存します。JavaScript無効時は概念説明を表示します。
 
-## 今後追加する図
+## 元ページとの関係
 
-今回は置き場と作業メモのみ作成しています。
-
-- `planned/decoder-kv-cache/`: KVキャッシュを含めたデコーダーの動作
-- `planned/ngram-to-llm/`: 「n-gramの最適化としてのLLM」の説明を検討する図
-
-## 分離元
-
-`/Users/aki/docs/ml-landscape/content/models/llm/components/` の `visual-001.html`、`visual-002.html`、`visual-003.html`、`layers.js`、`page.css` を2026-09-26の作業ツリーから分離。元リポジトリの変更や参照は実行時に不要です。
-
-主な変更はスタイルと状態の分離、コンポーネント取り外し時のタイマー破棄、単独配布用ビルドです。操作ラベル「ベクトル化（Word2Vec）」はGPTの埋め込みとWord2Vecを混同しないよう「ベクトル化（埋め込み）」にしました。点や確率は元図の説明用データを保持し、実モデルの計算結果ではありません。
-
-外部への送信・公開は行っていません。利用許諾は分離元の権利者の方針に従い、この作業では新しいライセンスを付与していません。
-
-## HTMLスライドとの連携
-
-`examples/slides.html` にスライド側の「前／次」ボタンで図を進める実例があります。
-
-```html
-<script src="./gpt-representations.js" defer></script>
-<llm-gpt-representations id="figure" stage="0"></llm-gpt-representations>
-<script>
-const figure = document.getElementById('figure');
-// スライドの表示・段階切り替えイベントから呼び出す
-function showOutput() { figure.setAttribute('stage', '6'); }
-function resetFigure() { figure.setAttribute('stage', '0'); }
-figure.addEventListener('stagechange', event => {
-  console.log(event.detail.stage, event.detail.title);
-});
-</script>
-```
-
-`stage` は0（文章）、1（埋め込み）、2〜4（第1〜3層）、5（N層）、6（出力）。初期化時と図内の操作でも `stagechange` が発火します。属性は外部からの指示用で、現在の段階はイベントで受け取ります。
-
-図は配置先の幅に追従し、狭いカラムでは説明を下に並べます。スライドの高さは固定せず、図の幅やスライド側のレイアウトで調整してください。タグをDOMから取り外すと保留中のタイマーを解除し、再配置時には `stage` 属性の段階（未指定なら文章）から初期化します。
+2026-09-26に `ml-landscape` のGPTページからHTML・JavaScript・CSSを切り出し、その後、共通データ化・位置ベクトルの動き・not比較・N-gram・デコーダーの図を加えました。ビルド時・閲覧時とも元リポジトリへ依存しません。`planned/`は当初の構想メモです。利用許諾は分離元の権利者の方針に従い、新しいライセンスは付与していません。

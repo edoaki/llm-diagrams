@@ -1,25 +1,30 @@
 import fs from 'node:fs/promises';
+import {validateData} from './validate-data.mjs';
 import { fileURLToPath } from 'node:url';
 const root=fileURLToPath(new URL('../',import.meta.url));
 const read=p=>fs.readFile(root+p,'utf8');
 const write=(p,s)=>fs.writeFile(root+p,s);
 const items=JSON.parse(await read('components.json'));
-const base=await read('shared/base.css');
-const page=(title,body)=>`<!doctype html><html lang="ja"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>${title}</title><style>body{margin:0;padding:24px;background:#f6f8f7;color:#243b30;font-family:system-ui,sans-serif}main{max-width:960px;margin:auto}h1{font-size:24px}p{line-height:1.8}a{color:#35664d}section{margin:32px 0}@media(max-width:600px){body{padding:12px}}</style><main>${body}</main></html>`;
+// Local snapshots of the original page's styles, in the original cascade order.
+const base=(await Promise.all(['style.css','content.css','learning-demos.css'].map(n=>read('shared/'+n)))).join('\n');
+const page=(title,body,css='',js='')=>`<!doctype html>
+<html lang="ja"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>${title}</title>
+<style>${base}\n${css}\n/* Only the surrounding page is sized for standalone viewing. */
+main.article{margin:auto;padding:24px;max-width:948px}
+@media(max-width:520px){main.article{padding:16px}}
+</style></head><body data-page="llm"><main class="article">${body}</main>${js?`<script>${js.replaceAll('</script','<\\/script')}</script>`:''}</body></html>\n`;
+const dataSource=await read('components/gpt-representations-not/template.html');
+const dataBlock=dataSource.match(/<!-- BEGIN EDITABLE DIAGRAM DATA[\s\S]*?<\/script>/)?.[0];
+if(!dataBlock)throw new Error('Missing editable data block');
+await validateData(JSON.parse(dataBlock.match(/<script[^>]*>([\s\S]*?)<\/script>/)[1]));
+const runtime=await read('shared/diagram-data.js');
 await fs.mkdir(root+'dist',{recursive:true});
-let sections='';
 for(const {id,title} of items){
  const prefix=`components/${id}/`;
- const html=await read(prefix+'template.html');
- const css=base+await read(prefix+'style.css');
- const markup=`<style>${css}</style>${html}`;
- const behavior=await read(prefix+'behavior.js');
- const tag=`llm-${id}`;
- const code=`(() => {\n${behavior}\nconst template=${JSON.stringify(markup)};\nif (!customElements.get('${tag}')) customElements.define('${tag}',class extends HTMLElement {\n static observedAttributes=['stage'];\n attributeChangedCallback(name,oldValue,value){ if(value!==null)this.cleanup?.setStage?.(Number(value)); }\n connectedCallback(){ if(this.cleanup)return; const root=this.shadowRoot || this.attachShadow({mode:'open'}); root.innerHTML=template; this.cleanup=mount(root); if(this.hasAttribute('stage'))this.cleanup.setStage?.(Number(this.getAttribute('stage'))); }\n disconnectedCallback(){ this.cleanup?.(); this.cleanup=null; }\n});\n})();\n`;
- await write(`dist/${id}.js`,code);
- const figure=`<${tag}><template shadowrootmode="open">${markup}</template></${tag}>`;
- await write(`dist/${id}.html`,page(title,`<h1>${title}</h1>${figure}<script>${code.replaceAll('</script','<\\/script')}</script>`));
- sections+=`<section><h2>${title}</h2><p><a href="dist/${id}.html">この図だけを開く・送る</a></p>${figure}<script src="dist/${id}.js"></script></section>`;
+ await write(`dist/${id}.html`,page(title,dataBlock+'\n'+(await read(prefix+'template.html')).replace(dataBlock,''),await read(prefix+'style.css'),runtime+'\n'+await read(prefix+'behavior.js')));
+ // Remove the obsolete Web Component build, without touching unrelated files.
+ await fs.rm(root+`dist/${id}.js`,{force:true});
 }
-await write('index.html',page('LLMの図コンポーネント',`<h1>LLMの図コンポーネント</h1><p>各図は単独のHTMLで閲覧でき、Web Componentとして別ページにも埋め込めます。数値・座標は説明用です。</p>${sections}<section><h2>追加予定（未実装）</h2><ul><li>KVキャッシュを含めたデコーダーの動作</li><li>n-gramとLLMの次トークン予測</li></ul></section>`));
-console.log(`Built ${items.length} independent diagrams.`);
+const list=animated=>items.filter(item=>item.animated===animated).map(({id,title})=>`<li><a href="dist/${id}.html">${title}</a> — <a href="dist/${id}.html" download>HTMLを保存</a></li>`).join('');
+await write('index.html',page('GPTのアニメーション',`<h1>GPTのアニメーション</h1><p>元の教材から切り出したアニメーションです。リンク先のHTMLを1つ渡すだけで、オフラインで開いて操作できます。</p><h2>動かせるアニメーション</h2><ul>${list(true)}</ul><h2>元ページの静止図</h2><ul>${list(false)}</ul>`));
+console.log(`Built ${items.length} standalone HTML files.`);

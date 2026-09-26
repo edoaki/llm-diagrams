@@ -1,0 +1,15 @@
+import fs from 'node:fs/promises';
+import {validateData} from './validate-data.mjs';
+const input=process.argv[2];
+if(!input)throw new Error('Usage: node scripts/import-measurements.mjs measurements.json');
+const file=new URL('../components/gpt-representations-not/template.html',import.meta.url);
+const html=await fs.readFile(file,'utf8');
+const re=/(<script type="application\/json" id="diagram-data">)([\s\S]*?)(<\/script>)/;
+const match=html.match(re);if(!match)throw new Error('Missing canonical data block');
+const old=JSON.parse(match[2]),incoming=JSON.parse(await fs.readFile(input,'utf8'));
+if(incoming.schemaVersion!==1||incoming.model?.status!=='measured')throw new Error('schemaVersion=1 and model.status=measured are required');
+const combined={...old,model:incoming.model,cases:incoming.cases};
+await validateData(combined);
+const json=JSON.stringify(combined,null,2).replaceAll('<','\\u003c');
+await fs.writeFile(file,html.replace('現在は説明用の仮置き値です。実モデルの計算結果ではありません。','model/casesは実測値です。ngramの表は説明用です。座標の出所はprojectionを参照。').replace(re,(_,a,b,c)=>a+'\n'+json+'\n'+c));
+console.log('Validated model/cases imported into the canonical HTML. N-gram teaching data preserved. Run npm run build and npm test.');

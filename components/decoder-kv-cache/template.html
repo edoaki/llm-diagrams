@@ -1,0 +1,12 @@
+<figure class="decoder" aria-labelledby="decoder-title">
+  <header class="dc-heading"><span class="dc-eyebrow">DECODER · STEP BY STEP</span><h1 id="decoder-title">次の言葉ができるまで</h1><p>過去の表現を保ったまま、いまのトークンを層ごとに計算する。</p></header>
+  <div class="dc-toolbar">
+    <div class="dc-controls" role="group" aria-label="アニメーションの操作"><button type="button" data-dc-back aria-label="1ステップ戻る">戻る</button><button type="button" data-dc-next>進む</button><span class="dc-count"></span><button type="button" data-dc-reset aria-label="リセット" title="リセット"><svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path d="M4 10a8 8 0 1 1 1 7M4 4v6h6" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></button></div>
+  <div class="dc-status" aria-live="polite"><span class="dc-step"></span><div><h3 class="dc-title"></h3><p class="dc-description"></p></div></div>
+  </div>
+  <div class="dc-legend"><span><i class="dc-blue"></i>計算済み・固定</span><span><i class="dc-orange"></i>いま計算する表現</span><span><i class="dc-outline"></i>未計算</span><span><i class="dc-green"></i>選ばれたトークン</span></div>
+  <div class="dc-panels"><section><div class="dc-panel-title"><h2>01　計算の経路</h2></div><svg class="dc-network" viewBox="0 0 460 370" role="img" aria-label="トークンごとの計算経路"></svg></section><section><div class="dc-panel-title"><h2>02　表現の空間</h2><span class="dc-space-token"></span></div><svg class="dc-space" viewBox="0 0 400 370" role="img" aria-label="層ごとの表現の変化"></svg></section></div>
+  <section class="dc-output" aria-label="次のトークンの候補"><div><h2>次のトークンの確率</h2><p class="dc-output-note"></p></div><div class="dc-bars"></div></section>
+  <figcaption>座標・軌跡・確率は説明用で、実モデルの出力ではありません。高次元の表現を平面で模式的に表示しています。3層に簡略化し、1語を1トークンとして扱います。位置情報・残差接続などの詳細は省略しています。</figcaption>
+  <noscript>このアニメーションを操作するにはJavaScriptを有効にしてください。</noscript>
+</figure>

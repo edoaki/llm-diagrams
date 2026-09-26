@@ -1,7 +1,5 @@
-# KVキャッシュを含めたデコーダーの動作
+# デコーダーの動作
 
-未実装。次の図を独立したコンポーネントとして追加するための作業メモ。
+実装済み: `components/decoder-kv-cache/` → `dist/decoder-kv-cache.html`。
 
-プロンプトの処理（prefill）と1トークンずつの生成（decode）、層ごとのK・Vの保存と再利用、新しいトークンのQ・K・V、出力と次の入力への循環を示す予定。
-
-実装時は components/<id>/ に template.html・style.css・behavior.js を作り、components.json に登録する。
+I と live の処理が済んだ状態から、in と Tokyo の層ごとの計算・過去のK・Vの参照・表現空間の変化・出力確率と選択を同期表示する。3層、座標、確率は説明用。一段階ずつ進む・戻る・リセットに対応。

@@ -1,0 +1,48 @@
+/* New introductory pages: readable text, progressive-enhancement diagrams. */
+.article > h2 { margin-top: 3.2rem; scroll-margin-top: 6rem; }
+.learning-demo { background: #fff; border: 1px solid #d5dfd5; border-radius: 10px; }
+.ld-body { padding: 24px; }
+.ld-eyebrow { color: #516d59; font-size: 12px; letter-spacing: .08em; margin: 0 0 12px; }
+.ld-title { display: block; margin-bottom: 16px; font-size: 18px; }
+.ld-controls { display: flex; flex-wrap: wrap; gap: 10px; margin: 20px 0 8px; align-items: center; }
+.learning-demo [hidden] { display: none !important; }
+.ld-controls button, .ld-controls select { border: 1px solid #8ba58e; border-radius: 6px; background: #f8faf5; color: #243b30; padding: 10px 14px; min-height: 44px; max-width: 100%; }
+.ld-controls button:hover { background: #e9f0e4; }
+.ld-controls button:disabled { opacity: .5; cursor: default; }
+.ld-controls button[aria-pressed="true"] { background: #35664d; color: white; }
+.ld-controls label { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; }
+.ld-status { background: #f0f5ec; padding: 14px 16px; border-radius: 6px; font-size: 14px; min-height: 4em; overflow-wrap: anywhere; }
+.ld-bars { display: grid; gap: 16px; }
+.ld-bar-label { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 6px; margin-bottom: 6px; font-size: 14px; }
+.ld-track { height: 20px; background: #e9eeea; border-radius: 4px; overflow: hidden; }
+.ld-fill { display: block; height: 100%; background: #467557; transition: width .4s ease; }
+.ld-fill.alt { background: #537f9b; }
+.ld-sequence { display: flex; flex-wrap: wrap; gap: 8px; padding: 12px 0; }
+.ld-token { background: #ecf2e7; border: 1px solid #a9bea5; border-radius: 5px; padding: 8px 12px; }
+.ld-token:last-child { background: #35664d; color: white; }
+.ld-candidate { padding: 12px; border-left: 3px solid #7595ad; background: #f2f6fa; }
+.ld-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; }
+.ld-card { padding: 14px 10px; border: 1px solid #d5dfd5; border-radius: 6px; background: #fafbf7; text-align: center; }
+.ld-card strong, .ld-card span { display: block; }
+.ld-card span { font-size: 13px; margin-top: 8px; }
+.ld-stages { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 6px; padding: 0; list-style: none; }
+.ld-stages li { margin: 0; padding: 10px 6px; border-bottom: 3px solid #d5dfd5; font-size: 12px; text-align: center; }
+.ld-stages li[aria-current="step"] { border-color: #35664d; background: #edf4e8; font-weight: bold; }
+.learning-demo svg { min-width: 0; width: 100%; height: auto; }
+.ld-range { width: 100%; accent-color: #35664d; }
+.ld-legend { font-size: 13px; color: #51685a; }
+.ld-kpi { font-size: 26px; color: #35664d; font-variant-numeric: tabular-nums; }
+.learning-demo noscript { display: block; padding: 12px 20px; font-size: 13px; }
+@media (max-width: 520px) {
+ .ld-body { padding: 16px; }
+ .ld-grid { grid-template-columns: 1fr; }
+ .ld-card { text-align: left; }
+ .ld-card strong, .ld-card span { display: inline; margin-right: 8px; }
+ .ld-controls button { flex-grow: 1; }
+ .ld-stages { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+ .ld-title { font-size: 17px; }
+ .article .table-scroll th, .article .table-scroll td { min-width: 100px; padding: 10px; }
+ .article .table-scroll::after { content: '幅が足りない表は横にスクロールできます →'; display: block; position: sticky; left: 0; font-size: 11px; color: #657568; padding-top: 8px; }
+}
+@media (prefers-reduced-motion: reduce) { .ld-fill { transition: none; } }
+@media print { .ld-controls { display: none; } }

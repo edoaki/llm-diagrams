@@ -8,7 +8,7 @@
   },
   "scripts": {
     "build": "node scripts/build.mjs",
-    "test": "node tests/browser.mjs",
+    "test": "node tests/data.mjs && node tests/browser.mjs",
     "browser:install": "playwright install chromium"
   },
   "devDependencies": {

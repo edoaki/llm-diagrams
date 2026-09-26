@@ -33,4 +33,25 @@ body[data-page="llm"] #attention .figure-scroll>svg{max-width:540px;max-height:3
 @media(prefers-reduced-motion:reduce){.tf-column{transition:none}}
 
 .tf-cycle{text-align:center}.tf-cycle>span{display:block;line-height:1;padding:8px 0;font-size:18px}.tf-cycle>div{color:#4b674a}
-.embedding-content{padding:22px}.embedding-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:14px}.embedding-grid section{margin:0!important;padding:16px!important;background:#f7f9f4;border-radius:8px}.embedding-grid h3{overflow-wrap:anywhere}.embedding-grid b{font-family:monospace;font-size:14px}.embedding-grid small{font-size:11px;font-weight:400}.embedding-content>p{overflow-wrap:anywhere}
+
+.tf-negation{width:100%;padding:0 0 8px}.tf-negation [role="group"]{display:flex;gap:6px}
+.tf-negation button[aria-pressed="true"]{background:var(--green);color:white}
+.tf-negation .tf-input{font-size:18px;font-weight:600;margin:12px 0 4px;overflow-wrap:anywhere}
+.tf-negation .tf-comparison-note{font-size:12px;color:var(--muted);margin:0}
+.tf-token[hidden]{display:none!important}
+
+/* The figure carries the explanation; no prose sidebar. */
+.tf-controls{padding-top:22px}.tf-stage{grid-template-columns:minmax(0,520px);padding:10px 12px 18px}
+
+.tf-pe{opacity:0;transform:translateY(130px);transition:transform .65s ease,opacity .4s;pointer-events:none}
+.tf-pe-visible .tf-pe{opacity:1;transform:translateY(105px)}
+.tf-pe-plus{opacity:0;transition:opacity .15s;pointer-events:none}
+.tf-pe-visible .tf-pe-plus{opacity:1}
+.tf-pe-merge .tf-pe-plus{opacity:0}
+.tf-pe-merge .tf-pe{transform:translateY(0);opacity:0;transition:transform .65s ease .15s,opacity .65s ease .15s}
+.tf-position-added .tf-pe{opacity:0;transition:none}
+.tf-vector-label{opacity:0;fill:#657568;font:14px system-ui,sans-serif;transition:opacity .3s}
+.tf-numeric .tf-vector-label{opacity:1!important}
+.tf-position-added.tf-numeric .tf-column{filter:drop-shadow(0 0 3px #91a87988)}
+@media(prefers-reduced-motion:reduce){.tf-pe,.tf-pe-plus,.tf-vector-label{transition:none}}
+.tf-pe text{fill:currentColor}
