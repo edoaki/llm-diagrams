@@ -35,6 +35,14 @@
  for(const c of data.cases){
   if(typeof c.prompt!=='string'||typeof c.label!=='string'||!Array.isArray(c.continuation))fail('入力文・ラベル・continuationを確認してください');
   if(!c.tokens?.length)fail('tokensが空です');c.tokens.forEach(checkToken);checkCandidates(c.candidates,c.selectedIndex);
+  // Optional: candidates predicted at an earlier prompt position must contain the actual next input token.
+  c.tokens.forEach((t,i)=>{
+   if(t.candidates===undefined)return;
+   const next=c.tokens[i+1];if(!next)fail('最後の入力トークンの候補はcase.candidatesに書いてください');
+   const index=Array.isArray(t.candidates)?t.candidates.findIndex(v=>v.text===next.text):-1;
+   checkCandidates(t.candidates,index);
+   if(model.status==='measured'&&t.candidates[index].tokenId!==next.id)fail('途中位置の候補に次の入力トークンのtokenIdが必要です');
+  });
   let selected=c.candidates[c.selectedIndex];
   for(const s of c.continuation){checkToken(s.token);if(s.token.text!==selected.text||s.token.id!==selected.tokenId)fail('続きのトークンが直前の選択と一致しません');checkCandidates(s.candidates,s.selectedIndex);selected=s.candidates[s.selectedIndex];}
  }
@@ -42,6 +50,8 @@
  if(!['illustrative','measured'].includes(ng.status)||(ng.status==='measured'&&!ng.source))fail('N-gram実測の出典が必要です');
  if(m.status!=='illustrative')fail('並べ替え表は説明用スコアとして保持してください');
  if(ng.probabilities.length!==ng.contexts.length)fail('N-gramの列数が一致しません');
+ // Squares on the last word's card in the Transformer scene; one short list per case, each value in −1〜1.
+ for(const c of data.cases){const f=ng.features?.[c.key];if(!Array.isArray(f)||f.length<1||f.length>12||!f.every(n=>finite(n)&&n>=-1&&n<=1))fail('ngram.featuresは各条件に1〜12個、−1〜1の数値です');}
  ng.probabilities.forEach(v=>{vector(v,ng.words.length,'N-gram');if(v.some(n=>n<0||n>1)||Math.abs(v.reduce((a,b)=>a+b,0)-1)>1e-6)fail('N-gramの確率を確認してください');});
  if(m.values.length!==m.words.length)fail('スコア表の行数が一致しません');m.values.forEach(v=>vector(v,m.contexts.length,'スコア表'));
  const permutation=(v,n)=>Array.isArray(v)&&v.length===n&&new Set(v).size===n&&v.every(i=>Number.isInteger(i)&&i>=0&&i<n);
@@ -57,6 +67,5 @@
  const percent=p=>format(p*100)+'%';
  const vec=v=>'['+v.slice(0,2).map(format).join(', ')+', …]';
  const steps=c=>[{tokens:c.tokens,candidates:c.candidates,selectedIndex:c.selectedIndex},...c.continuation.map((s,i)=>({tokens:[...c.tokens,...c.continuation.slice(0,i+1).map(x=>x.token)],candidates:s.candidates,selectedIndex:s.selectedIndex}))];
- const note=()=> (model.status==='measured'?`モデル：${model.id}。ベクトル・確率は実測値。`:'ベクトル・確率は説明用の仮置き値で、実モデルの計算結果ではありません。')+' '+(model.projection.status==='measured'?`配置：${model.projection.method}。`:'点の座標・軌跡は説明用の配置です。')+' 表示する数値は小数3桁で切り捨てています。';
- window.Diagram={data,layers,additive,format,percent,esc,vec,steps,note};
+ window.Diagram={data,layers,additive,format,percent,esc,vec,steps};
 })();

@@ -157,90 +157,187 @@ main.article details details{background:var(--tint)}
 @media (prefers-reduced-motion: reduce) { .ld-fill { transition: none; } }
 @media print { .ld-controls { display: none; } }
 
+.decoder{--blue:#4c7da5;--orange:#c36a28;--green:#24816c;--pale-blue:#bccddb;--pale-orange:#ebc7a9;margin:0;color:#273d49;font-family:system-ui,-apple-system,sans-serif}
+.decoder *{box-sizing:border-box}
+.dc-heading{margin-bottom:12px}
+.dc-eyebrow{font-size:11px;letter-spacing:.18em;color:#687e89;font-weight:700}
+.decoder h1{font-size:30px;line-height:1.4;margin:10px 0 0}
+.decoder .dc-panel-title h2{font-size:13px;line-height:1.5;margin:0;padding:0;border:0;font-weight:700;color:#273d49}
+.dc-legend{display:flex;flex-wrap:wrap;gap:6px 20px;margin-bottom:12px;font-size:12px;color:#4f6572}
+.dc-legend span{display:flex;align-items:center;gap:6px}
+.dc-legend i{width:10px;height:10px;border-radius:50%;display:inline-block}
+.dc-orange{background:var(--orange)}.dc-blue{background:var(--blue)}.dc-unused{background:#fff;box-shadow:inset 0 0 0 1.5px var(--pale-blue)}
+.dc-panels{display:grid;grid-template-columns:1.1fr 1fr;gap:16px}
+.dc-panels section{min-width:0;background:#f6f8fa;border:1px solid #e0e7eb;border-radius:14px;overflow:hidden}
+.dc-panel-title{padding:14px 16px 0}
+.dc-panels svg{display:block;width:100%;height:auto;min-width:0;max-width:none;overflow:visible}
+.decoder svg text{font-family:system-ui,sans-serif;font-size:13px;fill:#607582}
+.decoder svg .dc-row-current{fill:var(--orange);font-weight:700}
+.decoder svg .dc-space-layer{font-size:13px;font-weight:700;fill:var(--orange)}
+.decoder figcaption{font-size:11px;line-height:1.8;color:#7b8991;margin:14px 0 0;padding:0;background:transparent;border:0}
+/* Toolbar */
+.dc-toolbar{position:sticky;top:0;z-index:5;display:flex;flex-wrap:wrap;align-items:center;gap:8px 16px;background:#fffffffa;border-bottom:1px solid #dfe7eb;padding:12px 0;margin-bottom:14px;backdrop-filter:blur(8px)}
+.dc-cases{display:flex;gap:8px}
+.dc-controls{display:flex;flex:1;flex-wrap:nowrap;gap:8px;align-items:center}
+.decoder .dc-toolbar button{font:inherit;font-size:13px;line-height:1.4;border:1px solid #ccd8de;border-radius:7px;background:white;color:#365366;cursor:pointer;transition:background .2s,color .2s}
+.decoder .dc-toolbar button:disabled{opacity:.4;cursor:default}
+.decoder .dc-toolbar button:focus-visible{outline:3px solid #d78a48;outline-offset:3px}
+.decoder .dc-cases button{height:40px;padding:0 14px}
+.decoder .dc-cases button[aria-pressed=true]{background:#fcefe3;border-color:var(--orange);color:#9a4f1a}
+.dc-controls button[data-dc-back],.dc-controls button[data-dc-next]{width:72px;height:40px;padding:0;flex-shrink:0}
+.decoder .dc-toolbar button[data-dc-next]{background:#284b60;color:white;border-color:#284b60}
+.dc-step{background:#f4e6d9;color:#a4551c;border-radius:7px;font-size:12px;padding:4px 9px;font-weight:700;white-space:nowrap}
+.dc-step.is-output{background:#dcefe9;color:var(--green)}
+.dc-count{font-size:11px;color:#6a7f8a;white-space:nowrap;font-variant-numeric:tabular-nums}
+.decoder .dc-controls button[data-dc-reset]{display:grid;place-items:center;width:40px;height:40px;padding:0;margin-left:auto;flex-shrink:0;color:#71828c}
+.decoder button[data-dc-reset] svg{min-width:0;width:20px;height:20px}
+
+/* 01 network. Lines end at the node's edge and nodes are opaque, so nothing shows through a circle even while it fades. */
+.dc-net{transition:opacity .5s}
+.dc-edge{stroke:#d5e0e8;stroke-width:2;transition:stroke .5s,opacity .5s}
+.dc-edge[data-state=active]{stroke:#f0d7c2}
+.dc-edge.is-self{stroke:var(--orange);stroke-width:3;opacity:0}
+.dc-link{fill:none;stroke:var(--blue);stroke-width:2;opacity:0;transition:opacity .5s}
+[data-sub="1"] .dc-link,[data-sub="1"] .dc-edge.is-self{opacity:.9;stroke-dasharray:7 6;animation:dc-flow 1.2s linear infinite}
+[data-sub="2"] .dc-link{opacity:.3}
+[data-sub="2"] .dc-edge.is-self{opacity:.55}
+.dc-node{fill:#fbfcfd;stroke:var(--pale-blue);stroke-width:2;transform-box:fill-box;transform-origin:center;transition:fill .5s,stroke .5s,opacity .5s,transform .5s}
+.dc-node[data-state=active]{stroke:var(--pale-orange)}
+.dc-node.is-source[data-state=cached]{fill:#dde9f3;stroke:var(--blue)}
+.dc-node.is-source[data-state=active]{fill:#fcdfc4;stroke:var(--orange)}
+.dc-node.is-target{fill:var(--orange);stroke:var(--orange)}
+.dc-node.is-pending{fill:#fff;stroke-dasharray:4 3;transform:scale(.85)}
+.dc-node.dc-made{animation:dc-pop .6s ease}
+.decoder svg .dc-word{font-size:14px;fill:#304c5c;font-weight:600;transform-box:fill-box;transform-origin:center;transition:fill .4s,opacity .4s}
+.decoder svg .dc-word.is-active{fill:var(--orange);font-weight:700}
+.decoder svg .dc-word.is-picked{fill:var(--green);font-weight:700}
+.dc-word.dc-drop{animation:dc-drop .6s cubic-bezier(.2,.8,.2,1)}
+.decoder .is-hidden{opacity:0;pointer-events:none}
+.dc-word.is-hidden,.dc-node.is-hidden,.dc-edge.is-hidden{transition:none}
+/* Only the final representation remains: it grows out of its node, then feeds the output layer. */
+.is-output .dc-net{opacity:0}
+.dc-card{opacity:0;transition:transform .7s cubic-bezier(.2,.8,.2,1),opacity .4s;pointer-events:none}
+.dc-card rect{fill:#fdf1e6;stroke:var(--orange);stroke-width:1.5}
+.dc-card .dc-card-vector rect{fill:var(--orange);stroke:none}
+.decoder svg .dc-card-word{font-size:17px;font-weight:700;fill:#304c5c}
+.decoder svg .dc-card-caption{font-size:10px}
+.is-output .dc-card{opacity:1}
+.dc-out-layer{opacity:0;transform:translateX(12px);transition:opacity .5s,transform .5s}
+.dc-out-layer rect{fill:#e7eef2;stroke:#7f98a8;stroke-width:1.5;transition:fill .5s}
+.decoder svg .dc-out-layer text{font-weight:700;fill:#284b60;transition:fill .5s}
+.is-output .dc-out-layer{opacity:1;transform:none;transition-delay:.4s}
+.is-ready .dc-out-layer rect{fill:#284b60;stroke:#284b60}
+.decoder.is-ready svg .dc-out-layer text{fill:#fff}
+.dc-out-arrow{opacity:0;transition:opacity .4s .3s}
+.dc-out-arrow line{stroke:var(--orange);stroke-width:2.5;stroke-dasharray:8 6}
+.dc-out-arrow path{fill:var(--orange)}
+.is-output .dc-out-arrow{opacity:1;transition-delay:.7s}
+.is-output:not(.is-ready) .dc-out-arrow line{animation:dc-flow .8s linear infinite}
+
+/* 02 right panel: the space, replaced by the probabilities once only the final representation remains. */
+.dc-right-body{display:grid;align-items:center}
+.dc-right-body>*{grid-area:1/1;transition:opacity .4s}
+.dc-right.is-probs .dc-space,.dc-right:not(.is-probs) .dc-probs{opacity:0;visibility:hidden}
+.dc-probs{display:grid;gap:14px;padding:12px 18px 24px}
+.decoder:not(.is-ready) .dc-probs{opacity:0}
+.dc-prob{display:grid;grid-template-columns:minmax(58px,.7fr) 1.6fr 52px;align-items:center;gap:10px;font-size:14px;color:#304c5c}
+.dc-prob b{text-align:right;font-variant-numeric:tabular-nums;font-weight:500}
+.dc-track{height:9px;background:#e6ecf0;border-radius:5px;overflow:hidden}
+.dc-fill{display:block;height:100%;width:0;background:var(--orange);border-radius:5px;transition:width .7s ease,background .4s}
+.dc-prob.is-other .dc-fill{background:#b7c3ca}
+.dc-prob.is-top,.dc-prob.is-top b{color:var(--orange);font-weight:700}
+.dc-prob.is-chosen,.dc-prob.is-chosen b{color:var(--green);font-weight:700}
+.dc-prob.is-chosen .dc-fill{background:var(--green)}
+.dc-prob.is-muted .dc-fill{background:#c9d3d9}
+
+/* Motion */
+.dc-head{transition:opacity .3s}
+.dc-instant,.dc-instant *{transition:none!important}
+@keyframes dc-flow{to{stroke-dashoffset:-26}}
+@keyframes dc-pop{40%{transform:scale(1.35)}}
+@keyframes dc-drop{from{opacity:0;transform:translateY(-16px)}}
+@media(prefers-reduced-motion:reduce){.decoder *{animation:none!important;transition:none!important}}
+@media(max-width:640px){
+ .dc-panels{grid-template-columns:1fr;gap:12px}
+ .decoder h1{font-size:24px}
+ .dc-controls{gap:6px}
+ .dc-controls button[data-dc-back],.dc-controls button[data-dc-next]{width:60px}
+ .dc-probs{padding:8px 14px 18px}
+}
+@media(max-width:360px){.dc-count{display:none}.dc-controls button[data-dc-back],.dc-controls button[data-dc-next]{width:52px}.decoder .dc-cases button{padding:0 10px}}
+/* Isolate this diagram from the source article's figure and section defaults. */
+figure.decoder{border:0;overflow:visible;border-radius:0}
+.article .decoder section{margin:0}
+.article .decoder .dc-panels section{padding:0}
+.dc-head text{paint-order:stroke;stroke:#f6f8fa;stroke-width:4px;stroke-linejoin:round}
+
 .ng-demo{--ink:#173b3a;--teal:#157a72;--muted:#60716f;--line:#d8e5e1;margin:0!important;padding:0!important;border:1px solid var(--line)!important;border-radius:22px!important;overflow:hidden;background:#f7faf7!important;color:var(--ink);font-family:system-ui,-apple-system,sans-serif;box-shadow:0 14px 45px #163c3410}
-.ng-demo *{box-sizing:border-box}.ng-demo [hidden]{display:none!important}.ng-header{padding:30px 32px 22px;background:#edf3ec}.ng-kicker{font-size:11px!important;font-weight:750;letter-spacing:.18em;color:var(--teal);margin:0 0 12px!important}.ng-demo h1{font-size:clamp(25px,4vw,36px);letter-spacing:-.04em;line-height:1.3;margin:0 0 10px;border:0;padding:0;color:var(--ink)}.ng-intro{margin:0!important;font-size:14px!important;color:var(--muted)}.ng-interactive{padding:0 32px 24px}.ng-steps{display:grid;grid-template-columns:repeat(4,1fr);gap:5px;padding:22px 0}.ng-demo button{font:inherit;cursor:pointer;border:1px solid var(--line);border-radius:9px;padding:10px 15px;color:var(--ink);background:#fff;line-height:1.4;transition:background .2s,color .2s}.ng-demo button:hover{background:#e5f0eb}.ng-demo button:focus-visible{outline:3px solid #ce8d27;outline-offset:3px}.ng-demo button:disabled{opacity:.4;cursor:default}.ng-steps button{padding:9px 2px;font-size:11px;border:0;border-bottom:3px solid var(--line);border-radius:0;background:transparent}.ng-demo button[aria-pressed=true],.ng-steps button[aria-current=step]{background:#dceddf;border-color:var(--teal);color:#135e55}.ng-counter{font-size:11px!important;letter-spacing:.12em;color:var(--teal);font-weight:700;margin:0 0 5px!important}.ng-demo h2{font-size:23px;line-height:1.4;margin:0 0 10px;padding:0;border:0;color:var(--ink)}.ng-copy{font-size:14px!important;line-height:1.8!important;margin:0!important;color:var(--muted);min-height:76px}.ng-stage{margin-top:18px;min-height:420px}.ng-panel{background:white;border:1px solid var(--line);border-radius:16px;padding:22px;animation:ng-enter .35s ease}.ng-panel-head{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:18px}.ng-label{font-size:12px;font-weight:650}.ng-badge{font-size:10px;padding:4px 8px;border-radius:20px;background:#f1f4ec;white-space:nowrap}.ng-contexts{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:18px}.ng-contexts button{font-size:12px;padding:7px 12px}.ng-prob-table{display:grid;grid-template-columns:68px repeat(3,minmax(0,1fr));gap:5px}.ng-cell{padding:11px 3px;text-align:center;border-radius:6px;font-size:13px;background:#f6f8f6;transition:background .4s,box-shadow .4s}.ng-cell.ng-selected{background:#d9eee4;box-shadow:inset 0 0 0 1px #6aac96}.ng-cell.ng-colhead{font-size:11px;font-weight:650;background:transparent}.ng-cell.ng-rowhead{text-align:left;font-size:12px;background:transparent}.ng-table-note,.ng-matrix-note,.ng-model-note,.ng-attention-note{font-size:12px!important;line-height:1.8!important;color:var(--muted);margin:16px 0 0!important}.ng-matrix{position:relative;width:100%;max-width:370px;height:250px;margin:20px auto}.ng-number,.ng-axis{position:absolute;display:flex;align-items:center;justify-content:center;transition:top .8s cubic-bezier(.2,.8,.2,1),left .8s cubic-bezier(.2,.8,.2,1),background .4s}.ng-number{width:23%;height:58px;border-radius:9px;font-size:26px;font-variant-numeric:tabular-nums;color:#174c42;background:color-mix(in srgb,#318668 calc(var(--value)*14%),#f2f6ed)}.ng-number.ng-hidden-value{background:#fcf0d8;outline:2px dashed #c58f36}.ng-axis{font-size:11px;color:var(--muted);width:23%;height:25px}.ng-axis.ng-y{width:12%;height:58px}.ng-actions{display:flex;justify-content:center;gap:8px}.ng-actions button{font-size:12px}.ng-pipeline{display:grid;grid-template-columns:1fr;max-width:430px;margin:auto;text-align:center}.ng-input-box,.ng-model-box,.ng-output-box{padding:13px 18px;border:1px solid var(--line);border-radius:12px}.ng-demo small{display:block;font-size:10px;letter-spacing:.02em;color:var(--muted);margin-bottom:7px}.ng-input{font-size:19px}.ng-model-box{background:#edf5ef;border-color:#b6d1bf}.ng-model-box strong{font-size:19px}.ng-arrow{font-size:19px;color:#71a38b;line-height:1.4}.ng-vector{display:flex;justify-content:center;gap:5px;margin-top:10px}.ng-vector i{width:23px;height:17px;border-radius:3px;background:#3b8d70;opacity:var(--strength);transition:opacity .65s}.ng-bars{margin-top:13px;display:grid;gap:7px}.ng-bar-row{display:grid;grid-template-columns:49px 1fr 38px;align-items:center;gap:9px;font-size:11px;text-align:left}.ng-bar-track{height:9px;background:#f0f3ed;border-radius:5px;overflow:hidden}.ng-bar-fill{display:block;height:100%;width:var(--p);background:#4c987a;border-radius:5px;transition:width .7s ease}.ng-bar-row b{text-align:right;font-weight:500;font-variant-numeric:tabular-nums}.ng-takeaway{margin:18px 0;padding:13px 16px;border-left:3px solid #c3943e;background:#f5f0e3;font-size:13px;line-height:1.8;border-radius:0 8px 8px 0}.ng-navigation{display:flex;justify-content:space-between;align-items:center}.ng-navigation button{font-size:13px;min-width:95px}.ng-navigation [data-next]{background:var(--ink);color:#fff;border-color:var(--ink)}.ng-page{font-size:11px;color:var(--muted)}.ng-demo figcaption{padding:17px 32px!important;margin:0!important;border-top:1px solid var(--line);background:#f0f5ee;font-size:11px!important;line-height:1.8!important;color:var(--muted)!important}.ng-details{padding:14px 32px;font-size:11px;color:var(--muted)}.ng-details summary{cursor:pointer}.ng-details p{font-size:12px!important;line-height:1.8}.ng-fallback{padding:24px}.ng-sentence{text-align:center;font-size:17px!important;margin:15px 0 24px!important}.ng-sentence mark{background:#e5efd9;color:#235d44;border-radius:4px;padding:3px 5px}.ng-attention{max-width:600px;margin:auto}.ng-sources{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;text-align:center}.ng-source{padding:8px 3px;background:#f4f6ef;border-radius:8px;font-size:12px}.ng-source:nth-child(2){background:#e4efdb}.ng-links{display:block;width:100%;height:100px;overflow:visible}.ng-links path{fill:none;stroke:#7da88c;stroke-width:2;opacity:.16;transition:opacity .5s}.ng-links path:nth-child(2){stroke-width:7}.ng-attention.ng-mixed .ng-links path{opacity:.9;stroke-dasharray:9 8;animation:ng-flow 1.5s linear infinite}.ng-bank{width:180px;text-align:center;margin:0 auto;padding:12px;border:1px solid #aecdb7;background:#edf5ef;border-radius:12px}.ng-bank strong{font-size:24px}.ng-bank-caption{display:block;font-size:11px;color:var(--muted);margin-top:4px}.ng-process{display:flex;gap:8px;justify-content:center;margin:14px 0 18px}.ng-process span{font-size:10px;border-bottom:2px solid #dbe5d7;padding:6px}.ng-mixed .ng-process span{border-color:#548769;background:#f1f6eb}@keyframes ng-enter{from{opacity:.35;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}@keyframes ng-flow{to{stroke-dashoffset:-51}}
-@media(max-width:520px){.ng-header{padding:24px 18px 18px}.ng-interactive{padding:0 14px 20px}.ng-steps{gap:3px}.ng-steps button{font-size:9px;padding:9px 1px}.ng-demo h2{font-size:20px}.ng-copy{min-height:100px;font-size:13px!important}.ng-panel{padding:15px 10px}.ng-panel-head{align-items:flex-start;gap:7px}.ng-label{font-size:11px}.ng-badge{font-size:9px;padding:3px 5px}.ng-prob-table{grid-template-columns:49px repeat(3,minmax(0,1fr));gap:3px}.ng-cell{font-size:12px}.ng-cell.ng-colhead{font-size:9px}.ng-cell.ng-rowhead{font-size:10px}.ng-contexts{gap:5px}.ng-contexts button{font-size:11px;padding:6px 9px}.ng-demo figcaption,.ng-details{padding:14px 18px!important}.ng-sentence{font-size:14px!important}.ng-process span{font-size:9px}.ng-takeaway{font-size:12px}.ng-source{font-size:11px}.ng-stage{min-height:420px}}
-@media(prefers-reduced-motion:reduce){.ng-demo *{animation:none!important;transition:none!important}}
-/* Keep the standalone diagram independent of article-wide section/SVG defaults. */
-.article .ng-demo section{margin:0;scroll-margin-top:0}.article .ng-demo section+section{padding-top:22px}.ng-demo .ng-links{min-width:0;max-width:100%;padding:0;margin:0}
-@media(max-width:520px){.article .ng-demo section+section{padding-top:15px}}
+.ng-demo *{box-sizing:border-box}.ng-demo [hidden]{display:none!important}
+.ng-interactive{padding:0 32px 24px}
+.ng-demo button{font:inherit;font-size:13px;cursor:pointer;border:1px solid var(--line);border-radius:9px;padding:8px 14px;color:var(--ink);background:#fff;line-height:1.4;transition:background .2s,color .2s}
+.ng-demo button:focus-visible{outline:3px solid #ce8d27;outline-offset:3px}.ng-demo button:disabled{opacity:.4;cursor:default}
+.ng-demo button[aria-pressed=true],.ng-steps button[aria-current=step]{background:#dceddf;border-color:var(--teal);color:#135e55}
+.ng-steps{display:grid;grid-template-columns:repeat(4,1fr);gap:5px;padding:22px 0 18px}
+.ng-steps button{padding:10px 2px;font-size:12px;border:0;border-bottom:3px solid var(--line);border-radius:0;background:transparent}
+.ng-panel{background:#fff;border:1px solid var(--line);border-radius:16px;padding:24px 26px;animation:ng-enter .35s ease}
+.ng-panel>h2{font-size:21px;line-height:1.5;margin:0 0 18px;padding:0;border:0;color:var(--ink)}
+.ng-panel-head{display:flex;flex-wrap:wrap;align-items:center;gap:10px 16px;margin-bottom:18px}
+.ng-toolbar{display:flex;flex-wrap:wrap;align-items:center;gap:8px}
+.ng-panel-head>.ng-toolbar:last-child,.ng-badge{margin-left:auto}
+.ng-badge[hidden]{display:none}.ng-badge{font-size:11px;padding:4px 9px;border-radius:20px;background:#f1f4ec;color:var(--muted);white-space:nowrap}
+.ng-formula{font-size:26px;font-weight:700;color:var(--teal);letter-spacing:.02em}
+.ng-legend{font-size:12px;color:var(--muted)}
 
-.ng-demo .ng-copy{min-height:0}.ng-navigation{margin-top:20px}
+/* Scene 1: probability table; column headers are the context buttons. */
+.ng-prob-table{display:grid;gap:5px;overflow-x:auto}
+.ng-cell{padding:11px 4px;text-align:center;border-radius:6px;font-size:14px;background:#f6f8f6;font-variant-numeric:tabular-nums;transition:background .4s,box-shadow .4s}
+.ng-cell.ng-selected{background:#d9eee4;box-shadow:inset 0 0 0 1px #6aac96}
+.ng-demo .ng-cell.ng-colhead{font-size:12px;font-weight:650;background:transparent;border-radius:6px;padding:9px 4px;overflow-wrap:anywhere}
+.ng-demo .ng-cell.ng-colhead:not(button){color:var(--muted);font-weight:500}
+.ng-cell.ng-rowhead{text-align:left;font-size:13px;background:transparent}
 
-.ng-demo .ng-stage{min-height:0;margin-top:0}
-.ng-demo .ng-copy{margin:18px 0 0!important;color:var(--ink);font-size:14px!important}
-.ng-probability{display:flex;flex-wrap:wrap;align-items:center;gap:8px 18px;margin-bottom:18px}
-.ng-probability strong,.ng-output-probability{font-size:27px;font-weight:700;color:var(--teal);letter-spacing:.02em}
-.ng-probability span{font-size:12px;color:var(--muted)}
-.ng-axes{font-size:12px!important;margin:0 0 15px!important}
-.ng-demo .ng-feature-label{margin:7px 0 0}
-
-.ng-ngram-intro{border-bottom:1px solid var(--line);padding-bottom:18px;margin-bottom:20px}
-.ng-demo .ng-ngram-intro h2{font-size:20px;margin:0 0 8px}
-.ng-ngram-intro p{font-size:13px!important;line-height:1.8;margin:0 0 14px}
-.ng-ngram-example{display:flex;align-items:center;flex-wrap:wrap;gap:10px 20px}
-.ng-ngram-example .ng-example-label{font-size:10px;color:var(--muted)}
-.ng-ngram-example b{font-size:17px}.ng-ngram-example small{margin-bottom:3px}
-@media(max-width:520px){.ng-ngram-example{gap:10px}.ng-example-label{flex-basis:100%}.ng-example-label br{display:none}}
-
-/* Five-word matrix keeps labels readable on narrow screens. */
+/* Scenes 2–3: score matrix with absolutely positioned, animated cells. */
 .ng-matrix-scroll{overflow-x:auto;overscroll-behavior-x:contain}
 .ng-matrix-scroll:focus-visible{outline:3px solid #ce8d27;outline-offset:2px}
-.ng-matrix{min-width:500px;max-width:680px;height:326px;margin:12px auto}
-.ng-number{width:15.2%;height:46px;font-size:22px}
-.ng-axis{width:15.2%;height:44px;font-size:12px;line-height:1.4;text-align:center}
-.ng-axis.ng-y{width:15%;height:46px;justify-content:flex-start}
-.ng-score-note{font-size:11px!important;line-height:1.8!important;color:var(--muted);margin:8px 0 16px!important}
-.ng-actions{flex-wrap:wrap}
-
+.ng-matrix{position:relative;width:100%;min-width:560px;max-width:760px;margin:0 auto}
+.ng-number,.ng-axis{position:absolute;display:flex;align-items:center;justify-content:center;transition:top .8s cubic-bezier(.2,.8,.2,1),left .8s cubic-bezier(.2,.8,.2,1),background .4s}
+.ng-number{height:46px;border-radius:9px;font-size:22px;font-variant-numeric:tabular-nums;color:#174c42;background:color-mix(in srgb,#318668 calc(var(--value)*14%),#f2f6ed)}
+.ng-number.ng-hidden-value{background:#fcf0d8;outline:2px dashed #c58f36}
+.ng-number.ng-answer{box-shadow:inset 0 0 0 2px #c58f36}
 .ng-number.ng-swapped{box-shadow:inset 0 0 0 2px #b87b24}
+.ng-axis{height:44px;font-size:12px;line-height:1.4;text-align:center;color:var(--muted)}
+.ng-axis.ng-y{width:15%;height:46px;justify-content:flex-start;font-size:13px;color:var(--ink)}
+.ng-axis.ng-corner{left:0;top:0;width:15%;justify-content:flex-start;font-size:11px}
 .ng-axis.ng-swapped{color:#855513;font-weight:750}
+.ng-demo [data-sort-next]:not(:disabled){background:var(--ink);color:#fff;border-color:var(--ink)}
+.ng-matrix-note{font-size:14px;font-weight:650;color:#855513}
+.ng-scroll-hint{display:none;font-size:11px!important;color:var(--muted);margin:0 0 4px!important;text-align:right}
 
-.ng-bank-output{max-width:480px;margin:0 auto 16px;text-align:center}
-.ng-bank-output>.ng-arrow{display:block}
-.ng-demo .ng-prediction-label{font-size:11px!important;color:var(--muted);margin:6px 0 10px!important}
-.ng-bank-output>strong{font-size:14px}
-.ng-next-bars{display:grid;gap:9px;margin:16px 0}
-.ng-next-row{display:grid;grid-template-columns:minmax(125px,1.2fr) 1fr 34px;align-items:center;gap:8px;font-size:11px;text-align:left}
-.ng-next-row b{text-align:right;font-variant-numeric:tabular-nums;font-weight:500}
-.ng-top-prediction{color:var(--teal);font-weight:700}
-.ng-demo .ng-completion{font-size:12px!important;min-height:44px;line-height:1.8;margin:12px 0 0!important;padding:10px 6px;background:#f0f5ee;border-radius:8px}
-.ng-next-slot{display:inline-block;color:var(--teal);border-bottom:2px solid #71a38b;min-width:25px}
-.ng-demo .ng-sentence small{margin:10px 0 0;line-height:1.6}
-.ng-demo .ng-attention-note{margin:0 0 16px!important}
-.ng-paused .ng-links path{animation-play-state:paused!important}
-@media(max-width:520px){.ng-next-row{grid-template-columns:minmax(114px,1.5fr) 1fr 29px;gap:5px;font-size:10px}}
+.ng-navigation{display:flex;justify-content:space-between;align-items:center;margin-top:20px}
+.ng-navigation button{min-width:95px}
+.ng-navigation [data-next]{background:var(--ink);color:#fff;border-color:var(--ink)}
+.ng-page{font-size:12px;color:var(--muted)}
+.ng-demo figcaption{padding:14px 32px!important;margin:0!important;border-top:1px solid var(--line);background:#f0f5ee;font-size:12px!important;line-height:1.8!important;color:var(--muted)!important}
+.ng-fallback{padding:24px}
+@keyframes ng-enter{from{opacity:.35;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+@media(prefers-reduced-motion:reduce){.ng-demo *{animation:none!important;transition:none!important}}
+/* Keep the standalone diagram independent of article-wide section defaults. */
+.article .ng-demo section{margin:0;scroll-margin-top:0}
 
-.ng-demo .ng-scene-intro{font-size:13px!important;line-height:1.9;margin:0 0 18px!important;color:var(--muted)}
-.ng-sort-instruction{font-size:12px!important;line-height:1.7;margin:0 0 10px!important;text-align:center;min-height:2em}
-.ng-demo [data-sort]{background:var(--ink);color:#fff;border-color:var(--ink)}
-.ng-demo [data-sort-reset]{background:transparent;border-color:transparent;text-decoration:underline;text-underline-offset:3px}
-.ng-structure-controls{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
-.ng-structure-controls .ng-contexts{margin:0}.ng-structure-controls>button{font-size:12px}
-.ng-structure-bridge{margin-top:22px;padding-top:20px;border-top:1px solid var(--line)}
-.ng-demo .ng-structure-bridge h3{font-size:16px;margin:0 0 10px;border:0;padding:0}
-.ng-structure-bridge p{font-size:13px!important;line-height:1.9;margin:10px 0!important}
-.ng-structure-bridge small{line-height:1.8}
-.ng-bridge-flow{font-size:12px;line-height:1.9;color:var(--teal);padding:12px;background:#edf5ef;border-radius:8px;margin:12px 0 20px}
-.ng-playback-controls{display:flex;align-items:center;flex-wrap:wrap;gap:8px;margin:0 0 18px}
-.ng-playback-controls button{font-size:11px;padding:6px 10px}
-.ng-playback-state{font-size:11px;color:var(--muted);margin-right:auto}
-.ng-computation{display:grid;grid-template-columns:minmax(0,1fr) 20px minmax(0,1fr);gap:12px;align-items:center}
-.ng-attention{width:100%}.ng-bank-output{width:100%;margin:0}
-.ng-demo .ng-computation-label{font-size:14px!important;font-weight:650;text-align:center;margin:0 0 16px!important}
-.ng-bank-output>small{margin-top:7px}.ng-computation+.ng-attention-note{margin-top:20px!important}
-.ng-panel-head{flex-wrap:wrap}.ng-matrix-order{line-height:1.7}
-@media(max-width:680px){.ng-computation{grid-template-columns:1fr;gap:0}.ng-bank-output{max-width:480px}.ng-playback-state{flex-basis:100%}.ng-structure-controls{justify-content:center}}
-@media(max-width:520px){.ng-steps button{font-size:10px;padding:10px 3px}.ng-navigation button{min-width:0;font-size:12px;padding:10px}.ng-sort-controls .ng-actions{gap:6px}.ng-sort-controls button{padding:9px 10px;font-size:11px}.ng-sort-controls [data-sort-reset]{flex-basis:100%}}
-
-.ng-computation-arrow{font-size:26px;color:#71a38b;text-align:center}
-.ng-scroll-hint{display:none;font-size:10px!important;color:var(--muted);margin:0 0 4px!important}
-@media(max-width:680px){.ng-computation-arrow{transform:rotate(90deg);justify-self:center}.ng-scroll-hint{display:block}}
-
-.ng-next-row{grid-template-columns:minmax(80px,1fr) 1fr 75px}.ng-sources{flex-wrap:wrap}.ng-source{overflow-wrap:anywhere}.ng-prob-table{overflow-x:auto}.ng-bank-vector{display:flex;flex-wrap:wrap}
+@media(max-width:680px){.ng-scroll-hint{display:block}}
+@media(max-width:520px){
+ .ng-interactive{padding:0 12px 18px}.ng-steps{gap:3px}.ng-steps button{font-size:10px;padding:10px 1px}
+ .ng-panel{padding:16px 10px}.ng-panel>h2{font-size:17px;margin-bottom:14px}
+ .ng-formula{font-size:22px}.ng-legend{font-size:11px}.ng-badge{font-size:10px}
+ .ng-demo button{font-size:12px;padding:7px 10px}
+ .ng-prob-table{gap:3px}.ng-cell{font-size:12px}.ng-demo .ng-cell.ng-colhead{font-size:10px}.ng-cell.ng-rowhead{font-size:11px}
+ .ng-matrix{min-width:420px}.ng-number{font-size:17px;height:42px}.ng-axis{font-size:10px}.ng-axis.ng-y{font-size:12px}
+ .ng-navigation button{min-width:0;padding:10px}
+ .ng-demo figcaption{padding:12px 16px!important}
+}
 
 /* Only the surrounding page is sized for standalone viewing. */
-main.article{margin:auto;padding:24px;max-width:948px}
+main.article{margin:auto;padding:24px;max-width:1180px}
 @media(max-width:520px){main.article{padding:16px}}
 </style></head><body data-page="llm"><main class="article"><!-- BEGIN EDITABLE DIAGRAM DATA
 現在は説明用の仮置き値です。実モデルの計算結果ではありません。
@@ -264,7 +361,7 @@ END EDITABLE DIAGRAM DATA -->
     ],
     "positionEncoding": {
       "type": "sinusoidal",
-      "label": "Positional Encoding (sin/cos)"
+      "label": "位置エンコーディング（sin/cos）"
     },
     "extraction": {},
     "projection": {
@@ -286,8 +383,8 @@ END EDITABLE DIAGRAM DATA -->
             0.2345678
           ],
           "position": [
-            0.0,
-            1.0
+            0,
+            1
           ],
           "input": [
             0.1234567,
@@ -309,8 +406,8 @@ END EDITABLE DIAGRAM DATA -->
           },
           "points": {
             "0": [
-              0.12,
-              0.18
+              0.18,
+              0.22
             ],
             "1": [
               0.155,
@@ -357,8 +454,8 @@ END EDITABLE DIAGRAM DATA -->
           },
           "points": {
             "0": [
-              0.33999999999999997,
-              0.18
+              0.7,
+              0.33
             ],
             "1": [
               0.375,
@@ -405,8 +502,8 @@ END EDITABLE DIAGRAM DATA -->
           },
           "points": {
             "0": [
-              0.56,
-              0.18
+              0.42,
+              0.78
             ],
             "1": [
               0.5950000000000001,
@@ -453,8 +550,8 @@ END EDITABLE DIAGRAM DATA -->
           },
           "points": {
             "0": [
-              0.78,
-              0.18
+              0.72,
+              0.04
             ],
             "1": [
               0.8150000000000001,
@@ -468,7 +565,29 @@ END EDITABLE DIAGRAM DATA -->
               0.8150000000000001,
               0.404
             ]
-          }
+          },
+          "candidates": [
+            {
+              "tokenId": null,
+              "text": " is",
+              "probability": 0.64
+            },
+            {
+              "tokenId": null,
+              "text": " was",
+              "probability": 0.09
+            },
+            {
+              "tokenId": null,
+              "text": "'s",
+              "probability": 0.07
+            },
+            {
+              "tokenId": null,
+              "text": "その他",
+              "probability": 0.2
+            }
+          ]
         },
         {
           "id": null,
@@ -501,8 +620,8 @@ END EDITABLE DIAGRAM DATA -->
           },
           "points": {
             "0": [
-              0.12,
-              0.5800000000000001
+              0.3,
+              0.57
             ],
             "1": [
               0.155,
@@ -626,8 +745,8 @@ END EDITABLE DIAGRAM DATA -->
             0.2345678
           ],
           "position": [
-            0.0,
-            1.0
+            0,
+            1
           ],
           "input": [
             0.1234567,
@@ -649,8 +768,8 @@ END EDITABLE DIAGRAM DATA -->
           },
           "points": {
             "0": [
-              0.12,
-              0.18
+              0.18,
+              0.22
             ],
             "1": [
               0.155,
@@ -697,8 +816,8 @@ END EDITABLE DIAGRAM DATA -->
           },
           "points": {
             "0": [
-              0.33999999999999997,
-              0.18
+              0.7,
+              0.33
             ],
             "1": [
               0.375,
@@ -745,8 +864,8 @@ END EDITABLE DIAGRAM DATA -->
           },
           "points": {
             "0": [
-              0.56,
-              0.18
+              0.42,
+              0.78
             ],
             "1": [
               0.5950000000000001,
@@ -793,8 +912,8 @@ END EDITABLE DIAGRAM DATA -->
           },
           "points": {
             "0": [
-              0.78,
-              0.18
+              0.72,
+              0.04
             ],
             "1": [
               0.8150000000000001,
@@ -808,7 +927,29 @@ END EDITABLE DIAGRAM DATA -->
               0.8150000000000001,
               0.404
             ]
-          }
+          },
+          "candidates": [
+            {
+              "tokenId": null,
+              "text": " is",
+              "probability": 0.64
+            },
+            {
+              "tokenId": null,
+              "text": " was",
+              "probability": 0.09
+            },
+            {
+              "tokenId": null,
+              "text": "'s",
+              "probability": 0.07
+            },
+            {
+              "tokenId": null,
+              "text": "その他",
+              "probability": 0.2
+            }
+          ]
         },
         {
           "id": null,
@@ -841,8 +982,8 @@ END EDITABLE DIAGRAM DATA -->
           },
           "points": {
             "0": [
-              0.12,
-              0.5800000000000001
+              0.3,
+              0.57
             ],
             "1": [
               0.155,
@@ -889,8 +1030,8 @@ END EDITABLE DIAGRAM DATA -->
           },
           "points": {
             "0": [
-              0.33999999999999997,
-              0.5800000000000001
+              0.77,
+              0.7
             ],
             "1": [
               0.375,
@@ -1005,52 +1146,64 @@ END EDITABLE DIAGRAM DATA -->
   "ngram": {
     "status": "illustrative",
     "source": null,
+    "features": {
+      "positive": [0.85, 0.3, 0.62, 0.15, 0.72],
+      "negative": [0.22, 0.78, 0.4, 0.9, 0.34]
+    },
     "contexts": [
-      "France is",
-      "capital of France is",
-      "France is not"
+      "I live in",
+      "I like",
+      "I eat"
     ],
     "words": [
-      "Paris",
-      "London",
-      "Berlin",
+      "Tokyo",
+      "Kyoto",
+      "Osaka",
+      "sushi",
+      "pizza",
       "その他"
     ],
     "probabilities": [
       [
-        0.78,
-        0.06,
-        0.04,
-        0.12
-      ],
-      [
-        0.85,
-        0.04,
-        0.03,
-        0.08
-      ],
-      [
-        0.12,
         0.4,
-        0.28,
+        0.25,
+        0.2,
+        0.01,
+        0.01,
+        0.13
+      ],
+      [
+        0.1,
+        0.08,
+        0.07,
+        0.3,
+        0.25,
         0.2
+      ],
+      [
+        0.01,
+        0.01,
+        0.01,
+        0.45,
+        0.37,
+        0.15
       ]
     ],
     "matrix": {
       "status": "illustrative",
       "words": [
-        "Paris",
-        "London",
-        "Berlin",
-        "Rome",
-        "Madrid"
+        "water",
+        "soup",
+        "dough",
+        "metal",
+        "paper"
       ],
       "contexts": [
-        "is",
-        "France is",
-        "of France is",
-        "capital of France is",
-        "France is not"
+        "I pour the",
+        "I spill the",
+        "I heat the",
+        "I cut the",
+        "I fold the"
       ],
       "values": [
         [
@@ -1069,9 +1222,9 @@ END EDITABLE DIAGRAM DATA -->
         ],
         [
           3.2,
-          3.0,
+          3,
           3.4,
-          4.0,
+          4,
           3.7
         ],
         [
@@ -1084,7 +1237,7 @@ END EDITABLE DIAGRAM DATA -->
         [
           0.1,
           0.3,
-          1.0,
+          1,
           4.8,
           4.7
         ]
@@ -1128,16 +1281,14 @@ END EDITABLE DIAGRAM DATA -->
  <div class="ng-interactive" hidden>
   <nav class="ng-steps" aria-label="説明の場面"></nav>
   <div class="ng-stage">
-   <section class="ng-panel" data-panel="table"><div class="ng-ngram-intro"><h2>N-gram</h2><p>直前の N−1 語を条件に、出現頻度から次の語の確率を求めます。</p><div class="ng-ngram-example"><span class="ng-example-label">4-gramの例<br>（単語単位）</span><span><small>文脈 x：直前の3語</small><b>I live in</b></span><span aria-hidden="true">→</span><span><small>次の語 y</small><b>Tokyo</b></span></div></div><div class="ng-probability"><strong>p(y | x)</strong><span>文脈 x の次に単語 y が続く確率</span></div><p class="ng-axes">次の単語 y ↓ ／ 文脈 x →</p><div class="ng-contexts" aria-label="文脈を選ぶ"></div><div class="ng-prob-table"></div><p class="ng-table-note">各列の合計＝100%</p></section>
-   <section class="ng-panel" data-panel="matrix" hidden><h2 class="ng-matrix-title"></h2><p class="ng-scene-intro ng-matrix-intro"></p><div class="ng-panel-head"><span class="ng-label ng-matrix-order" role="status">ばらばらな配置</span><span class="ng-badge">文脈との合い方：0〜5（説明用）</span></div><p class="ng-axes">次に続く単語 ↓ ／ 文脈 →</p><p class="ng-scroll-hint">表は左右にスクロールできます ↔</p><div class="ng-matrix-scroll" tabindex="0" role="region" aria-label="スコア表（狭い画面では横にスクロールできます）"><div class="ng-matrix" role="img" aria-label="ばらばらな配置のスコア表"></div></div><p class="ng-score-note">高いほど文脈に合う、説明用の仮スコアです。実測値や確率ではありません。</p><div class="ng-sort-controls"><p class="ng-sort-instruction"></p><div class="ng-actions"><button type="button" data-sort-back>← 1操作戻す</button><button type="button" data-sort>次の操作 →</button><button type="button" data-sort-reset>最初の配置</button></div></div><div class="ng-structure-controls" hidden><div class="ng-contexts" aria-label="表の配置"><button type="button" data-layout="original">元の配置</button><button type="button" data-layout="sorted">並べ替えた配置</button></div><button type="button" data-reveal>隠した値を確かめる</button></div><p class="ng-matrix-note" role="status"></p><div class="ng-structure-bridge" hidden><h3>表の傾向を、共通の計算で表す</h3><p>文脈や単語に共通の特徴があれば、その特徴を使って各語のスコアを計算できます。新しい文脈にも、学習した特徴と同じ計算を使います。</p><div class="ng-bridge-flow">文脈 x → 特徴 → 各語のスコア（表の1列）</div><p>では、文脈の特徴はどう作るのでしょうか。次はTransformerの中を見ます。</p><small>並べ替えは傾向を見るための例です。実際のモデルは、文章から特徴と計算のパラメータを学びます。</small></div></section>
-   <section class="ng-panel" data-panel="attention" hidden><h2>文脈から予測を作る</h2><p class="ng-scene-intro">前の場面の「文脈 → 特徴 → スコア」を、同じ題材の文で見てみます。Transformerは前の語の情報を取り込み、文脈を表す特徴を作ります。その特徴から各語のスコアを計算し、確率の1列にします。</p><div class="ng-bridge-flow">文脈 x → Transformerで特徴を作る → 次の語の確率</div><div class="ng-contexts" aria-label="予測する文脈"><button type="button" data-bank="money">事業への融資</button><button type="button" data-bank="river">大雨の後の川岸</button></div><div class="ng-playback-controls"><span class="ng-playback-state"></span><button type="button" data-playback>一時停止</button><button type="button" data-replay>最初から再生</button></div><p class="ng-sentence"></p><div class="ng-computation"><div class="ng-attention"><p class="ng-computation-label">① 文脈の特徴を作る</p><div class="ng-sources"></div><svg class="ng-links" viewBox="0 0 600 110" preserveAspectRatio="none" aria-hidden="true"><path d="M 100 0 Q 100 60 300 105"/><path d="M 300 0 L 300 105"/><path d="M 500 0 Q 500 60 300 105"/></svg><div class="ng-bank"><strong>bank</strong><span class="ng-bank-caption">入力時の表現</span><div class="ng-bank-vector ng-vector"></div></div><div class="ng-process"><span>Attentionで情報を取り込む</span><span>取り込んだ情報を加工する</span></div></div><span class="ng-computation-arrow" aria-hidden="true">→</span><div class="ng-bank-output"><p class="ng-prediction-label">bank の表現 → 語ごとのスコア → softmax</p><strong>② 次の語の確率 p(y | x)</strong><small>この文脈に対応する、確率表の1列</small><div class="ng-next-bars"></div><p class="ng-completion"></p></div></div><p class="ng-attention-note">確率は説明用です。Attentionの重みではなく、文脈を取り込んだ表現から作る出力を示しています。</p></section>
+   <section class="ng-panel" data-panel="table"><h2>N-gramは、文脈ごとの次の語の確率を表で覚える</h2><div class="ng-panel-head"><span class="ng-formula">p(y | x)</span><span class="ng-legend">x：文脈 ／ y：次の語 ／ 各列の合計 100%</span></div><div class="ng-prob-table"></div></section>
+   <section class="ng-panel" data-panel="matrix" hidden><h2 class="ng-matrix-title"></h2><div class="ng-panel-head"><div class="ng-toolbar"><button type="button" data-sort-back></button><button type="button" data-sort-next></button><button type="button" data-reveal></button><span class="ng-matrix-note" role="status"></span></div><span class="ng-badge ng-matrix-badge"></span></div><p class="ng-scroll-hint">↔</p><div class="ng-matrix-scroll" tabindex="0" role="region" aria-label="スコア表（狭い画面では横にスクロールできます）"><div class="ng-matrix" role="img"></div></div></section>
+   <section class="ng-panel" data-panel="attention" hidden><h2>Transformerは、層ごとに前の語の情報を取り込み、次の語の確率を出す</h2><div class="decoder" data-decoder data-cycles="last" data-case-select></div></section>
   </div>
-  <p class="ng-copy" aria-live="polite"></p>
   <footer class="ng-navigation"><button type="button" data-prev>← 前の場面</button><span class="ng-page"></span><button type="button" data-next>次の場面 →</button></footer>
  </div>
  <div class="ng-fallback"><p>N-gramは、直前の N−1 語を条件に、出現頻度から次の語の確率を求めます。</p><p>文脈 x と次の単語 y の関係を、条件付き確率 p(y | x) の表で考えます。</p><p>ニューラル言語モデルは、学習した特徴と共通の計算で次の単語の確率を作ります。Transformerは、Attentionなどを通して文脈の表現を作る仕組みです。</p><p>JavaScriptを有効にすると、4場面を操作できます。</p></div>
- <figcaption>数値と図は説明用で、実モデルの計算結果ではありません。</figcaption>
- <details class="ng-details"><summary>補足・参考文献</summary><p>N-gramは直前のN−1個のトークンを条件に予測します。表の参照自体は高速にできますが、長い文脈では組み合わせが増え、観測できない組み合わせが多くなります。ニューラル言語モデルは特徴とパラメータを共有します。Transformerでも文脈が長くなると計算量は増えます。</p><p>並べ替えだけでは情報量は減りません。単純な傾向での近似には誤差があり、任意の表が単純になるわけでもありません。Attentionの重みと、次の単語の確率は別のものです。実際のモデルは単語ではなくトークンを扱います。</p><p><a href="https://jmlr.org/papers/volume3/bengio03a/bengio03a.pdf">Bengio et al. (2003), A Neural Probabilistic Language Model</a><br><a href="https://arxiv.org/abs/1706.03762">Vaswani et al. (2017), Attention Is All You Need</a></p></details>
+ <figcaption>線はAttentionの重みではありません。</figcaption>
 </figure>
 </main><script>/* Shared reader is embedded in every standalone HTML; no fetch or external assets. */
 'use strict';
@@ -1176,6 +1327,14 @@ END EDITABLE DIAGRAM DATA -->
  for(const c of data.cases){
   if(typeof c.prompt!=='string'||typeof c.label!=='string'||!Array.isArray(c.continuation))fail('入力文・ラベル・continuationを確認してください');
   if(!c.tokens?.length)fail('tokensが空です');c.tokens.forEach(checkToken);checkCandidates(c.candidates,c.selectedIndex);
+  // Optional: candidates predicted at an earlier prompt position must contain the actual next input token.
+  c.tokens.forEach((t,i)=>{
+   if(t.candidates===undefined)return;
+   const next=c.tokens[i+1];if(!next)fail('最後の入力トークンの候補はcase.candidatesに書いてください');
+   const index=Array.isArray(t.candidates)?t.candidates.findIndex(v=>v.text===next.text):-1;
+   checkCandidates(t.candidates,index);
+   if(model.status==='measured'&&t.candidates[index].tokenId!==next.id)fail('途中位置の候補に次の入力トークンのtokenIdが必要です');
+  });
   let selected=c.candidates[c.selectedIndex];
   for(const s of c.continuation){checkToken(s.token);if(s.token.text!==selected.text||s.token.id!==selected.tokenId)fail('続きのトークンが直前の選択と一致しません');checkCandidates(s.candidates,s.selectedIndex);selected=s.candidates[s.selectedIndex];}
  }
@@ -1183,6 +1342,8 @@ END EDITABLE DIAGRAM DATA -->
  if(!['illustrative','measured'].includes(ng.status)||(ng.status==='measured'&&!ng.source))fail('N-gram実測の出典が必要です');
  if(m.status!=='illustrative')fail('並べ替え表は説明用スコアとして保持してください');
  if(ng.probabilities.length!==ng.contexts.length)fail('N-gramの列数が一致しません');
+ // Squares on the last word's card in the Transformer scene; one short list per case, each value in −1〜1.
+ for(const c of data.cases){const f=ng.features?.[c.key];if(!Array.isArray(f)||f.length<1||f.length>12||!f.every(n=>finite(n)&&n>=-1&&n<=1))fail('ngram.featuresは各条件に1〜12個、−1〜1の数値です');}
  ng.probabilities.forEach(v=>{vector(v,ng.words.length,'N-gram');if(v.some(n=>n<0||n>1)||Math.abs(v.reduce((a,b)=>a+b,0)-1)>1e-6)fail('N-gramの確率を確認してください');});
  if(m.values.length!==m.words.length)fail('スコア表の行数が一致しません');m.values.forEach(v=>vector(v,m.contexts.length,'スコア表'));
  const permutation=(v,n)=>Array.isArray(v)&&v.length===n&&new Set(v).size===n&&v.every(i=>Number.isInteger(i)&&i>=0&&i<n);
@@ -1198,127 +1359,358 @@ END EDITABLE DIAGRAM DATA -->
  const percent=p=>format(p*100)+'%';
  const vec=v=>'['+v.slice(0,2).map(format).join(', ')+', …]';
  const steps=c=>[{tokens:c.tokens,candidates:c.candidates,selectedIndex:c.selectedIndex},...c.continuation.map((s,i)=>({tokens:[...c.tokens,...c.continuation.slice(0,i+1).map(x=>x.token)],candidates:s.candidates,selectedIndex:s.selectedIndex}))];
- const note=()=> (model.status==='measured'?`モデル：${model.id}。ベクトル・確率は実測値。`:'ベクトル・確率は説明用の仮置き値で、実モデルの計算結果ではありません。')+' '+(model.projection.status==='measured'?`配置：${model.projection.method}。`:'点の座標・軌跡は説明用の配置です。')+' 表示する数値は小数3桁で切り捨てています。';
- window.Diagram={data,layers,additive,format,percent,esc,vec,steps,note};
+ window.Diagram={data,layers,additive,format,percent,esc,vec,steps};
+})();
+
+'use strict';
+// Decoder diagram, mounted on every [data-decoder]: words below, layers stacked above, and the representation space.
+// data-cycles="last" computes only the last word; data-case-select adds buttons for the input sentences.
+// Other diagrams embed it through "uses" in components.json, so this file is the one implementation.
+(() => {
+ const {data,layers,format,percent,esc}=window.Diagram;
+ const NS='http://www.w3.org/2000/svg',N=data.model.numLayers;
+ const blue='#4c7da5',orange='#c36a28';
+ const illustrative=data.model.projection.status!=='measured';
+ const motion=matchMedia('(prefers-reduced-motion: reduce)');
+ const r1=v=>Math.round(v*10)/10;
+ const text=(x,y,s,extra='')=>`<text x="${r1(x)}" y="${r1(y)}" ${extra}>${s}</text>`;
+ // Axis-break mark (two parallel waves) = layers left out of the drawing.
+ const breakMark=(cx,cy,len,thick,amp,period,bg)=>{
+  const wave=off=>{const pts=[];for(let t=-len/2;t<=len/2+.01;t+=Math.min(2,len/8))pts.push([r1(t),r1(off+amp*Math.sin(2*Math.PI*t/period))]);return pts;};
+  const a=wave(-thick/2),b=wave(thick/2),line=pts=>'M'+pts.map(p=>p.join(' ')).join(' L');
+  return `<g class="dc-break" transform="translate(${r1(cx)} ${r1(cy)})"><path d="${line(a)} L${b.reverse().map(p=>p.join(' ')).join(' L')} Z" fill="${bg}"/><path d="${line(a)}" fill="none" stroke="#7d8f99" stroke-width="1.2"/><path d="${line(b.reverse())}" fill="none" stroke="#7d8f99" stroke-width="1.2"/></g>`;
+ };
+ let mounted=0;
+
+ function mount(root){
+  const select=root.hasAttribute('data-case-select'),onlyLast=root.dataset.cycles==='last',uid='dc'+ ++mounted;
+  const cases=select?data.cases:[data.cases[0]];
+  // The layer just below the last is drawn too, so the final step is a single layer; measured data needs its points.
+  const rows=[...layers];
+  if(N-1>rows.at(-2)&&(illustrative||cases.every(c=>c.tokens.every(t=>t.points[String(N-1)]))))rows.splice(-1,0,N-1);
+  const count=rows.length,full=[0,...rows];
+  // Row index k whose distance from the row below skips layers (the axis break), or -1.
+  const gapK=full.findIndex((v,k)=>k>0&&v>full[k-1]+1);
+  // When layers are skipped, the top rows are named by position from the end rather than by number.
+  const layerName=L=>!L?'埋め込み':gapK>0&&L===N?'第N層':gapK>0&&L===N-1?'第N−1層':`第${L}層`;
+  const label=k=>layerName(full[k]);
+  // Phases in a cycle: embedding, each drawn layer, the output layer, then (all cycles) the choice.
+  const OUTPUT=count+1,PICK=count+2,perCycle=count+(onlyLast?2:3);
+
+  root.insertAdjacentHTML('beforeend',`<div class="dc-toolbar">${select?`<div class="dc-cases" role="group" aria-label="入力する文">${cases.map((c,i)=>`<button type="button" data-dc-case="${i}">${esc(c.label)}</button>`).join('')}</div>`:''}<div class="dc-controls" role="group" aria-label="アニメーションの操作"><button type="button" data-dc-back aria-label="1ステップ戻る">戻る</button><button type="button" data-dc-next>進む</button><span class="dc-step" aria-live="polite"></span><span class="dc-count"></span><button type="button" data-dc-reset aria-label="最初から" title="最初から"><svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path d="M4 10a8 8 0 1 1 1 7M4 4v6h6" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></button></div></div>
+<div class="dc-legend"><span><i class="dc-orange"></i>計算中のトークン</span><span><i class="dc-blue"></i>計算済みのトークン（K・Vを保存）</span><span><i class="dc-unused"></i>この段階では使わない表現</span></div>
+<div class="dc-panels"><section><div class="dc-panel-title"><h2>01　計算の経路</h2></div><svg class="dc-network" role="img"></svg></section><section class="dc-right"><div class="dc-panel-title"><h2 class="dc-right-title"></h2></div><div class="dc-right-body"><svg class="dc-space" viewBox="0 0 360 340" role="img" aria-label="層ごとの表現の変化"></svg><div class="dc-probs" role="list" aria-label="次のトークンの確率"></div></div></section></div>`);
+  const $=s=>root.querySelector(s),$$=s=>[...root.querySelectorAll(s)];
+
+  // ---- 01 network geometry: fixed across cases so switching sentences does not rescale the drawing.
+  const ROW=56,GAP=84,LEFT=76,bg='#f6f8fa';
+  const ys=[];ys[count]=34;
+  for(let k=count;k>0;k--)ys[k-1]=ys[k]+(k===gapK?GAP:ROW);
+  const y=k=>ys[k],wordY=y(0)+34,H=wordY+12,midY=(y(0)+y(count))/2;
+  const slotsOf=c=>c.tokens.length+(onlyLast?0:1);
+  const W=Math.max(360,LEFT+(Math.max(...cases.map(slotsOf))-1)*54+30);
+  // Half the node's size including its stroke: lines stop here instead of running through the node.
+  const edge=k=>k===count?12:10;
+  const CARD=[150,72],BOX=[84,52],cardLeft=12+CARD[0]/2,boxX=W-12-BOX[0]/2,arrow=[12+CARD[0]+8,W-12-BOX[0]-12];
+  const network=$('.dc-network');
+  network.setAttribute('viewBox',`0 0 ${W} ${H}`);
+  network.innerHTML=`<defs><filter id="${uid}-shadow" x="-10%" y="-15%" width="120%" height="140%"><feDropShadow dx="0" dy="2" stdDeviation="3" flood-color="#27404f" flood-opacity=".16"/></filter></defs><g class="dc-net"><g class="dc-edges"></g><g class="dc-links"></g>${gapK>0?breakMark(W/2,(y(gapK)+y(gapK-1))/2,W-12,10,3,22,bg):''}<g class="dc-nodes"></g><g class="dc-labels"></g></g><g class="dc-words"></g>
+<g class="dc-output"><g class="dc-out-arrow"><line x1="${arrow[0]}" y1="${midY}" x2="${arrow[1]}" y2="${midY}"/><path d="M${arrow[1]} ${midY-6} L${arrow[1]+9} ${midY} L${arrow[1]} ${midY+6}Z"/></g><g transform="translate(${boxX} ${midY})"><g class="dc-out-layer"><rect x="${-BOX[0]/2}" y="${-BOX[1]/2}" width="${BOX[0]}" height="${BOX[1]}" rx="10"/>${text(0,5,'出力層','text-anchor="middle"')}</g></g>
+<g class="dc-card"><rect x="${-CARD[0]/2}" y="${-CARD[1]/2}" width="${CARD[0]}" height="${CARD[1]}" rx="10" filter="url(#${uid}-shadow)"/>${text(0,-12,'','text-anchor="middle" class="dc-card-word"')}${text(0,5,`${label(count)}の表現`,'text-anchor="middle" class="dc-card-caption"')}<g class="dc-card-vector"></g></g></g>`;
+  const edges=$('.dc-edges'),links=$('.dc-links'),nodesG=$('.dc-nodes'),labelsG=$('.dc-labels'),wordsG=$('.dc-words'),card=$('.dc-card');
+  labelsG.innerHTML=full.map((_,k)=>text(8,y(k)+4,label(k),`data-row-label="${k}"`)).join('');
+
+  // ---- 02 space: measured projections are drawn as-is; illustrative ones get a context-dependent teaching layout.
+  const SW=360,SH=340;
+  const toSpace=([u,v])=>[28+u*(SW-56),22+v*(SH-50)];
+  const spaceOf=c=>{
+   if(!illustrative)return c.tokens.map(t=>full.map(L=>toSpace(t.points[String(L)])));
+   // Each token gets its own steps from a generator seeded by its text and position, so the layout is stable across reloads.
+   const rng=seed=>{let h=2166136261;for(const ch of seed)h=Math.imul(h^ch.charCodeAt(0),16777619);return()=>{h=Math.imul(h^h>>>15,2246822507);h=Math.imul(h^h>>>13,3266489909);return((h^=h>>>16)>>>0)/4294967296;};};
+   const clamp=p=>p.map(v=>Math.min(.92,Math.max(.08,v)));
+   const move=(p,r,len)=>{const a=r()*2*Math.PI;return clamp([p[0]+len*Math.cos(a),p[1]+len*Math.sin(a)]);};
+   const goals=[];
+   return c.tokens.map((t,i)=>{
+    const r=rng(t.text+'#'+i),path=[clamp(t.points[0])];
+    // Before the break (or on every row when nothing is skipped): small steps whose size and direction differ per token.
+    const last=gapK<0?count:gapK-1;
+    for(let k=1;k<=last;k++)path.push(move(path.at(-1),r,.04+.1*r()));
+    if(gapK<0)return path.map(toSpace);
+    // Across the skipped layers: a large jump to a place pulled toward the previous word, so neighbours and order change.
+    let goal,tries=0;
+    do{
+     const free=[.12+.76*r(),.12+.76*r()],prevGoal=goals[i-1];
+     goal=clamp(prevGoal?free.map((v,d)=>.65*v+.35*prevGoal[d]):free);
+    }while(tries++<60&&(Math.hypot(goal[0]-path.at(-1)[0],goal[1]-path.at(-1)[1])<.3||goals.some(g=>Math.hypot(goal[0]-g[0],goal[1]-g[1])<.16)));
+    goals.push(goal);
+    // After the break: the remaining rows reach the goal in moderate steps of their own.
+    const tail=[goal];
+    for(let k=count;k>gapK;k--)tail.unshift(move(tail[0],r,.05+.07*r()));
+    path.push(...tail);
+    return path.map(toSpace);
+   });
+  };
+  const space=$('.dc-space');
+  let grid='';
+  for(let k=0;k<=6;k++)grid+=`<line x1="${28+k*(SW-56)/6}" y1="14" x2="${28+k*(SW-56)/6}" y2="${SH-20}" stroke="#e7edf1"/><line x1="20" y1="${22+k*(SH-50)/6}" x2="${SW-20}" y2="${22+k*(SH-50)/6}" stroke="#e7edf1"/>`;
+  space.innerHTML=`<g>${grid}</g><g class="dc-trails"></g><g class="dc-heads"></g><text class="dc-space-layer" x="${SW-24}" y="${SH-30}" text-anchor="end"></text>`;
+  const heads=$('.dc-heads'),probs=$('.dc-probs');
+
+  // ---- per-case state
+  let ci=0,c,n,x,words,cycles,spacePts,total,step=0,sub=2,timers=[],builtFor='',spaceCycle=-1;
+  function build(){
+   c=cases[ci];n=c.tokens.length;
+   const col=(W-30-LEFT)/Math.max(1,slotsOf(c)-1);x=i=>LEFT+i*col;
+   words=[...c.tokens.map(t=>t.text),c.candidates[c.selectedIndex].text];
+   // Earlier prompt tokens start out computed (their K・V are cached); from the earliest position whose prediction is recorded, one token at a time.
+   let start=n-1;
+   if(!onlyLast)while(start>0&&c.tokens[start-1].candidates)start--;
+   cycles=[];
+   for(let t=start;t<n;t++){const cs=t<n-1?c.tokens[t].candidates:c.candidates;cycles.push({t,cs,chosen:t<n-1?cs.findIndex(v=>v.text===c.tokens[t+1].text):c.selectedIndex});}
+   total=cycles.length*perCycle;
+   spacePts=spaceOf(c);
+   let e='',nd='';
+   for(let i=0;i<n;i++)for(let k=0;k<=count;k++){
+    if(k)e+=`<line class="dc-edge" data-edge="${i}-${k}" x1="${r1(x(i))}" y1="${r1(y(k-1)-edge(k-1))}" x2="${r1(x(i))}" y2="${r1(y(k)+edge(k))}"/>`;
+    nd+=k===count?`<rect class="dc-node" data-node="${i}-${k}" x="${r1(x(i)-11)}" y="${y(k)-11}" width="22" height="22" rx="3"/>`:`<circle class="dc-node" data-node="${i}-${k}" cx="${r1(x(i))}" cy="${y(k)}" r="9"/>`;
+   }
+   edges.innerHTML=e;nodesG.innerHTML=nd;
+   wordsG.innerHTML=words.slice(0,onlyLast?n:n+1).map((w,i)=>text(x(i),wordY,esc(w),`text-anchor="middle" class="dc-word" data-word="${i}"`)).join('');
+   heads.replaceChildren();builtFor='';spaceCycle=-1;
+   $$('[data-dc-case]').forEach(b=>b.setAttribute('aria-pressed',String(+b.dataset.dcCase===ci)));
+  }
+
+  // glide: the dots move from their previous layer; a new cycle starts from the embeddings, so they are placed there directly.
+  function renderSpace(cur,lay,glide){
+   const color=i=>i<cur.t?blue:orange,at=(i,k)=>spacePts[i][k];
+   let trails='';
+   for(let i=0;i<=cur.t;i++){
+    // Only the stretch since the skipped layers stays drawn, so no trail floats away from its point.
+    const from=gapK>0&&lay>=gapK?gapK:0;
+    trails+=`<g data-space-token="${i}">`;
+    for(let k=from+1;k<=lay;k++){const [ax,ay]=at(i,k-1),[bx,by]=at(i,k);trails+=`<line x1="${r1(ax)}" y1="${r1(ay)}" x2="${r1(bx)}" y2="${r1(by)}" stroke="${color(i)}" stroke-width="1.5" opacity=".55"/>`;}
+    for(let k=from;k<lay;k++){const [px,py]=at(i,k);trails+=`<circle cx="${r1(px)}" cy="${r1(py)}" r="3" fill="${color(i)}" opacity=".45"/>`;}
+    trails+='</g>';
+   }
+   $('.dc-trails').innerHTML=trails;
+   $('.dc-space-layer').textContent=label(lay);
+   // Points may overlap; only the labels are placed around their dots to stay readable.
+   const boxes=[],dots=[...Array(cur.t+1).keys()].map(j=>at(j,lay));
+   const place=(i,[hx,hy])=>{
+    const w=words[i].trim().length*7.6+6;
+    const options=[[0,-11,'middle',hx-w/2,hy-24],[0,21,'middle',hx-w/2,hy+8],[10,5,'start',hx+8,hy-8],[-10,5,'end',hx-8-w,hy-8]];
+    const free=o=>!boxes.some(b=>o[3]<b[0]+b[2]&&b[0]<o[3]+w&&o[4]<b[1]+15&&b[1]<o[4]+15)&&!dots.some(([dx,dy],j)=>j!==i&&dx>o[3]-5&&dx<o[3]+w+5&&dy>o[4]-5&&dy<o[4]+20);
+    const o=options.find(free)||options[0];boxes.push([o[3],o[4],w]);return o;
+   };
+   [...heads.children].forEach(h=>{if(+h.dataset.head>cur.t)h.remove();});
+   for(let i=0;i<=cur.t;i++){
+    let h=heads.querySelector(`[data-head="${i}"]`);
+    const [hx,hy]=at(i,lay);
+    if(!h){
+     h=document.createElementNS(NS,'g');h.setAttribute('class','dc-head');h.dataset.head=i;
+     h.innerHTML=`<circle class="dc-ring" r="12" fill="none" stroke-width="2"/><circle class="dc-dot" r="6" stroke="#fff" stroke-width="2"/>${text(0,-11,esc(words[i]),'text-anchor="middle" style="font-weight:600"')}`;
+     heads.append(h);
+     if(!motion.matches)h.animate([{opacity:0},{opacity:1}],{duration:400});
+    }else if(!glide)h.getAnimations().forEach(a=>a.cancel());
+    else if(+h.dataset.k!==lay&&!motion.matches){
+     // Crossing the skipped layers (or any multi-row jump) is a long glide.
+     const k0=+h.dataset.k,far=Math.abs(k0-lay)>1||Math.max(k0,lay)===gapK;
+     h.getAnimations().forEach(a=>a.cancel());
+     h.animate([at(i,k0),at(i,lay)].map(([px,py])=>({transform:`translate(${r1(px)}px,${r1(py)}px)`})),{duration:far?1600:650,easing:'ease-in-out'});
+    }
+    h.dataset.k=lay;h.style.transform=`translate(${r1(hx)}px,${r1(hy)}px)`;
+    h.querySelector('.dc-dot').setAttribute('fill',color(i));
+    const tx=h.querySelector('text'),o=place(i,[hx,hy]);
+    tx.style.fill=color(i);tx.setAttribute('x',o[0]);tx.setAttribute('y',o[1]);tx.setAttribute('text-anchor',o[2]);
+    h.querySelector('.dc-ring').setAttribute('stroke',i===cur.t?orange:'none');
+   }
+  }
+
+  // Restart a one-shot CSS animation on an element.
+  const replay=(el,cls)=>{if(!el)return;el.classList.remove(cls);el.getBoundingClientRect();el.classList.add(cls);};
+  function render(effect){
+   const cycle=Math.floor(step/perCycle),phase=step%perCycle,cur=cycles[cycle],t=cur.t;
+   const done=Math.min(phase,count),layerPhase=phase>=1&&phase<=count,output=phase>=OUTPUT,picked=phase===PICK;
+   // The row after the axis break is reached through the omitted layers, so no information is drawn flowing into it.
+   const flows=layerPhase&&done!==gapK;
+   const ready=picked||output&&sub===2;
+   root.dataset.step=step;root.dataset.layer=full[done];root.dataset.sub=sub;
+   root.classList.toggle('is-output',output&&!picked);root.classList.toggle('is-ready',ready);root.classList.toggle('is-picked',picked);
+   const shown=(i,k)=>i<t||i===t&&k<=done;
+   // Circles used in this step stay saturated: the new node and, while a layer is computed, every node it reads from the row below.
+   $$('.dc-node').forEach(el=>{
+    const [i,k]=el.dataset.node.split('-').map(Number),target=i===t&&k===done;
+    el.dataset.state=i<t?'cached':'active';
+    el.classList.toggle('is-hidden',!shown(i,k));
+    el.classList.toggle('is-target',target);
+    el.classList.toggle('is-source',flows&&k===done-1&&i<=t);
+    el.classList.toggle('is-pending',target&&flows&&sub<2);
+    if(!target)el.classList.remove('dc-made');
+   });
+   $$('.dc-edge').forEach(el=>{
+    const [i,k]=el.dataset.edge.split('-').map(Number);
+    el.dataset.state=i<t?'cached':'active';
+    el.classList.toggle('is-hidden',!(shown(i,k)&&shown(i,k-1)));
+    el.classList.toggle('is-self',flows&&i===t&&k===done);
+   });
+   // Information from every earlier word's node in the row below flows into the new node.
+   const key=`${ci}:${step}`;
+   if(key!==builtFor){
+    builtFor=key;
+    let l='';
+    if(flows)for(let i=0;i<t;i++){
+     const sx=x(i),sy=y(done-1)-edge(done-1),ex=x(t),ey=y(done)+edge(done),d=sy-ey;
+     l+=`<path class="dc-link" d="M${r1(sx)} ${r1(sy)} C${r1(sx)} ${r1(sy-d*.55)} ${r1(ex)} ${r1(ey+d*.45)} ${r1(ex)} ${r1(ey)}"/>`;
+    }
+    links.innerHTML=l;
+    probs.innerHTML=cur.cs.map((v,r)=>`<div class="dc-prob${v.text==='その他'?' is-other':''}" role="listitem"><span class="dc-prob-word">${esc(v.text.trim()||v.text)}</span><span class="dc-track"><span class="dc-fill"></span></span><b>${percent(v.probability)}</b></div>`).join('');
+   }
+   $$('[data-row-label]').forEach(el=>el.classList.toggle('dc-row-current',!output&&+el.dataset.rowLabel===done));
+   $$('.dc-word').forEach(el=>{
+    const i=+el.dataset.word;
+    el.classList.toggle('is-hidden',!(i<=t||picked&&i===t+1));
+    el.classList.toggle('is-active',i===t);
+    el.classList.toggle('is-picked',picked&&i===t+1);
+   });
+   // The final representation grows out of its node and moves beside the output layer.
+   const vector=t===n-1?data.ngram.features[c.key]:c.tokens[t].layers[String(N)];
+   const [vx,vy]=output?[cardLeft,midY]:[x(t),y(count)];
+   card.style.transform=`translate(${r1(vx)}px,${r1(vy)}px) scale(${output?1:.1})`;
+   card.querySelector('.dc-card-word').textContent=words[t].trim();
+   card.querySelector('.dc-card-vector').innerHTML=vector.map((v,j)=>`<rect x="${r1(j*20-vector.length*10+2)}" y="14" width="16" height="11" rx="2" opacity="${r1(Math.max(.15,Math.min(1,Math.abs(v))))}"><title>${format(v)}</title></rect>`).join('');
+   // Probabilities replace the space once only the final representation remains.
+   const best=Math.max(...cur.cs.map(v=>v.probability));
+   $('.dc-right').classList.toggle('is-probs',output);
+   $('.dc-right-title').textContent=output?'02　次のトークンの確率':'02　表現の空間';
+   [...probs.children].forEach((row,r)=>{
+    const p=cur.cs[r].probability;
+    row.classList.toggle('is-top',ready&&!picked&&p===best);
+    row.classList.toggle('is-chosen',picked&&r===cur.chosen);
+    row.classList.toggle('is-muted',picked&&r!==cur.chosen);
+    row.querySelector('.dc-fill').style.width=`${ready?p*100:0}%`;
+   });
+   const glide=spaceCycle===cycle;spaceCycle=cycle;
+   renderSpace(cur,flows&&sub<2?done-1:done,glide);
+   network.setAttribute('aria-label',output?`${words[t].trim()}の${label(count)}の表現から、次のトークンの確率を出す`:`${words[t].trim()}の${label(done)}を計算`);
+   if(effect==='made')replay($('.dc-node.is-target'),'dc-made');
+   if(effect==='enter'&&phase===0)replay($('.dc-node.is-target'),'dc-made');
+   if(effect==='enter'&&picked)replay($('.dc-word.is-picked'),'dc-drop');
+   const chip=$('.dc-step');
+   chip.textContent=picked?'選択':output?'出力':label(done);
+   chip.classList.toggle('is-output',output);
+   $('[data-dc-back]').disabled=step===0;
+   $('[data-dc-next]').disabled=step===total-1;
+   $('.dc-count').textContent=`${step+1} / ${total}`;
+  }
+
+  const stop=()=>{timers.forEach(clearTimeout);timers=[];};
+  // Forward: a layer's new node appears first, information flows into it, then it forms; the output layer lights up once the card arrives.
+  function play(to){
+   stop();step=to;
+   const phase=step%perCycle,flows=phase>=1&&phase<=count&&phase!==gapK;
+   if(phase===gapK){sub=2;render('made');return;}
+   if(motion.matches||!(flows||phase===OUTPUT)){sub=2;render('enter');return;}
+   sub=0;render('enter');
+   const at=phase===OUTPUT?[900,1800]:[700,1900];
+   timers=[setTimeout(()=>{sub=1;render();},at[0]),setTimeout(()=>{sub=2;render('made');},at[1])];
+  }
+  // Backward, reset and sentence changes show the finished state without motion.
+  function show(to){
+   stop();step=to;sub=2;root.classList.add('dc-instant');render();
+   root.getBoundingClientRect();root.classList.remove('dc-instant');
+  }
+  $('[data-dc-next]').addEventListener('click',()=>{if(step<total-1)play(step+1);});
+  $('[data-dc-back]').addEventListener('click',()=>show(Math.max(0,step-1)));
+  $('[data-dc-reset]').addEventListener('click',()=>show(0));
+  $$('[data-dc-case]').forEach(b=>b.addEventListener('click',()=>{if(ci===+b.dataset.dcCase)return;ci=+b.dataset.dcCase;build();show(Math.min(step,total-1));}));
+  motion.addEventListener('change',()=>show(step));
+  build();show(0);
+  // Embedding pages call settle() when the diagram is hidden, so no delayed step fires off-screen.
+  return {settle:()=>show(step)};
+ }
+ document.querySelectorAll('[data-decoder]').forEach(el=>{el.decoderDiagram=mount(el);});
 })();
 
 'use strict';
 (() => {
  const root=document.querySelector('#ng-demo');if(!root)return;
  const q=s=>root.querySelector(s),qa=s=>[...root.querySelectorAll(s)];
- const {data,format,percent,esc,note}=window.Diagram;
+ const {data,format,percent}=window.Diagram;
  const {contexts,words,probabilities,matrix:matrixData}=data.ngram;
- const stages=[
-  ['確率表',''],
-  ['並べ替える','値はそのままに、行と列の位置だけを変えています。前の操作に戻して、どこが変わったかを見比べられます。'],
-  ['傾向を使う',''],
-  ['文脈から予測','notの有無で入力と最後のトークンの表現を比較します。文脈を切り替えて比べてみてください。']
- ];
- let step=0,context=0,sortPhase=0,structureSorted=true,revealed=false,bank='money',phase=0,paused=false,bankTimer;
- const motion=window.matchMedia('(prefers-reduced-motion: reduce)');
- const bankExamples=Object.fromEntries(data.cases.map((c,i)=>[i===0?'money':'river',c]));
+ const stages=['確率表','並べ替える','傾向で推測','文脈から予測'];
+ let step=0,context=0,sortPhase=0,revealed=false;
+ const illustrative=s=>s!=='measured';
  const makeButton=(label,fn)=>{const b=document.createElement('button');b.type='button';b.textContent=label;b.addEventListener('click',fn);return b;};
- stages.forEach((s,i)=>{const b=makeButton(`${i+1} ${s[0]}`,()=>go(i));b.dataset.stage=i;q('.ng-steps').append(b);});
- const holder=q('[data-panel="table"] .ng-contexts');contexts.forEach((label,i)=>{const b=makeButton(label,()=>{context=i;renderContext();});b.dataset.context=i;holder.append(b);});
+ stages.forEach((label,i)=>{const b=makeButton(`${i+1} ${label}`,()=>go(i));b.dataset.stage=i;q('.ng-steps').append(b);});
+
+ // Scene 1: column headers select the context, so the table itself is the control.
  const table=q('.ng-prob-table');
+ table.style.gridTemplateColumns=`minmax(60px,.8fr) repeat(${contexts.length},minmax(70px,1fr))`;
  for(let row=-1;row<words.length;row++)for(let col=-1;col<contexts.length;col++){
-  const cell=document.createElement('div');cell.className='ng-cell'+(row===-1?' ng-colhead':col===-1?' ng-rowhead':'');
-  cell.textContent=row===-1?(col===-1?'y ／ x':contexts[col]):col===-1?words[row]:percent(probabilities[col][row]);
-  if(col>=0)cell.dataset.col=col;table.append(cell);
+  const head=row===-1&&col>=0,cell=head?makeButton(contexts[col],()=>{context=col;renderContext();}):document.createElement('div');
+  cell.className='ng-cell'+(row===-1?' ng-colhead':col===-1?' ng-rowhead':'');
+  if(!head)cell.textContent=row===-1?'y ＼ x':col===-1?words[row]:percent(probabilities[col][row]);
+  if(col>=0)cell.dataset.col=col;if(head)cell.dataset.context=col;table.append(cell);
  }
- const matrix=q('.ng-matrix');
- const {words:matrixWords,contexts:matrixContexts,values,rowOrder:rowShuffled,columnOrder:colShuffled,rowSwap,columnSwap,hiddenCell}=matrixData;
- for(let r=0;r<matrixWords.length;r++)for(let c=0;c<matrixContexts.length;c++){const el=document.createElement('div');el.className='ng-number';el.dataset.r=r;el.dataset.c=c;el.style.setProperty('--value',(values[r][c]-matrixData.range[0])/(matrixData.range[1]-matrixData.range[0])*5);matrix.append(el);}
- for(const [axis,labels] of [['x',matrixContexts],['y',matrixWords]])labels.forEach((label,i)=>{const el=document.createElement('span');el.className=`ng-axis ng-${axis}`;el.dataset.index=i;el.textContent=label;matrix.append(el);});
- q('.ng-prob-table').style.gridTemplateColumns=`minmax(65px,1fr) repeat(${contexts.length},minmax(65px,1fr))`;
- q('.ng-matrix').style.height=(105+matrixWords.length*54)+'px';
- q('.ng-matrix').style.minWidth=Math.max(560,100+matrixContexts.length*110)+'px';
- q('.ng-table-note').textContent=data.ngram.status==='measured'?'出現頻度から求めた確率（表示の切り捨てで合計が100%にならない場合があります）':'N-gramの確率は説明用の仮置き値です。各列の合計は100%です。';
- q('.ng-example-label').innerHTML='N-gramの例<br>（単語単位）';
- q('.ng-ngram-example small').textContent='文脈 x：直前の語';
- q('.ng-ngram-example b').textContent=contexts[0];
- qa('.ng-ngram-example b')[1].textContent=words[0];
  function renderContext(){
   qa('[data-context]').forEach(b=>b.setAttribute('aria-pressed',String(+b.dataset.context===context)));
   qa('[data-col]').forEach(c=>c.classList.toggle('ng-selected',+c.dataset.col===context));
-
  }
+
+ // Scenes 2–3: one score matrix whose cells move between layouts.
+ const matrix=q('.ng-matrix');
+ const {words:matrixWords,contexts:matrixContexts,values,rowOrder:rowShuffled,columnOrder:colShuffled,rowSwap,columnSwap,hiddenCell}=matrixData;
+ // Sorting steps through the row swap, the column swap, then the rest at once; each button names its operation.
+ const sortOps=[
+  {back:'◀ 戻す',next:'行を入れ替える ▶'},
+  {back:'◀ 行を元に戻す',next:'列を入れ替える ▶'},
+  {back:'◀ 列を元に戻す',next:'残りをまとめて並べ替える ▶'},
+  {back:'◀ まとめて並べ替える前に戻す',next:'並べ替え完了'}];
+ const rowH=54,top0=54,colW=80/matrixContexts.length;
+ for(let r=0;r<matrixWords.length;r++)for(let c=0;c<matrixContexts.length;c++){const el=document.createElement('div');el.className='ng-number';el.dataset.r=r;el.dataset.c=c;el.style.setProperty('--value',(values[r][c]-matrixData.range[0])/(matrixData.range[1]-matrixData.range[0])*5);matrix.append(el);}
+ for(const [axis,labels] of [['x',matrixContexts],['y',matrixWords]])labels.forEach((label,i)=>{const el=document.createElement('span');el.className=`ng-axis ng-${axis}`;el.dataset.index=i;el.textContent=label;matrix.append(el);});
+ const corner=document.createElement('span');corner.className='ng-axis ng-corner';corner.textContent='y ＼ x';matrix.append(corner);
+ matrix.style.height=(top0+matrixWords.length*rowH+8)+'px';
+ qa('.ng-number,.ng-axis.ng-x').forEach(el=>el.style.width=(colW-4)+'%');
+ q('.ng-matrix-badge').textContent=`スコア ${matrixData.range.join('〜')}`;
  function renderMatrix(){
-  const layoutPhase=step===2?(structureSorted?3:0):sortPhase;
+  const layoutPhase=step===2?3:sortPhase;
   const swap=(order,a,b)=>order.map(i=>i===a?b:i===b?a:i);
   const rowOrder=layoutPhase===3?matrixWords.map((_,i)=>i):layoutPhase>=1?swap(rowShuffled,...rowSwap):rowShuffled;
   const colOrder=layoutPhase===3?matrixContexts.map((_,i)=>i):layoutPhase>=2?swap(colShuffled,...columnSwap):colShuffled;
   const highlighted=(r,c)=>step===1&&(sortPhase===1&&rowSwap.includes(r)||sortPhase===2&&columnSwap.includes(c));
   const masked=(r,c)=>step===2&&r===hiddenCell[0]&&c===hiddenCell[1]&&!revealed;
-  qa('.ng-number').forEach(el=>{const r=+el.dataset.r,c=+el.dataset.c;el.style.left=(16+colOrder.indexOf(c)*(80/matrixContexts.length))+'%';el.style.top=(54+rowOrder.indexOf(r)*54)+'px';el.textContent=masked(r,c)?'?':format(values[r][c]);el.classList.toggle('ng-hidden-value',masked(r,c));el.classList.toggle('ng-swapped',highlighted(r,c));});
-  qa('.ng-axis').forEach(el=>{const isX=el.classList.contains('ng-x'),pos=(isX?colOrder:rowOrder).indexOf(+el.dataset.index);el.style.left=isX?(16+pos*(80/matrixContexts.length))+'%':'0';el.style.top=isX?'0':(54+pos*54)+'px';el.classList.toggle('ng-swapped',highlighted(isX?-1:+el.dataset.index,isX?+el.dataset.index:-1));});
-  const orderLabel=step===2?(structureSorted?'並べ替えた配置':'元の配置'):['0 / 3 · 最初の配置',`1 / 3 · ${rowSwap.map(i=>matrixWords[i]).join(' と ')} の行を交換済み`,`2 / 3 · ${columnSwap.map(i=>matrixContexts[i]).join(' と ')} の列も交換済み`,'3 / 3 · 並べ替え完了'][sortPhase];
-  q('.ng-matrix-order').textContent=orderLabel;
-  matrix.setAttribute('aria-label',`${orderLabel}のスコア表。列：${colOrder.map(c=>matrixContexts[c]).join('、')}。${rowOrder.map(r=>matrixWords[r]+'：'+colOrder.map(c=>masked(r,c)?'はてな':format(values[r][c])).join('、')).join('。')}`);
-  q('.ng-matrix-title').textContent=step===2?'表の傾向から値を考える':'並べ替えて、表の傾向を見る';
-  q('.ng-matrix-intro').textContent=step===2?'前の場面と同じ表から、値を1つ隠しました。行や列の増減を手がかりに、「?」にはどんな値が入りそうか考えてみてください。':'ここからは、文脈と次の語の合い方をスコアで表します。確率表と同じく、列が文脈、行が次の語です。行と列を動かして、共通の傾向を探します。';
-  q('.ng-sort-controls').hidden=step!==1;
-  q('.ng-structure-controls').hidden=step!==2;
-  q('.ng-structure-bridge').hidden=step!==2;
-  q('[data-sort-back]').disabled=sortPhase===0;
-  q('[data-sort-reset]').disabled=sortPhase===0;
-  q('[data-sort]').disabled=sortPhase===3;
-  q('[data-sort]').textContent=sortPhase===3?'並べ替え完了':'次の操作 →';
-  q('.ng-sort-instruction').textContent=[`次：${rowSwap.map(i=>matrixWords[i]).join(' と ')} の行を交換`,`次：${columnSwap.map(i=>matrixContexts[i]).join(' と ')} の列を交換`,'次：残りの行と列をまとめて並べ替える','行や列に沿った、値の増減が見える配置になりました。'][sortPhase];
-  qa('[data-layout]').forEach(b=>b.setAttribute('aria-pressed',String((b.dataset.layout==='sorted')===structureSorted)));
-  q('[data-reveal]').textContent=revealed?'値をもう一度隠す':'隠した値を確かめる';
+  const x=pos=>(16+pos*colW)+'%',y=pos=>(top0+pos*rowH)+'px';
+  qa('.ng-number').forEach(el=>{const r=+el.dataset.r,c=+el.dataset.c;el.style.left=x(colOrder.indexOf(c));el.style.top=y(rowOrder.indexOf(r));el.textContent=masked(r,c)?'?':format(values[r][c]);el.classList.toggle('ng-hidden-value',masked(r,c));el.classList.toggle('ng-answer',step===2&&revealed&&r===hiddenCell[0]&&c===hiddenCell[1]);el.classList.toggle('ng-swapped',highlighted(r,c));});
+  qa('.ng-axis.ng-x,.ng-axis.ng-y').forEach(el=>{const isX=el.classList.contains('ng-x'),pos=(isX?colOrder:rowOrder).indexOf(+el.dataset.index);el.style.left=isX?x(pos):'0';el.style.top=isX?'0':y(pos);el.classList.toggle('ng-swapped',highlighted(isX?-1:+el.dataset.index,isX?+el.dataset.index:-1));});
+  const layoutLabel=layoutPhase===3?'並べ替えた配置':layoutPhase===0?'元の配置':'並べ替え中';
+  matrix.setAttribute('aria-label',`${layoutLabel}のスコア表。列：${colOrder.map(c=>matrixContexts[c]).join('、')}。${rowOrder.map(r=>matrixWords[r]+'：'+colOrder.map(c=>masked(r,c)?'はてな':format(values[r][c])).join('、')).join('。')}`);
+  q('.ng-matrix-title').textContent=step===2?'傾向があれば、見ていない組み合わせ「?」も推測しやすい':'行と列を並べ替えると、表の傾向が見えてくる';
+  const back=q('[data-sort-back]'),next=q('[data-sort-next]');
+  back.hidden=next.hidden=step!==1;
+  back.textContent=sortOps[sortPhase].back;back.disabled=sortPhase===0;
+  next.textContent=sortOps[sortPhase].next;next.disabled=sortPhase===3;
+  q('[data-reveal]').hidden=step!==2;
+  q('[data-reveal]').textContent=revealed?'もう一度隠す':'答えを見る';
   q('[data-reveal]').setAttribute('aria-expanded',String(revealed));
   q('.ng-matrix-note').hidden=step!==2||!revealed;
-  q('.ng-matrix-note').textContent=`${matrixContexts[hiddenCell[1]]} → ${matrixWords[hiddenCell[0]]} の元の値は${format(values[hiddenCell[0]][hiddenCell[1]])}です。ただし、周囲の値だけから一意には決まりません。`;
+  q('.ng-matrix-note').textContent=`${matrixContexts[hiddenCell[1]]} → ${matrixWords[hiddenCell[0]]}：${format(values[hiddenCell[0]][hiddenCell[1]])}`;
  }
- function renderBank(){
-  const example=bankExamples[bank],mixed=phase>0,last=example.tokens.at(-1),f=mixed?last.layers[data.model.numLayers]:last.input;
-  qa('[data-bank]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.bank===bank)));
-  q('.ng-sentence').textContent=example.prompt+' ?';
-  q('.ng-sources').replaceChildren(...example.tokens.slice(0,-1).map(t=>{const s=document.createElement('span');s.className='ng-source';s.textContent=t.text;return s;}));
-  q('.ng-bank strong').textContent=last.text;
-  q('.ng-attention').classList.toggle('ng-mixed',mixed);
-  q('[data-panel="attention"]').dataset.phase=phase;
-  q('[data-panel="attention"]').classList.toggle('ng-paused',paused);
-  q('.ng-bank-vector').innerHTML=f.map(n=>`<i title="${format(n)}" style="--strength:${Math.min(1,Math.abs(n))}"></i>`).join('');
-  q('.ng-bank-caption').textContent=mixed?`第${data.model.numLayers}層の表現`:'入力時の表現';
-  const best=Math.max(...example.candidates.map(c=>c.probability));
-  q('.ng-prediction-label').textContent=last.text+' の表現 → 語ごとのスコア → softmax';
-  q('.ng-next-bars').innerHTML=example.candidates.map(c=>`<div class="ng-next-row ${phase===2&&c.probability===best?'ng-top-prediction':''}"><span>${esc(c.text)}</span><span class="ng-bar-track"><span class="ng-bar-fill" style="--p:${phase===2?c.probability*100:0}%"></span></span><b>${phase===2?percent(c.probability):'—'}</b></div>`).join('');
-  q('.ng-completion').textContent=phase===2?'最有力候補：'+example.candidates.filter(c=>c.probability===best).map(c=>c.text).join(' ／ '):phase===1?'文脈を含む表現から、次のトークンの確率へ':'まず、最後のトークンより前の文脈を見ます';
-  q('[data-playback]').textContent=paused?'再生する':'一時停止';q('[data-playback]').hidden=motion.matches;q('[data-replay]').hidden=motion.matches;
-  q('.ng-playback-state').textContent=motion.matches?'結果を表示中':paused?'一時停止中':'自動ループ再生中';
- }
- function scheduleBank(){
-  clearTimeout(bankTimer);
-  if(step!==3||paused||motion.matches||document.hidden)return;
-  bankTimer=setTimeout(()=>{phase=(phase+1)%3;renderBank();scheduleBank();},[1200,1600,3600][phase]);
- }
- function restartBank(){phase=motion.matches||paused?2:0;renderBank();scheduleBank();}
- motion.addEventListener('change',restartBank);
- document.addEventListener('visibilitychange',scheduleBank);
- function go(n){step=n;root.dataset.step=step;clearTimeout(bankTimer);if(motion.matches)phase=2;
+
+ // Scene 4 embeds the decoder diagram (components/decoder-kv-cache), computing only the last word.
+ const decoder=q('[data-decoder]').decoderDiagram;
+
+ function go(n){step=n;root.dataset.step=step;
   qa('[data-stage]').forEach(b=>{if(+b.dataset.stage===step)b.setAttribute('aria-current','step');else b.removeAttribute('aria-current');});
-  q('.ng-copy').textContent=stages[step][1];q('.ng-copy').hidden=!stages[step][1];
   const panel=['table','matrix','matrix','attention'][step];qa('[data-panel]').forEach(p=>p.hidden=p.dataset.panel!==panel);
   q('[data-prev]').disabled=step===0;q('[data-next]').disabled=step===stages.length-1;q('.ng-page').textContent=`${step+1} / ${stages.length}`;
-  q('[data-next]').textContent=step===stages.length-1?'最後の場面':'次の場面 →';
-  renderContext();renderMatrix();renderBank();scheduleBank();
+  renderContext();renderMatrix();decoder.settle();
  }
  q('[data-prev]').addEventListener('click',()=>go(Math.max(0,step-1)));q('[data-next]').addEventListener('click',()=>go(Math.min(stages.length-1,step+1)));
- q('[data-sort]').addEventListener('click',()=>{sortPhase=Math.min(3,sortPhase+1);renderMatrix();});
  q('[data-sort-back]').addEventListener('click',()=>{sortPhase=Math.max(0,sortPhase-1);renderMatrix();});
- q('[data-sort-reset]').addEventListener('click',()=>{sortPhase=0;renderMatrix();});
- qa('[data-layout]').forEach(b=>b.addEventListener('click',()=>{structureSorted=b.dataset.layout==='sorted';renderMatrix();}));
+ q('[data-sort-next]').addEventListener('click',()=>{sortPhase=Math.min(3,sortPhase+1);renderMatrix();});
  q('[data-reveal]').addEventListener('click',()=>{revealed=!revealed;renderMatrix();});
- qa('[data-bank]').forEach(b=>b.addEventListener('click',()=>{if(bank===b.dataset.bank)return;bank=b.dataset.bank;restartBank();}));
- q('[data-playback]').addEventListener('click',()=>{paused=!paused;renderBank();scheduleBank();});
- q('[data-replay]').addEventListener('click',()=>{paused=false;restartBank();});
- q('figcaption').textContent=note()+' N-gramの表は'+(data.ngram.status==='measured'?'出現頻度の実測':'説明用の仮置き')+'、並べ替えの表は説明用のスコアです。';
- q('.ng-attention-note').textContent='色の帯は表示成分の絶対値を0〜1に収めた模式表示です。線はAttentionの実測重みではありません。';
- qa('[data-bank]').forEach((b,i)=>b.textContent=data.cases[i]?.label||'比較');
- q('.ng-badge').textContent=`文脈との合い方：${matrixData.range.join('〜')}（説明用）`;
- qa('.ng-number,.ng-axis.ng-x').forEach(el=>el.style.width=(76/matrixContexts.length)+'%');
+ q('figcaption').textContent=(illustrative(data.model.status)?'':`予測はモデル ${data.model.id} の実測値。`)+'線はAttentionの重みではありません。';
  q('.ng-interactive').hidden=false;q('.ng-fallback').hidden=true;go(0);
 })();
 </script></body></html>

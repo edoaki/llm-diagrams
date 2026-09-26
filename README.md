@@ -8,12 +8,9 @@
 
 | 図 | 単独配布ファイル |
 | --- | --- |
-| 文章 → 埋め込み → 各層 → 次トークンの確率 | [dist/gpt-representations.html](dist/gpt-representations.html) |
+| 文章 → 埋め込み → 各層 → 次トークンの確率（not切り替えなし） | [dist/gpt-representations.html](dist/gpt-representations.html) |
 | notの有無を比較する空間図 | [dist/gpt-representations-not.html](dist/gpt-representations-not.html) |
-| 続きを一つずつ生成 | [dist/autoregressive.html](dist/autoregressive.html) |
 | 過去の表現を保ちながら次のトークンを計算 | [dist/decoder-kv-cache.html](dist/decoder-kv-cache.html) |
-| トークン化と位置情報 | [dist/token-embeddings.html](dist/token-embeddings.html) |
-| 生成の一巡 | [dist/generation-loop.html](dist/generation-loop.html) |
 | N-gram → 並べ替え → 傾向 → Transformer | [dist/ngram-to-llm.html](dist/ngram-to-llm.html) |
 
 `index.html` は一覧です。各HTMLを単独で配布できます。`examples/slides.html` はiframeで埋め込む例です。公開はmainブランチのルートをGitHub Pagesのソースとし、`.nojekyll`で生成済みファイルをそのまま配信します。
@@ -55,7 +52,7 @@ npm test
 
 `components/<id>/` に各図のHTML・CSS・挙動、`shared/` に共通CSSとデータ読み込み・表示処理があります。ビルドが原本のデータを検証し、全HTMLへ埋め込みます。`dist/` と `index.html` は生成物として管理します。
 
-テストは単独HTMLのオフライン動作、960/390/320px、各場面、not比較、加算のタイミング、キャンセル、生成の再生・停止、データのみの置換（トークン数・層数・RoPE・精度・説明文・候補強調）を確認します。スクリーンショットはGit管理外の`test-results/`に保存します。JavaScript無効時は概念説明を表示します。
+テストは単独HTMLのオフライン動作、960/390/320px、各場面、not比較、加算のタイミング、キャンセル、データのみの置換（トークン数・層数・RoPE・精度・説明文・候補強調）を確認します。スクリーンショットはGit管理外の`test-results/`に保存します。JavaScript無効時は概念説明を表示します。
 
 ## 元ページとの関係
 

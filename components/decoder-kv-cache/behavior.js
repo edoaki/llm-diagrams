@@ -1,86 +1,268 @@
+'use strict';
+// Decoder diagram, mounted on every [data-decoder]: words below, layers stacked above, and the representation space.
+// data-cycles="last" computes only the last word; data-case-select adds buttons for the input sentences.
+// Other diagrams embed it through "uses" in components.json, so this file is the one implementation.
 (() => {
- const root=document.querySelector('.decoder');
- if(!root)return;
- const $=s=>root.querySelector(s);
- const blue='#4c7da5',orange='#c36a28',green='#24816c',muted='#c5d0d7';
- const {data,layers,steps,percent,esc,note}=window.Diagram;
- const frames=steps(data.cases[0]),allTokens=frames.at(-1).tokens;
- const words=allTokens.map(t=>t.text);
- const tokenPaths=allTokens.map(t=>[0,...layers].map(l=>[45+t.points[l][0]*300,60+t.points[l][1]*235]));
- const candidates=frames.map(f=>f.candidates.map(v=>[v.text,v.probability]));
- const count=layers.length,perCycle=count*2+3,total=frames.length*perCycle;
- const label=l=>l?`第${layers[l-1]}層`:'埋め込み';
- const gap=count>1&&layers.at(-1)>layers.at(-2)+1;
- const lastInitial=frames[0].tokens.length-1;
- let step=0;
- const line=(x1,y1,x2,y2,color,extra='')=>`<line x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}" stroke="${color}" stroke-width="2" ${extra}/>`;
- const text=(x,y,s,extra='')=>`<text x="${x}" y="${y}" ${extra}>${s}</text>`;
- const y=l=>292-l*(216/count);
- const x=i=>100+i*76;
- function render(){
-  const cycle=Math.floor(step/perCycle),phase=step%perCycle,active=cycle+lastInitial;
-  const layer=phase===0?0:Math.min(count,Math.ceil(phase/2));
-  const attending=phase<count*2+1&&phase%2===1;
-  const completed=phase<count*2+1?Math.floor(phase/2):count;
-  const ready=phase>=count*2+1,selected=phase===count*2+2;
-  root.dataset.step=step;root.dataset.layer=completed?layers[completed-1]:0;
-  let net='';
-  for(let l=0;l<=count;l++)net+=text(10,y(l)+4,label(l));
-  if(gap)net+=text(35,(y(count)+y(count-1))/2,'…','text-anchor="middle"');
-  for(let i=0;i<=active;i++){
-   const fixed=i<active;
-   net+=text(x(i),40,fixed?'KEEP':'計算中',`text-anchor="middle" style="fill:${fixed?blue:orange};font-size:10px;letter-spacing:1px"`);
-   for(let l=1;l<=count;l++)net+=line(x(i),y(l-1)-12,x(i),y(l)+12,fixed?blue:l<=completed?orange:muted);
-   for(let l=0;l<=count;l++){
-    const color=fixed?blue:l<=completed?orange:muted;
-    const fill=fixed?'#e1edf5':l<=completed?'#fcdfc4':'#f6f8fa';
-    net+=l===count?`<rect data-node="${i}-${l}" x="${x(i)-11}" y="${y(l)-11}" width="22" height="22" rx="3" fill="${fill}" stroke="${color}" stroke-width="2"/>`:`<circle data-node="${i}-${l}" cx="${x(i)}" cy="${y(l)}" r="10" fill="${fill}" stroke="${color}" stroke-width="2"/>`;
+ const {data,layers,format,percent,esc}=window.Diagram;
+ const NS='http://www.w3.org/2000/svg',N=data.model.numLayers;
+ const blue='#4c7da5',orange='#c36a28';
+ const illustrative=data.model.projection.status!=='measured';
+ const motion=matchMedia('(prefers-reduced-motion: reduce)');
+ const r1=v=>Math.round(v*10)/10;
+ const text=(x,y,s,extra='')=>`<text x="${r1(x)}" y="${r1(y)}" ${extra}>${s}</text>`;
+ // Axis-break mark (two parallel waves) = layers left out of the drawing.
+ const breakMark=(cx,cy,len,thick,amp,period,bg)=>{
+  const wave=off=>{const pts=[];for(let t=-len/2;t<=len/2+.01;t+=Math.min(2,len/8))pts.push([r1(t),r1(off+amp*Math.sin(2*Math.PI*t/period))]);return pts;};
+  const a=wave(-thick/2),b=wave(thick/2),line=pts=>'M'+pts.map(p=>p.join(' ')).join(' L');
+  return `<g class="dc-break" transform="translate(${r1(cx)} ${r1(cy)})"><path d="${line(a)} L${b.reverse().map(p=>p.join(' ')).join(' L')} Z" fill="${bg}"/><path d="${line(a)}" fill="none" stroke="#7d8f99" stroke-width="1.2"/><path d="${line(b.reverse())}" fill="none" stroke="#7d8f99" stroke-width="1.2"/></g>`;
+ };
+ let mounted=0;
+
+ function mount(root){
+  const select=root.hasAttribute('data-case-select'),onlyLast=root.dataset.cycles==='last',uid='dc'+ ++mounted;
+  const cases=select?data.cases:[data.cases[0]];
+  // The layer just below the last is drawn too, so the final step is a single layer; measured data needs its points.
+  const rows=[...layers];
+  if(N-1>rows.at(-2)&&(illustrative||cases.every(c=>c.tokens.every(t=>t.points[String(N-1)]))))rows.splice(-1,0,N-1);
+  const count=rows.length,full=[0,...rows];
+  // Row index k whose distance from the row below skips layers (the axis break), or -1.
+  const gapK=full.findIndex((v,k)=>k>0&&v>full[k-1]+1);
+  // When layers are skipped, the top rows are named by position from the end rather than by number.
+  const layerName=L=>!L?'埋め込み':gapK>0&&L===N?'第N層':gapK>0&&L===N-1?'第N−1層':`第${L}層`;
+  const label=k=>layerName(full[k]);
+  // Phases in a cycle: embedding, each drawn layer, the output layer, then (all cycles) the choice.
+  const OUTPUT=count+1,PICK=count+2,perCycle=count+(onlyLast?2:3);
+
+  root.insertAdjacentHTML('beforeend',`<div class="dc-toolbar">${select?`<div class="dc-cases" role="group" aria-label="入力する文">${cases.map((c,i)=>`<button type="button" data-dc-case="${i}">${esc(c.label)}</button>`).join('')}</div>`:''}<div class="dc-controls" role="group" aria-label="アニメーションの操作"><button type="button" data-dc-back aria-label="1ステップ戻る">戻る</button><button type="button" data-dc-next>進む</button><span class="dc-step" aria-live="polite"></span><span class="dc-count"></span><button type="button" data-dc-reset aria-label="最初から" title="最初から"><svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path d="M4 10a8 8 0 1 1 1 7M4 4v6h6" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></button></div></div>
+<div class="dc-legend"><span><i class="dc-orange"></i>計算中のトークン</span><span><i class="dc-blue"></i>計算済みのトークン（K・Vを保存）</span><span><i class="dc-unused"></i>この段階では使わない表現</span></div>
+<div class="dc-panels"><section><div class="dc-panel-title"><h2>01　計算の経路</h2></div><svg class="dc-network" role="img"></svg></section><section class="dc-right"><div class="dc-panel-title"><h2 class="dc-right-title"></h2></div><div class="dc-right-body"><svg class="dc-space" viewBox="0 0 360 340" role="img" aria-label="層ごとの表現の変化"></svg><div class="dc-probs" role="list" aria-label="次のトークンの確率"></div></div></section></div>`);
+  const $=s=>root.querySelector(s),$$=s=>[...root.querySelectorAll(s)];
+
+  // ---- 01 network geometry: fixed across cases so switching sentences does not rescale the drawing.
+  const ROW=56,GAP=84,LEFT=76,bg='#f6f8fa';
+  const ys=[];ys[count]=34;
+  for(let k=count;k>0;k--)ys[k-1]=ys[k]+(k===gapK?GAP:ROW);
+  const y=k=>ys[k],wordY=y(0)+34,H=wordY+12,midY=(y(0)+y(count))/2;
+  const slotsOf=c=>c.tokens.length+(onlyLast?0:1);
+  const W=Math.max(360,LEFT+(Math.max(...cases.map(slotsOf))-1)*54+30);
+  // Half the node's size including its stroke: lines stop here instead of running through the node.
+  const edge=k=>k===count?12:10;
+  const CARD=[150,72],BOX=[84,52],cardLeft=12+CARD[0]/2,boxX=W-12-BOX[0]/2,arrow=[12+CARD[0]+8,W-12-BOX[0]-12];
+  const network=$('.dc-network');
+  network.setAttribute('viewBox',`0 0 ${W} ${H}`);
+  network.innerHTML=`<defs><filter id="${uid}-shadow" x="-10%" y="-15%" width="120%" height="140%"><feDropShadow dx="0" dy="2" stdDeviation="3" flood-color="#27404f" flood-opacity=".16"/></filter></defs><g class="dc-net"><g class="dc-edges"></g><g class="dc-links"></g>${gapK>0?breakMark(W/2,(y(gapK)+y(gapK-1))/2,W-12,10,3,22,bg):''}<g class="dc-nodes"></g><g class="dc-labels"></g></g><g class="dc-words"></g>
+<g class="dc-output"><g class="dc-out-arrow"><line x1="${arrow[0]}" y1="${midY}" x2="${arrow[1]}" y2="${midY}"/><path d="M${arrow[1]} ${midY-6} L${arrow[1]+9} ${midY} L${arrow[1]} ${midY+6}Z"/></g><g transform="translate(${boxX} ${midY})"><g class="dc-out-layer"><rect x="${-BOX[0]/2}" y="${-BOX[1]/2}" width="${BOX[0]}" height="${BOX[1]}" rx="10"/>${text(0,5,'出力層','text-anchor="middle"')}</g></g>
+<g class="dc-card"><rect x="${-CARD[0]/2}" y="${-CARD[1]/2}" width="${CARD[0]}" height="${CARD[1]}" rx="10" filter="url(#${uid}-shadow)"/>${text(0,-12,'','text-anchor="middle" class="dc-card-word"')}${text(0,5,`${label(count)}の表現`,'text-anchor="middle" class="dc-card-caption"')}<g class="dc-card-vector"></g></g></g>`;
+  const edges=$('.dc-edges'),links=$('.dc-links'),nodesG=$('.dc-nodes'),labelsG=$('.dc-labels'),wordsG=$('.dc-words'),card=$('.dc-card');
+  labelsG.innerHTML=full.map((_,k)=>text(8,y(k)+4,label(k),`data-row-label="${k}"`)).join('');
+
+  // ---- 02 space: measured projections are drawn as-is; illustrative ones get a context-dependent teaching layout.
+  const SW=360,SH=340;
+  const toSpace=([u,v])=>[28+u*(SW-56),22+v*(SH-50)];
+  const spaceOf=c=>{
+   if(!illustrative)return c.tokens.map(t=>full.map(L=>toSpace(t.points[String(L)])));
+   // Each token gets its own steps from a generator seeded by its text and position, so the layout is stable across reloads.
+   const rng=seed=>{let h=2166136261;for(const ch of seed)h=Math.imul(h^ch.charCodeAt(0),16777619);return()=>{h=Math.imul(h^h>>>15,2246822507);h=Math.imul(h^h>>>13,3266489909);return((h^=h>>>16)>>>0)/4294967296;};};
+   const clamp=p=>p.map(v=>Math.min(.92,Math.max(.08,v)));
+   const move=(p,r,len)=>{const a=r()*2*Math.PI;return clamp([p[0]+len*Math.cos(a),p[1]+len*Math.sin(a)]);};
+   const goals=[];
+   return c.tokens.map((t,i)=>{
+    const r=rng(t.text+'#'+i),path=[clamp(t.points[0])];
+    // Before the break (or on every row when nothing is skipped): small steps whose size and direction differ per token.
+    const last=gapK<0?count:gapK-1;
+    for(let k=1;k<=last;k++)path.push(move(path.at(-1),r,.04+.1*r()));
+    if(gapK<0)return path.map(toSpace);
+    // Across the skipped layers: a large jump to a place pulled toward the previous word, so neighbours and order change.
+    let goal,tries=0;
+    do{
+     const free=[.12+.76*r(),.12+.76*r()],prevGoal=goals[i-1];
+     goal=clamp(prevGoal?free.map((v,d)=>.65*v+.35*prevGoal[d]):free);
+    }while(tries++<60&&(Math.hypot(goal[0]-path.at(-1)[0],goal[1]-path.at(-1)[1])<.3||goals.some(g=>Math.hypot(goal[0]-g[0],goal[1]-g[1])<.16)));
+    goals.push(goal);
+    // After the break: the remaining rows reach the goal in moderate steps of their own.
+    const tail=[goal];
+    for(let k=count;k>gapK;k--)tail.unshift(move(tail[0],r,.05+.07*r()));
+    path.push(...tail);
+    return path.map(toSpace);
+   });
+  };
+  const space=$('.dc-space');
+  let grid='';
+  for(let k=0;k<=6;k++)grid+=`<line x1="${28+k*(SW-56)/6}" y1="14" x2="${28+k*(SW-56)/6}" y2="${SH-20}" stroke="#e7edf1"/><line x1="20" y1="${22+k*(SH-50)/6}" x2="${SW-20}" y2="${22+k*(SH-50)/6}" stroke="#e7edf1"/>`;
+  space.innerHTML=`<g>${grid}</g><g class="dc-trails"></g><g class="dc-heads"></g><text class="dc-space-layer" x="${SW-24}" y="${SH-30}" text-anchor="end"></text>`;
+  const heads=$('.dc-heads'),probs=$('.dc-probs');
+
+  // ---- per-case state
+  let ci=0,c,n,x,words,cycles,spacePts,total,step=0,sub=2,timers=[],builtFor='',spaceCycle=-1;
+  function build(){
+   c=cases[ci];n=c.tokens.length;
+   const col=(W-30-LEFT)/Math.max(1,slotsOf(c)-1);x=i=>LEFT+i*col;
+   words=[...c.tokens.map(t=>t.text),c.candidates[c.selectedIndex].text];
+   // Earlier prompt tokens start out computed (their K・V are cached); from the earliest position whose prediction is recorded, one token at a time.
+   let start=n-1;
+   if(!onlyLast)while(start>0&&c.tokens[start-1].candidates)start--;
+   cycles=[];
+   for(let t=start;t<n;t++){const cs=t<n-1?c.tokens[t].candidates:c.candidates;cycles.push({t,cs,chosen:t<n-1?cs.findIndex(v=>v.text===c.tokens[t+1].text):c.selectedIndex});}
+   total=cycles.length*perCycle;
+   spacePts=spaceOf(c);
+   let e='',nd='';
+   for(let i=0;i<n;i++)for(let k=0;k<=count;k++){
+    if(k)e+=`<line class="dc-edge" data-edge="${i}-${k}" x1="${r1(x(i))}" y1="${r1(y(k-1)-edge(k-1))}" x2="${r1(x(i))}" y2="${r1(y(k)+edge(k))}"/>`;
+    nd+=k===count?`<rect class="dc-node" data-node="${i}-${k}" x="${r1(x(i)-11)}" y="${y(k)-11}" width="22" height="22" rx="3"/>`:`<circle class="dc-node" data-node="${i}-${k}" cx="${r1(x(i))}" cy="${y(k)}" r="9"/>`;
    }
-   net+=text(x(i),328,esc(words[i]),'text-anchor="middle" class="dc-word"');
+   edges.innerHTML=e;nodesG.innerHTML=nd;
+   wordsG.innerHTML=words.slice(0,onlyLast?n:n+1).map((w,i)=>text(x(i),wordY,esc(w),`text-anchor="middle" class="dc-word" data-word="${i}"`)).join('');
+   heads.replaceChildren();builtFor='';spaceCycle=-1;
+   $$('[data-dc-case]').forEach(b=>b.setAttribute('aria-pressed',String(+b.dataset.dcCase===ci)));
   }
-  if(attending){
-   for(let i=0;i<active;i++)net+=`<path class="dc-flow" d="M ${x(i)+12} ${y(layer-1)} Q ${x(active)-25} ${y(layer-1)-10} ${x(active)-12} ${y(layer)+10}" fill="none" stroke="${blue}" stroke-width="2"/><rect x="${x(i)-17}" class="dc-kv-label" y="${y(layer-1)-35}" width="34" height="17" rx="4" fill="#e1edf5"/>`+text(x(i),y(layer-1)-23,'K・V','text-anchor="middle" style="font-size:9px"');
-   net+=text(x(active)+17,y(layer-1)-17,'Q','style="fill:#c36a28;font-size:10px"');
+
+  // glide: the dots move from their previous layer; a new cycle starts from the embeddings, so they are placed there directly.
+  function renderSpace(cur,lay,glide){
+   const color=i=>i<cur.t?blue:orange,at=(i,k)=>spacePts[i][k];
+   let trails='';
+   for(let i=0;i<=cur.t;i++){
+    // Only the stretch since the skipped layers stays drawn, so no trail floats away from its point.
+    const from=gapK>0&&lay>=gapK?gapK:0;
+    trails+=`<g data-space-token="${i}">`;
+    for(let k=from+1;k<=lay;k++){const [ax,ay]=at(i,k-1),[bx,by]=at(i,k);trails+=`<line x1="${r1(ax)}" y1="${r1(ay)}" x2="${r1(bx)}" y2="${r1(by)}" stroke="${color(i)}" stroke-width="1.5" opacity=".55"/>`;}
+    for(let k=from;k<lay;k++){const [px,py]=at(i,k);trails+=`<circle cx="${r1(px)}" cy="${r1(py)}" r="3" fill="${color(i)}" opacity=".45"/>`;}
+    trails+='</g>';
+   }
+   $('.dc-trails').innerHTML=trails;
+   $('.dc-space-layer').textContent=label(lay);
+   // Points may overlap; only the labels are placed around their dots to stay readable.
+   const boxes=[],dots=[...Array(cur.t+1).keys()].map(j=>at(j,lay));
+   const place=(i,[hx,hy])=>{
+    const w=words[i].trim().length*7.6+6;
+    const options=[[0,-11,'middle',hx-w/2,hy-24],[0,21,'middle',hx-w/2,hy+8],[10,5,'start',hx+8,hy-8],[-10,5,'end',hx-8-w,hy-8]];
+    const free=o=>!boxes.some(b=>o[3]<b[0]+b[2]&&b[0]<o[3]+w&&o[4]<b[1]+15&&b[1]<o[4]+15)&&!dots.some(([dx,dy],j)=>j!==i&&dx>o[3]-5&&dx<o[3]+w+5&&dy>o[4]-5&&dy<o[4]+20);
+    const o=options.find(free)||options[0];boxes.push([o[3],o[4],w]);return o;
+   };
+   [...heads.children].forEach(h=>{if(+h.dataset.head>cur.t)h.remove();});
+   for(let i=0;i<=cur.t;i++){
+    let h=heads.querySelector(`[data-head="${i}"]`);
+    const [hx,hy]=at(i,lay);
+    if(!h){
+     h=document.createElementNS(NS,'g');h.setAttribute('class','dc-head');h.dataset.head=i;
+     h.innerHTML=`<circle class="dc-ring" r="12" fill="none" stroke-width="2"/><circle class="dc-dot" r="6" stroke="#fff" stroke-width="2"/>${text(0,-11,esc(words[i]),'text-anchor="middle" style="font-weight:600"')}`;
+     heads.append(h);
+     if(!motion.matches)h.animate([{opacity:0},{opacity:1}],{duration:400});
+    }else if(!glide)h.getAnimations().forEach(a=>a.cancel());
+    else if(+h.dataset.k!==lay&&!motion.matches){
+     // Crossing the skipped layers (or any multi-row jump) is a long glide.
+     const k0=+h.dataset.k,far=Math.abs(k0-lay)>1||Math.max(k0,lay)===gapK;
+     h.getAnimations().forEach(a=>a.cancel());
+     h.animate([at(i,k0),at(i,lay)].map(([px,py])=>({transform:`translate(${r1(px)}px,${r1(py)}px)`})),{duration:far?1600:650,easing:'ease-in-out'});
+    }
+    h.dataset.k=lay;h.style.transform=`translate(${r1(hx)}px,${r1(hy)}px)`;
+    h.querySelector('.dc-dot').setAttribute('fill',color(i));
+    const tx=h.querySelector('text'),o=place(i,[hx,hy]);
+    tx.style.fill=color(i);tx.setAttribute('x',o[0]);tx.setAttribute('y',o[1]);tx.setAttribute('text-anchor',o[2]);
+    h.querySelector('.dc-ring').setAttribute('stroke',i===cur.t?orange:'none');
+   }
   }
-  net+=text(230,359,attending?'過去のK・V ＋ 現在のK・Vを参照':'過去の列はそのまま。現在の列だけ更新。','text-anchor="middle" style="font-size:11px"');
-  $('.dc-network').setAttribute('viewBox',`0 0 ${Math.max(460,x(allTokens.length-1)+65)} 370`);
-  $('.dc-network').innerHTML=net;
-  const pts=tokenPaths[active];
-  let space='';
-  for(let k=0;k<6;k++)space+=line(45,65+k*45,355,65+k*45,'#e7edf1')+line(55+k*58,55,55+k*58,300,'#e7edf1');
-  for(let i=0;i<active;i++){
-   const past=tokenPaths[i];
-   space+=`<g data-space-token="${esc(words[i])}"><polyline points="${past.map(p=>p.join(',')).join(' ')}" fill="none" stroke="${blue}" stroke-width="1.5" opacity=".45"/>`;
-   for(let l=0;l<=count;l++)space+=`<circle data-space-node="${i}-${l}" cx="${past[l][0]}" cy="${past[l][1]}" r="${l===completed?6:3.5}" fill="${blue}" opacity="${l===completed?1:.5}"/>`;
-   space+=text(past[count][0],past[count][1]-15,esc(words[i]),`text-anchor="middle" style="fill:${blue};font-weight:600"`)+'</g>';
+
+  // Restart a one-shot CSS animation on an element.
+  const replay=(el,cls)=>{if(!el)return;el.classList.remove(cls);el.getBoundingClientRect();el.classList.add(cls);};
+  function render(effect){
+   const cycle=Math.floor(step/perCycle),phase=step%perCycle,cur=cycles[cycle],t=cur.t;
+   const done=Math.min(phase,count),layerPhase=phase>=1&&phase<=count,output=phase>=OUTPUT,picked=phase===PICK;
+   // The row after the axis break is reached through the omitted layers, so no information is drawn flowing into it.
+   const flows=layerPhase&&done!==gapK;
+   const ready=picked||output&&sub===2;
+   root.dataset.step=step;root.dataset.layer=full[done];root.dataset.sub=sub;
+   root.classList.toggle('is-output',output&&!picked);root.classList.toggle('is-ready',ready);root.classList.toggle('is-picked',picked);
+   const shown=(i,k)=>i<t||i===t&&k<=done;
+   // Circles used in this step stay saturated: the new node and, while a layer is computed, every node it reads from the row below.
+   $$('.dc-node').forEach(el=>{
+    const [i,k]=el.dataset.node.split('-').map(Number),target=i===t&&k===done;
+    el.dataset.state=i<t?'cached':'active';
+    el.classList.toggle('is-hidden',!shown(i,k));
+    el.classList.toggle('is-target',target);
+    el.classList.toggle('is-source',flows&&k===done-1&&i<=t);
+    el.classList.toggle('is-pending',target&&flows&&sub<2);
+    if(!target)el.classList.remove('dc-made');
+   });
+   $$('.dc-edge').forEach(el=>{
+    const [i,k]=el.dataset.edge.split('-').map(Number);
+    el.dataset.state=i<t?'cached':'active';
+    el.classList.toggle('is-hidden',!(shown(i,k)&&shown(i,k-1)));
+    el.classList.toggle('is-self',flows&&i===t&&k===done);
+   });
+   // Information from every earlier word's node in the row below flows into the new node.
+   const key=`${ci}:${step}`;
+   if(key!==builtFor){
+    builtFor=key;
+    let l='';
+    if(flows)for(let i=0;i<t;i++){
+     const sx=x(i),sy=y(done-1)-edge(done-1),ex=x(t),ey=y(done)+edge(done),d=sy-ey;
+     l+=`<path class="dc-link" d="M${r1(sx)} ${r1(sy)} C${r1(sx)} ${r1(sy-d*.55)} ${r1(ex)} ${r1(ey+d*.45)} ${r1(ex)} ${r1(ey)}"/>`;
+    }
+    links.innerHTML=l;
+    probs.innerHTML=cur.cs.map((v,r)=>`<div class="dc-prob${v.text==='その他'?' is-other':''}" role="listitem"><span class="dc-prob-word">${esc(v.text.trim()||v.text)}</span><span class="dc-track"><span class="dc-fill"></span></span><b>${percent(v.probability)}</b></div>`).join('');
+   }
+   $$('[data-row-label]').forEach(el=>el.classList.toggle('dc-row-current',!output&&+el.dataset.rowLabel===done));
+   $$('.dc-word').forEach(el=>{
+    const i=+el.dataset.word;
+    el.classList.toggle('is-hidden',!(i<=t||picked&&i===t+1));
+    el.classList.toggle('is-active',i===t);
+    el.classList.toggle('is-picked',picked&&i===t+1);
+   });
+   // The final representation grows out of its node and moves beside the output layer.
+   const vector=t===n-1?data.ngram.features[c.key]:c.tokens[t].layers[String(N)];
+   const [vx,vy]=output?[cardLeft,midY]:[x(t),y(count)];
+   card.style.transform=`translate(${r1(vx)}px,${r1(vy)}px) scale(${output?1:.1})`;
+   card.querySelector('.dc-card-word').textContent=words[t].trim();
+   card.querySelector('.dc-card-vector').innerHTML=vector.map((v,j)=>`<rect x="${r1(j*20-vector.length*10+2)}" y="14" width="16" height="11" rx="2" opacity="${r1(Math.max(.15,Math.min(1,Math.abs(v))))}"><title>${format(v)}</title></rect>`).join('');
+   // Probabilities replace the space once only the final representation remains.
+   const best=Math.max(...cur.cs.map(v=>v.probability));
+   $('.dc-right').classList.toggle('is-probs',output);
+   $('.dc-right-title').textContent=output?'02　次のトークンの確率':'02　表現の空間';
+   [...probs.children].forEach((row,r)=>{
+    const p=cur.cs[r].probability;
+    row.classList.toggle('is-top',ready&&!picked&&p===best);
+    row.classList.toggle('is-chosen',picked&&r===cur.chosen);
+    row.classList.toggle('is-muted',picked&&r!==cur.chosen);
+    row.querySelector('.dc-fill').style.width=`${ready?p*100:0}%`;
+   });
+   const glide=spaceCycle===cycle;spaceCycle=cycle;
+   renderSpace(cur,flows&&sub<2?done-1:done,glide);
+   network.setAttribute('aria-label',output?`${words[t].trim()}の${label(count)}の表現から、次のトークンの確率を出す`:`${words[t].trim()}の${label(done)}を計算`);
+   if(effect==='made')replay($('.dc-node.is-target'),'dc-made');
+   if(effect==='enter'&&phase===0)replay($('.dc-node.is-target'),'dc-made');
+   if(effect==='enter'&&picked)replay($('.dc-word.is-picked'),'dc-drop');
+   const chip=$('.dc-step');
+   chip.textContent=picked?'選択':output?'出力':label(done);
+   chip.classList.toggle('is-output',output);
+   $('[data-dc-back]').disabled=step===0;
+   $('[data-dc-next]').disabled=step===total-1;
+   $('.dc-count').textContent=`${step+1} / ${total}`;
   }
-  space+=`<polyline points="${pts.slice(0,completed+1).map(p=>p.join(',')).join(' ')}" fill="none" stroke="${orange}" stroke-width="2" opacity=".65"/>`;
-  for(let l=0;l<=completed;l++)space+=`<circle cx="${pts[l][0]}" cy="${pts[l][1]}" r="4" fill="${orange}"/>`+text(pts[l][0],pts[l][1]+22,label(l),'text-anchor="middle" style="font-size:10px"');
-  // Keep the moving SVG node alive so changes of layer animate continuously.
-  let dot=$('.dc-dot');
-  if(!$('.dc-space-scene'))$('.dc-space').innerHTML='<g class="dc-space-scene"></g>';
-  $('.dc-space-scene').innerHTML=space+text(pts[completed][0],pts[completed][1]-16,esc(words[active]),`text-anchor="middle" style="fill:${orange};font-weight:600"`)+text(200,344,'青：過去の表現　オレンジ：現在の表現','text-anchor="middle" style="font-size:11px"');
-  if(!dot){dot=document.createElementNS('http://www.w3.org/2000/svg','circle');dot.setAttribute('class','dc-dot');dot.setAttribute('r','9');dot.setAttribute('fill',orange);dot.setAttribute('stroke','white');dot.setAttribute('stroke-width','3');}
-  if(!dot.parentNode)$('.dc-space').append(dot);
-  if(phase===0){dot.style.transition='none';}
-  dot.setAttribute('cx',pts[completed][0]);dot.setAttribute('cy',pts[completed][1]);
-  if(phase===0){dot.getBoundingClientRect();dot.style.transition='';}
-  $('.dc-space-token').textContent=`${words[active]} の表現`;
-  $('.dc-step').textContent=ready?'OUTPUT':phase===0?'INPUT':`LAYER ${layers[layer-1]}`;
-  $('.dc-title').textContent=phase===0?`${words[active]} の埋め込みからスタート`:attending?`第${layers[layer-1]}層：文脈を受け取る`:phase<count*2+1?`第${layers[layer-1]}層：表現が更新された`:selected?`${candidates[cycle][0][0]} を選んで、次の入力へ`:'最上段の表現から、候補の確率へ';
-  $('.dc-description').textContent=gap&&layer===count?'第2層の後の中間層の計算を省略して、最終層を表示しています。':'過去のK・Vを保存し、現在のトークンの表現を計算します。';
-  const frame=frames[cycle],chosen=frame.candidates[frame.selectedIndex];
-  if(selected)$('.dc-title').textContent=`${chosen.text} を選んで、次の入力へ`;
-  $('.dc-output-note').textContent=selected?frame.tokens.map(t=>t.text).join('')+chosen.text:ready?`${words[active]} の位置から続きを予測`:'最上段まで計算すると候補が現れます。';
-  $('.dc-bars').innerHTML=candidates[cycle].map(([word,p],i)=>`<div class="dc-bar ${selected&&i===frame.selectedIndex?'chosen':''}"><span>${ready?esc(word):'—'}</span><div class="dc-track"><div class="dc-fill" style="width:${ready?p*100:0}%"></div></div><span>${ready?percent(p):'—'}</span></div>`).join('');
-  $('[data-dc-back]').disabled=step===0;
-  $('[data-dc-next]').disabled=step===total-1;
-  $('.dc-count').textContent=`${step+1} / ${total}`;
+
+  const stop=()=>{timers.forEach(clearTimeout);timers=[];};
+  // Forward: a layer's new node appears first, information flows into it, then it forms; the output layer lights up once the card arrives.
+  function play(to){
+   stop();step=to;
+   const phase=step%perCycle,flows=phase>=1&&phase<=count&&phase!==gapK;
+   if(phase===gapK){sub=2;render('made');return;}
+   if(motion.matches||!(flows||phase===OUTPUT)){sub=2;render('enter');return;}
+   sub=0;render('enter');
+   const at=phase===OUTPUT?[900,1800]:[700,1900];
+   timers=[setTimeout(()=>{sub=1;render();},at[0]),setTimeout(()=>{sub=2;render('made');},at[1])];
+  }
+  // Backward, reset and sentence changes show the finished state without motion.
+  function show(to){
+   stop();step=to;sub=2;root.classList.add('dc-instant');render();
+   root.getBoundingClientRect();root.classList.remove('dc-instant');
+  }
+  $('[data-dc-next]').addEventListener('click',()=>{if(step<total-1)play(step+1);});
+  $('[data-dc-back]').addEventListener('click',()=>show(Math.max(0,step-1)));
+  $('[data-dc-reset]').addEventListener('click',()=>show(0));
+  $$('[data-dc-case]').forEach(b=>b.addEventListener('click',()=>{if(ci===+b.dataset.dcCase)return;ci=+b.dataset.dcCase;build();show(Math.min(step,total-1));}));
+  motion.addEventListener('change',()=>show(step));
+  build();show(0);
+  // Embedding pages call settle() when the diagram is hidden, so no delayed step fires off-screen.
+  return {settle:()=>show(step)};
  }
- function next(){if(step<total-1)step++;render();}
- $('[data-dc-next]').addEventListener('click',()=>{next();});
- $('[data-dc-back]').addEventListener('click',()=>{step=Math.max(0,step-1);render();});
- $('[data-dc-reset]').addEventListener('click',()=>{step=0;render();});
- $('figcaption').textContent=note()+` 埋め込み → ${layers.map(l=>'第'+l+'層').join(' → ')}。`+(gap?'第2層と最終層の間の計算は省略しています。':'');
- render();
+ document.querySelectorAll('[data-decoder]').forEach(el=>{el.decoderDiagram=mount(el);});
 })();

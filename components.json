@@ -1,17 +1,12 @@
 [
   {
     "id": "gpt-representations",
-    "title": "文章から、文脈を含む表現へ",
+    "title": "文章から、文脈を含む表現へ（通常版）",
     "animated": true
   },
   {
     "id": "gpt-representations-not",
-    "title": "LLMの空間の図（not切り替えあり）",
-    "animated": true
-  },
-  {
-    "id": "autoregressive",
-    "title": "同じ文章の続きを一つずつ作る",
+    "title": "文章から、文脈を含む表現へ（not比較版）",
     "animated": true
   },
   {
@@ -20,18 +15,10 @@
     "animated": true
   },
   {
-    "id": "token-embeddings",
-    "title": "トークン化と位置情報",
-    "animated": false
-  },
-  {
-    "id": "generation-loop",
-    "title": "次トークンを選び、入力に戻す",
-    "animated": false
-  },
-  {
     "id": "ngram-to-llm",
     "title": "N-gramからTransformerへ：表を覚える、その先へ",
-    "animated": true
+    "animated": true,
+    "width": 1180,
+    "uses": ["decoder-kv-cache"]
   }
 ]

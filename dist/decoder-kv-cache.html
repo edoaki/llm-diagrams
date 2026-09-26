@@ -157,37 +157,119 @@ main.article details details{background:var(--tint)}
 @media (prefers-reduced-motion: reduce) { .ld-fill { transition: none; } }
 @media print { .ld-controls { display: none; } }
 
-.decoder{--blue:#4c7da5;--orange:#c36a28;--green:#24816c;margin:0;color:#273d49;font-family:system-ui,-apple-system,sans-serif}.decoder *{box-sizing:border-box}.dc-heading{margin-bottom:24px}.dc-eyebrow{font-size:11px;letter-spacing:.18em;color:#687e89;font-weight:700}.decoder h1{font-size:30px;line-height:1.4;margin:10px 0}.decoder p{font-size:13px;line-height:1.8;margin:0;color:#617580}.dc-legend{display:flex;flex-wrap:wrap;gap:12px 22px;margin-bottom:20px;font-size:11px}.dc-legend span{display:flex;align-items:center;gap:6px}.dc-legend i{width:10px;height:10px;border-radius:50%;display:inline-block}.dc-blue{background:var(--blue)}.dc-orange{background:var(--orange)}.dc-green{background:var(--green)}.dc-outline{border:1px solid #aebcc3}.dc-panels{display:grid;grid-template-columns:1.1fr 1fr;gap:16px}.dc-panels section{min-width:0;background:#f6f8fa;border:1px solid #e0e7eb;border-radius:14px;overflow:hidden}.dc-panel-title{display:flex;align-items:center;justify-content:space-between;padding:16px 16px 0;gap:8px}.decoder h2{font-size:13px;margin:0;font-weight:700}.dc-panel-title span{font-size:11px;color:#71828c}.dc-panels svg{display:block;width:100%;height:auto;overflow:visible}.decoder svg text{font-family:system-ui,sans-serif;font-size:12px;fill:#607582}.decoder svg .dc-word{font-size:16px;fill:#304c5c;font-weight:600}.dc-status{display:flex;align-items:flex-start;gap:15px;padding:18px 0;min-height:108px}.dc-step{flex-shrink:0;background:#f4e6d9;color:#a4551c;border-radius:7px;font-size:11px;padding:5px 9px;font-weight:700}.decoder h3{font-size:16px;margin:0 0 5px}.dc-output{border-top:1px solid #dfe7eb;border-bottom:1px solid #dfe7eb;padding:16px 0;display:grid;grid-template-columns:1fr 1.3fr;gap:24px;min-height:154px}.dc-output p{margin-top:6px;font-size:12px}.dc-bar{display:grid;grid-template-columns:54px 1fr 36px;align-items:center;gap:10px;font-size:12px;margin:5px 0}.dc-track{height:8px;background:#e9eef1;border-radius:8px;overflow:hidden}.dc-fill{height:100%;background:var(--orange);border-radius:8px;transition:width .5s}.dc-bar.chosen{color:var(--green);font-weight:700}.chosen .dc-fill{background:var(--green)}.dc-controls{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin:18px 0}.decoder button{font:inherit;font-size:12px;border:1px solid #ccd8de;border-radius:7px;padding:9px 12px;background:white;color:#365366;cursor:pointer}.decoder button:disabled{opacity:.4;cursor:default}.decoder button:focus-visible{outline:3px solid #d78a48;outline-offset:3px}.dc-count{font-size:11px;color:#6a7f8a;margin-left:auto}.decoder figcaption{font-size:11px;line-height:1.8;color:#7b8991;margin:0}.decoder details{font-size:12px;margin-top:15px;color:#617580}.decoder details p{margin-top:10px}.dc-dot{transition:cx .65s ease,cy .65s ease}.dc-flow{stroke-dasharray:6 6;animation:dc-flow 1s linear infinite}@keyframes dc-flow{to{stroke-dashoffset:-24}}@media(prefers-reduced-motion:reduce){.dc-dot,.dc-fill{transition:none}.dc-flow{animation:none}}@media(max-width:640px){.dc-panels{grid-template-columns:1fr}.dc-heading h1{font-size:24px}.dc-output{grid-template-columns:1fr;gap:10px}.dc-status{min-height:130px}.dc-legend{gap:9px 15px}.dc-panel-title{padding-top:12px}.dc-count{width:100%;margin:0}.decoder button{padding:9px 10px}}
+.decoder{--blue:#4c7da5;--orange:#c36a28;--green:#24816c;--pale-blue:#bccddb;--pale-orange:#ebc7a9;margin:0;color:#273d49;font-family:system-ui,-apple-system,sans-serif}
+.decoder *{box-sizing:border-box}
+.dc-heading{margin-bottom:12px}
+.dc-eyebrow{font-size:11px;letter-spacing:.18em;color:#687e89;font-weight:700}
+.decoder h1{font-size:30px;line-height:1.4;margin:10px 0 0}
+.decoder .dc-panel-title h2{font-size:13px;line-height:1.5;margin:0;padding:0;border:0;font-weight:700;color:#273d49}
+.dc-legend{display:flex;flex-wrap:wrap;gap:6px 20px;margin-bottom:12px;font-size:12px;color:#4f6572}
+.dc-legend span{display:flex;align-items:center;gap:6px}
+.dc-legend i{width:10px;height:10px;border-radius:50%;display:inline-block}
+.dc-orange{background:var(--orange)}.dc-blue{background:var(--blue)}.dc-unused{background:#fff;box-shadow:inset 0 0 0 1.5px var(--pale-blue)}
+.dc-panels{display:grid;grid-template-columns:1.1fr 1fr;gap:16px}
+.dc-panels section{min-width:0;background:#f6f8fa;border:1px solid #e0e7eb;border-radius:14px;overflow:hidden}
+.dc-panel-title{padding:14px 16px 0}
+.dc-panels svg{display:block;width:100%;height:auto;min-width:0;max-width:none;overflow:visible}
+.decoder svg text{font-family:system-ui,sans-serif;font-size:13px;fill:#607582}
+.decoder svg .dc-row-current{fill:var(--orange);font-weight:700}
+.decoder svg .dc-space-layer{font-size:13px;font-weight:700;fill:var(--orange)}
+.decoder figcaption{font-size:11px;line-height:1.8;color:#7b8991;margin:14px 0 0;padding:0;background:transparent;border:0}
+/* Toolbar */
+.dc-toolbar{position:sticky;top:0;z-index:5;display:flex;flex-wrap:wrap;align-items:center;gap:8px 16px;background:#fffffffa;border-bottom:1px solid #dfe7eb;padding:12px 0;margin-bottom:14px;backdrop-filter:blur(8px)}
+.dc-cases{display:flex;gap:8px}
+.dc-controls{display:flex;flex:1;flex-wrap:nowrap;gap:8px;align-items:center}
+.decoder .dc-toolbar button{font:inherit;font-size:13px;line-height:1.4;border:1px solid #ccd8de;border-radius:7px;background:white;color:#365366;cursor:pointer;transition:background .2s,color .2s}
+.decoder .dc-toolbar button:disabled{opacity:.4;cursor:default}
+.decoder .dc-toolbar button:focus-visible{outline:3px solid #d78a48;outline-offset:3px}
+.decoder .dc-cases button{height:40px;padding:0 14px}
+.decoder .dc-cases button[aria-pressed=true]{background:#fcefe3;border-color:var(--orange);color:#9a4f1a}
+.dc-controls button[data-dc-back],.dc-controls button[data-dc-next]{width:72px;height:40px;padding:0;flex-shrink:0}
+.decoder .dc-toolbar button[data-dc-next]{background:#284b60;color:white;border-color:#284b60}
+.dc-step{background:#f4e6d9;color:#a4551c;border-radius:7px;font-size:12px;padding:4px 9px;font-weight:700;white-space:nowrap}
+.dc-step.is-output{background:#dcefe9;color:var(--green)}
+.dc-count{font-size:11px;color:#6a7f8a;white-space:nowrap;font-variant-numeric:tabular-nums}
+.decoder .dc-controls button[data-dc-reset]{display:grid;place-items:center;width:40px;height:40px;padding:0;margin-left:auto;flex-shrink:0;color:#71828c}
+.decoder button[data-dc-reset] svg{min-width:0;width:20px;height:20px}
+
+/* 01 network. Lines end at the node's edge and nodes are opaque, so nothing shows through a circle even while it fades. */
+.dc-net{transition:opacity .5s}
+.dc-edge{stroke:#d5e0e8;stroke-width:2;transition:stroke .5s,opacity .5s}
+.dc-edge[data-state=active]{stroke:#f0d7c2}
+.dc-edge.is-self{stroke:var(--orange);stroke-width:3;opacity:0}
+.dc-link{fill:none;stroke:var(--blue);stroke-width:2;opacity:0;transition:opacity .5s}
+[data-sub="1"] .dc-link,[data-sub="1"] .dc-edge.is-self{opacity:.9;stroke-dasharray:7 6;animation:dc-flow 1.2s linear infinite}
+[data-sub="2"] .dc-link{opacity:.3}
+[data-sub="2"] .dc-edge.is-self{opacity:.55}
+.dc-node{fill:#fbfcfd;stroke:var(--pale-blue);stroke-width:2;transform-box:fill-box;transform-origin:center;transition:fill .5s,stroke .5s,opacity .5s,transform .5s}
+.dc-node[data-state=active]{stroke:var(--pale-orange)}
+.dc-node.is-source[data-state=cached]{fill:#dde9f3;stroke:var(--blue)}
+.dc-node.is-source[data-state=active]{fill:#fcdfc4;stroke:var(--orange)}
+.dc-node.is-target{fill:var(--orange);stroke:var(--orange)}
+.dc-node.is-pending{fill:#fff;stroke-dasharray:4 3;transform:scale(.85)}
+.dc-node.dc-made{animation:dc-pop .6s ease}
+.decoder svg .dc-word{font-size:14px;fill:#304c5c;font-weight:600;transform-box:fill-box;transform-origin:center;transition:fill .4s,opacity .4s}
+.decoder svg .dc-word.is-active{fill:var(--orange);font-weight:700}
+.decoder svg .dc-word.is-picked{fill:var(--green);font-weight:700}
+.dc-word.dc-drop{animation:dc-drop .6s cubic-bezier(.2,.8,.2,1)}
+.decoder .is-hidden{opacity:0;pointer-events:none}
+.dc-word.is-hidden,.dc-node.is-hidden,.dc-edge.is-hidden{transition:none}
+/* Only the final representation remains: it grows out of its node, then feeds the output layer. */
+.is-output .dc-net{opacity:0}
+.dc-card{opacity:0;transition:transform .7s cubic-bezier(.2,.8,.2,1),opacity .4s;pointer-events:none}
+.dc-card rect{fill:#fdf1e6;stroke:var(--orange);stroke-width:1.5}
+.dc-card .dc-card-vector rect{fill:var(--orange);stroke:none}
+.decoder svg .dc-card-word{font-size:17px;font-weight:700;fill:#304c5c}
+.decoder svg .dc-card-caption{font-size:10px}
+.is-output .dc-card{opacity:1}
+.dc-out-layer{opacity:0;transform:translateX(12px);transition:opacity .5s,transform .5s}
+.dc-out-layer rect{fill:#e7eef2;stroke:#7f98a8;stroke-width:1.5;transition:fill .5s}
+.decoder svg .dc-out-layer text{font-weight:700;fill:#284b60;transition:fill .5s}
+.is-output .dc-out-layer{opacity:1;transform:none;transition-delay:.4s}
+.is-ready .dc-out-layer rect{fill:#284b60;stroke:#284b60}
+.decoder.is-ready svg .dc-out-layer text{fill:#fff}
+.dc-out-arrow{opacity:0;transition:opacity .4s .3s}
+.dc-out-arrow line{stroke:var(--orange);stroke-width:2.5;stroke-dasharray:8 6}
+.dc-out-arrow path{fill:var(--orange)}
+.is-output .dc-out-arrow{opacity:1;transition-delay:.7s}
+.is-output:not(.is-ready) .dc-out-arrow line{animation:dc-flow .8s linear infinite}
+
+/* 02 right panel: the space, replaced by the probabilities once only the final representation remains. */
+.dc-right-body{display:grid;align-items:center}
+.dc-right-body>*{grid-area:1/1;transition:opacity .4s}
+.dc-right.is-probs .dc-space,.dc-right:not(.is-probs) .dc-probs{opacity:0;visibility:hidden}
+.dc-probs{display:grid;gap:14px;padding:12px 18px 24px}
+.decoder:not(.is-ready) .dc-probs{opacity:0}
+.dc-prob{display:grid;grid-template-columns:minmax(58px,.7fr) 1.6fr 52px;align-items:center;gap:10px;font-size:14px;color:#304c5c}
+.dc-prob b{text-align:right;font-variant-numeric:tabular-nums;font-weight:500}
+.dc-track{height:9px;background:#e6ecf0;border-radius:5px;overflow:hidden}
+.dc-fill{display:block;height:100%;width:0;background:var(--orange);border-radius:5px;transition:width .7s ease,background .4s}
+.dc-prob.is-other .dc-fill{background:#b7c3ca}
+.dc-prob.is-top,.dc-prob.is-top b{color:var(--orange);font-weight:700}
+.dc-prob.is-chosen,.dc-prob.is-chosen b{color:var(--green);font-weight:700}
+.dc-prob.is-chosen .dc-fill{background:var(--green)}
+.dc-prob.is-muted .dc-fill{background:#c9d3d9}
+
+/* Motion */
+.dc-head{transition:opacity .3s}
+.dc-instant,.dc-instant *{transition:none!important}
+@keyframes dc-flow{to{stroke-dashoffset:-26}}
+@keyframes dc-pop{40%{transform:scale(1.35)}}
+@keyframes dc-drop{from{opacity:0;transform:translateY(-16px)}}
+@media(prefers-reduced-motion:reduce){.decoder *{animation:none!important;transition:none!important}}
+@media(max-width:640px){
+ .dc-panels{grid-template-columns:1fr;gap:12px}
+ .decoder h1{font-size:24px}
+ .dc-controls{gap:6px}
+ .dc-controls button[data-dc-back],.dc-controls button[data-dc-next]{width:60px}
+ .dc-probs{padding:8px 14px 18px}
+}
+@media(max-width:360px){.dc-count{display:none}.dc-controls button[data-dc-back],.dc-controls button[data-dc-next]{width:52px}.decoder .dc-cases button{padding:0 10px}}
 /* Isolate this diagram from the source article's figure and section defaults. */
 figure.decoder{border:0;overflow:visible;border-radius:0}
 .article .decoder section{margin:0}
 .article .decoder .dc-panels section{padding:0}
-.decoder .dc-panels svg{min-width:0}
-.decoder figcaption{padding:0;background:transparent;border:0}
-.dc-output{margin-top:16px!important;min-height:124px}
-.dc-controls{margin-bottom:0}
-.dc-status{padding:12px 0 18px;min-height:84px;gap:10px}
-.decoder .dc-status h3{font-size:13px;font-weight:600}
-.decoder .dc-status p{font-size:12px}
-.dc-step{font-size:10px;padding:3px 7px}
-.dc-toolbar{position:sticky;top:0;z-index:5;background:#fffffffa;border-bottom:1px solid #dfe7eb;padding:12px 0;margin-bottom:16px;backdrop-filter:blur(8px)}
-.dc-toolbar .dc-controls{margin:0;gap:8px}
-.dc-toolbar button{min-height:42px;padding:10px 16px;font-size:13px}
-.decoder button[data-dc-next]{background:#284b60;color:white;border-color:#284b60}
-
-.dc-toolbar .dc-count{margin-left:8px;font-variant-numeric:tabular-nums}
-.dc-toolbar button[data-dc-reset]{margin-left:auto;border-color:transparent;color:#71828c}
-.dc-toolbar .dc-status{padding:12px 0 0;min-height:0;align-items:center}
-.dc-toolbar .dc-status h3{margin:0}
-.dc-toolbar .dc-description{display:none}
-@media(max-width:640px){.dc-toolbar .dc-status{align-items:flex-start}.dc-toolbar .dc-status h3{font-size:12px}}
-.dc-toolbar .dc-controls{display:flex;flex-wrap:nowrap;gap:8px}
-.dc-toolbar button[data-dc-back],.dc-toolbar button[data-dc-next]{width:80px;height:40px;min-height:40px;padding:0;font-size:13px}
-.dc-toolbar .dc-count{width:auto;margin:0 4px;white-space:nowrap}
-.dc-toolbar button[data-dc-reset]{display:grid;place-items:center;width:40px;height:40px;min-height:40px;padding:0;margin-left:auto;border:1px solid #ccd8de;flex-shrink:0}
-.decoder button[data-dc-reset] svg{min-width:0;width:20px;height:20px}
-
-.dc-bar{grid-template-columns:minmax(50px,1fr) 1.5fr 75px}.dc-bar>span{overflow-wrap:anywhere}.dc-panels section:first-child{overflow-x:auto}.dc-network{min-width:520px!important}.dc-toolbar .dc-description{display:block;font-size:11px}
+.dc-head text{paint-order:stroke;stroke:#f6f8fa;stroke-width:4px;stroke-linejoin:round}
 
 /* Only the surrounding page is sized for standalone viewing. */
 main.article{margin:auto;padding:24px;max-width:948px}
@@ -214,7 +296,7 @@ END EDITABLE DIAGRAM DATA -->
     ],
     "positionEncoding": {
       "type": "sinusoidal",
-      "label": "Positional Encoding (sin/cos)"
+      "label": "位置エンコーディング（sin/cos）"
     },
     "extraction": {},
     "projection": {
@@ -236,8 +318,8 @@ END EDITABLE DIAGRAM DATA -->
             0.2345678
           ],
           "position": [
-            0.0,
-            1.0
+            0,
+            1
           ],
           "input": [
             0.1234567,
@@ -259,8 +341,8 @@ END EDITABLE DIAGRAM DATA -->
           },
           "points": {
             "0": [
-              0.12,
-              0.18
+              0.18,
+              0.22
             ],
             "1": [
               0.155,
@@ -307,8 +389,8 @@ END EDITABLE DIAGRAM DATA -->
           },
           "points": {
             "0": [
-              0.33999999999999997,
-              0.18
+              0.7,
+              0.33
             ],
             "1": [
               0.375,
@@ -355,8 +437,8 @@ END EDITABLE DIAGRAM DATA -->
           },
           "points": {
             "0": [
-              0.56,
-              0.18
+              0.42,
+              0.78
             ],
             "1": [
               0.5950000000000001,
@@ -403,8 +485,8 @@ END EDITABLE DIAGRAM DATA -->
           },
           "points": {
             "0": [
-              0.78,
-              0.18
+              0.72,
+              0.04
             ],
             "1": [
               0.8150000000000001,
@@ -418,7 +500,29 @@ END EDITABLE DIAGRAM DATA -->
               0.8150000000000001,
               0.404
             ]
-          }
+          },
+          "candidates": [
+            {
+              "tokenId": null,
+              "text": " is",
+              "probability": 0.64
+            },
+            {
+              "tokenId": null,
+              "text": " was",
+              "probability": 0.09
+            },
+            {
+              "tokenId": null,
+              "text": "'s",
+              "probability": 0.07
+            },
+            {
+              "tokenId": null,
+              "text": "その他",
+              "probability": 0.2
+            }
+          ]
         },
         {
           "id": null,
@@ -451,8 +555,8 @@ END EDITABLE DIAGRAM DATA -->
           },
           "points": {
             "0": [
-              0.12,
-              0.5800000000000001
+              0.3,
+              0.57
             ],
             "1": [
               0.155,
@@ -576,8 +680,8 @@ END EDITABLE DIAGRAM DATA -->
             0.2345678
           ],
           "position": [
-            0.0,
-            1.0
+            0,
+            1
           ],
           "input": [
             0.1234567,
@@ -599,8 +703,8 @@ END EDITABLE DIAGRAM DATA -->
           },
           "points": {
             "0": [
-              0.12,
-              0.18
+              0.18,
+              0.22
             ],
             "1": [
               0.155,
@@ -647,8 +751,8 @@ END EDITABLE DIAGRAM DATA -->
           },
           "points": {
             "0": [
-              0.33999999999999997,
-              0.18
+              0.7,
+              0.33
             ],
             "1": [
               0.375,
@@ -695,8 +799,8 @@ END EDITABLE DIAGRAM DATA -->
           },
           "points": {
             "0": [
-              0.56,
-              0.18
+              0.42,
+              0.78
             ],
             "1": [
               0.5950000000000001,
@@ -743,8 +847,8 @@ END EDITABLE DIAGRAM DATA -->
           },
           "points": {
             "0": [
-              0.78,
-              0.18
+              0.72,
+              0.04
             ],
             "1": [
               0.8150000000000001,
@@ -758,7 +862,29 @@ END EDITABLE DIAGRAM DATA -->
               0.8150000000000001,
               0.404
             ]
-          }
+          },
+          "candidates": [
+            {
+              "tokenId": null,
+              "text": " is",
+              "probability": 0.64
+            },
+            {
+              "tokenId": null,
+              "text": " was",
+              "probability": 0.09
+            },
+            {
+              "tokenId": null,
+              "text": "'s",
+              "probability": 0.07
+            },
+            {
+              "tokenId": null,
+              "text": "その他",
+              "probability": 0.2
+            }
+          ]
         },
         {
           "id": null,
@@ -791,8 +917,8 @@ END EDITABLE DIAGRAM DATA -->
           },
           "points": {
             "0": [
-              0.12,
-              0.5800000000000001
+              0.3,
+              0.57
             ],
             "1": [
               0.155,
@@ -839,8 +965,8 @@ END EDITABLE DIAGRAM DATA -->
           },
           "points": {
             "0": [
-              0.33999999999999997,
-              0.5800000000000001
+              0.77,
+              0.7
             ],
             "1": [
               0.375,
@@ -955,52 +1081,64 @@ END EDITABLE DIAGRAM DATA -->
   "ngram": {
     "status": "illustrative",
     "source": null,
+    "features": {
+      "positive": [0.85, 0.3, 0.62, 0.15, 0.72],
+      "negative": [0.22, 0.78, 0.4, 0.9, 0.34]
+    },
     "contexts": [
-      "France is",
-      "capital of France is",
-      "France is not"
+      "I live in",
+      "I like",
+      "I eat"
     ],
     "words": [
-      "Paris",
-      "London",
-      "Berlin",
+      "Tokyo",
+      "Kyoto",
+      "Osaka",
+      "sushi",
+      "pizza",
       "その他"
     ],
     "probabilities": [
       [
-        0.78,
-        0.06,
-        0.04,
-        0.12
-      ],
-      [
-        0.85,
-        0.04,
-        0.03,
-        0.08
-      ],
-      [
-        0.12,
         0.4,
-        0.28,
+        0.25,
+        0.2,
+        0.01,
+        0.01,
+        0.13
+      ],
+      [
+        0.1,
+        0.08,
+        0.07,
+        0.3,
+        0.25,
         0.2
+      ],
+      [
+        0.01,
+        0.01,
+        0.01,
+        0.45,
+        0.37,
+        0.15
       ]
     ],
     "matrix": {
       "status": "illustrative",
       "words": [
-        "Paris",
-        "London",
-        "Berlin",
-        "Rome",
-        "Madrid"
+        "water",
+        "soup",
+        "dough",
+        "metal",
+        "paper"
       ],
       "contexts": [
-        "is",
-        "France is",
-        "of France is",
-        "capital of France is",
-        "France is not"
+        "I pour the",
+        "I spill the",
+        "I heat the",
+        "I cut the",
+        "I fold the"
       ],
       "values": [
         [
@@ -1019,9 +1157,9 @@ END EDITABLE DIAGRAM DATA -->
         ],
         [
           3.2,
-          3.0,
+          3,
           3.4,
-          4.0,
+          4,
           3.7
         ],
         [
@@ -1034,7 +1172,7 @@ END EDITABLE DIAGRAM DATA -->
         [
           0.1,
           0.3,
-          1.0,
+          1,
           4.8,
           4.7
         ]
@@ -1073,16 +1211,8 @@ END EDITABLE DIAGRAM DATA -->
   }
 }
 </script>
-<figure class="decoder" aria-labelledby="decoder-title">
-  <header class="dc-heading"><span class="dc-eyebrow">DECODER · STEP BY STEP</span><h1 id="decoder-title">次の言葉ができるまで</h1><p>過去の表現を保ったまま、いまのトークンを層ごとに計算する。</p></header>
-  <div class="dc-toolbar">
-    <div class="dc-controls" role="group" aria-label="アニメーションの操作"><button type="button" data-dc-back aria-label="1ステップ戻る">戻る</button><button type="button" data-dc-next>進む</button><span class="dc-count"></span><button type="button" data-dc-reset aria-label="リセット" title="リセット"><svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path d="M4 10a8 8 0 1 1 1 7M4 4v6h6" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></button></div>
-  <div class="dc-status" aria-live="polite"><span class="dc-step"></span><div><h3 class="dc-title"></h3><p class="dc-description"></p></div></div>
-  </div>
-  <div class="dc-legend"><span><i class="dc-blue"></i>計算済み・固定</span><span><i class="dc-orange"></i>いま計算する表現</span><span><i class="dc-outline"></i>未計算</span><span><i class="dc-green"></i>選ばれたトークン</span></div>
-  <div class="dc-panels"><section><div class="dc-panel-title"><h2>01　計算の経路</h2></div><svg class="dc-network" viewBox="0 0 460 370" role="img" aria-label="トークンごとの計算経路"></svg></section><section><div class="dc-panel-title"><h2>02　表現の空間</h2><span class="dc-space-token"></span></div><svg class="dc-space" viewBox="0 0 400 370" role="img" aria-label="層ごとの表現の変化"></svg></section></div>
-  <section class="dc-output" aria-label="次のトークンの候補"><div><h2>次のトークンの確率</h2><p class="dc-output-note"></p></div><div class="dc-bars"></div></section>
-  <figcaption>座標・軌跡・確率は説明用で、実モデルの出力ではありません。高次元の表現を平面で模式的に表示しています。3層に簡略化し、1語を1トークンとして扱います。位置情報・残差接続などの詳細は省略しています。</figcaption>
+<figure class="decoder" data-decoder aria-labelledby="decoder-title">
+  <header class="dc-heading"><span class="dc-eyebrow">DECODER · STEP BY STEP</span><h1 id="decoder-title">次の言葉ができるまで</h1></header>
   <noscript>このアニメーションを操作するにはJavaScriptを有効にしてください。</noscript>
 </figure>
 </main><script>/* Shared reader is embedded in every standalone HTML; no fetch or external assets. */
@@ -1122,6 +1252,14 @@ END EDITABLE DIAGRAM DATA -->
  for(const c of data.cases){
   if(typeof c.prompt!=='string'||typeof c.label!=='string'||!Array.isArray(c.continuation))fail('入力文・ラベル・continuationを確認してください');
   if(!c.tokens?.length)fail('tokensが空です');c.tokens.forEach(checkToken);checkCandidates(c.candidates,c.selectedIndex);
+  // Optional: candidates predicted at an earlier prompt position must contain the actual next input token.
+  c.tokens.forEach((t,i)=>{
+   if(t.candidates===undefined)return;
+   const next=c.tokens[i+1];if(!next)fail('最後の入力トークンの候補はcase.candidatesに書いてください');
+   const index=Array.isArray(t.candidates)?t.candidates.findIndex(v=>v.text===next.text):-1;
+   checkCandidates(t.candidates,index);
+   if(model.status==='measured'&&t.candidates[index].tokenId!==next.id)fail('途中位置の候補に次の入力トークンのtokenIdが必要です');
+  });
   let selected=c.candidates[c.selectedIndex];
   for(const s of c.continuation){checkToken(s.token);if(s.token.text!==selected.text||s.token.id!==selected.tokenId)fail('続きのトークンが直前の選択と一致しません');checkCandidates(s.candidates,s.selectedIndex);selected=s.candidates[s.selectedIndex];}
  }
@@ -1129,6 +1267,8 @@ END EDITABLE DIAGRAM DATA -->
  if(!['illustrative','measured'].includes(ng.status)||(ng.status==='measured'&&!ng.source))fail('N-gram実測の出典が必要です');
  if(m.status!=='illustrative')fail('並べ替え表は説明用スコアとして保持してください');
  if(ng.probabilities.length!==ng.contexts.length)fail('N-gramの列数が一致しません');
+ // Squares on the last word's card in the Transformer scene; one short list per case, each value in −1〜1.
+ for(const c of data.cases){const f=ng.features?.[c.key];if(!Array.isArray(f)||f.length<1||f.length>12||!f.every(n=>finite(n)&&n>=-1&&n<=1))fail('ngram.featuresは各条件に1〜12個、−1〜1の数値です');}
  ng.probabilities.forEach(v=>{vector(v,ng.words.length,'N-gram');if(v.some(n=>n<0||n>1)||Math.abs(v.reduce((a,b)=>a+b,0)-1)>1e-6)fail('N-gramの確率を確認してください');});
  if(m.values.length!==m.words.length)fail('スコア表の行数が一致しません');m.values.forEach(v=>vector(v,m.contexts.length,'スコア表'));
  const permutation=(v,n)=>Array.isArray(v)&&v.length===n&&new Set(v).size===n&&v.every(i=>Number.isInteger(i)&&i>=0&&i<n);
@@ -1144,94 +1284,275 @@ END EDITABLE DIAGRAM DATA -->
  const percent=p=>format(p*100)+'%';
  const vec=v=>'['+v.slice(0,2).map(format).join(', ')+', …]';
  const steps=c=>[{tokens:c.tokens,candidates:c.candidates,selectedIndex:c.selectedIndex},...c.continuation.map((s,i)=>({tokens:[...c.tokens,...c.continuation.slice(0,i+1).map(x=>x.token)],candidates:s.candidates,selectedIndex:s.selectedIndex}))];
- const note=()=> (model.status==='measured'?`モデル：${model.id}。ベクトル・確率は実測値。`:'ベクトル・確率は説明用の仮置き値で、実モデルの計算結果ではありません。')+' '+(model.projection.status==='measured'?`配置：${model.projection.method}。`:'点の座標・軌跡は説明用の配置です。')+' 表示する数値は小数3桁で切り捨てています。';
- window.Diagram={data,layers,additive,format,percent,esc,vec,steps,note};
+ window.Diagram={data,layers,additive,format,percent,esc,vec,steps};
 })();
 
+'use strict';
+// Decoder diagram, mounted on every [data-decoder]: words below, layers stacked above, and the representation space.
+// data-cycles="last" computes only the last word; data-case-select adds buttons for the input sentences.
+// Other diagrams embed it through "uses" in components.json, so this file is the one implementation.
 (() => {
- const root=document.querySelector('.decoder');
- if(!root)return;
- const $=s=>root.querySelector(s);
- const blue='#4c7da5',orange='#c36a28',green='#24816c',muted='#c5d0d7';
- const {data,layers,steps,percent,esc,note}=window.Diagram;
- const frames=steps(data.cases[0]),allTokens=frames.at(-1).tokens;
- const words=allTokens.map(t=>t.text);
- const tokenPaths=allTokens.map(t=>[0,...layers].map(l=>[45+t.points[l][0]*300,60+t.points[l][1]*235]));
- const candidates=frames.map(f=>f.candidates.map(v=>[v.text,v.probability]));
- const count=layers.length,perCycle=count*2+3,total=frames.length*perCycle;
- const label=l=>l?`第${layers[l-1]}層`:'埋め込み';
- const gap=count>1&&layers.at(-1)>layers.at(-2)+1;
- const lastInitial=frames[0].tokens.length-1;
- let step=0;
- const line=(x1,y1,x2,y2,color,extra='')=>`<line x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}" stroke="${color}" stroke-width="2" ${extra}/>`;
- const text=(x,y,s,extra='')=>`<text x="${x}" y="${y}" ${extra}>${s}</text>`;
- const y=l=>292-l*(216/count);
- const x=i=>100+i*76;
- function render(){
-  const cycle=Math.floor(step/perCycle),phase=step%perCycle,active=cycle+lastInitial;
-  const layer=phase===0?0:Math.min(count,Math.ceil(phase/2));
-  const attending=phase<count*2+1&&phase%2===1;
-  const completed=phase<count*2+1?Math.floor(phase/2):count;
-  const ready=phase>=count*2+1,selected=phase===count*2+2;
-  root.dataset.step=step;root.dataset.layer=completed?layers[completed-1]:0;
-  let net='';
-  for(let l=0;l<=count;l++)net+=text(10,y(l)+4,label(l));
-  if(gap)net+=text(35,(y(count)+y(count-1))/2,'…','text-anchor="middle"');
-  for(let i=0;i<=active;i++){
-   const fixed=i<active;
-   net+=text(x(i),40,fixed?'KEEP':'計算中',`text-anchor="middle" style="fill:${fixed?blue:orange};font-size:10px;letter-spacing:1px"`);
-   for(let l=1;l<=count;l++)net+=line(x(i),y(l-1)-12,x(i),y(l)+12,fixed?blue:l<=completed?orange:muted);
-   for(let l=0;l<=count;l++){
-    const color=fixed?blue:l<=completed?orange:muted;
-    const fill=fixed?'#e1edf5':l<=completed?'#fcdfc4':'#f6f8fa';
-    net+=l===count?`<rect data-node="${i}-${l}" x="${x(i)-11}" y="${y(l)-11}" width="22" height="22" rx="3" fill="${fill}" stroke="${color}" stroke-width="2"/>`:`<circle data-node="${i}-${l}" cx="${x(i)}" cy="${y(l)}" r="10" fill="${fill}" stroke="${color}" stroke-width="2"/>`;
+ const {data,layers,format,percent,esc}=window.Diagram;
+ const NS='http://www.w3.org/2000/svg',N=data.model.numLayers;
+ const blue='#4c7da5',orange='#c36a28';
+ const illustrative=data.model.projection.status!=='measured';
+ const motion=matchMedia('(prefers-reduced-motion: reduce)');
+ const r1=v=>Math.round(v*10)/10;
+ const text=(x,y,s,extra='')=>`<text x="${r1(x)}" y="${r1(y)}" ${extra}>${s}</text>`;
+ // Axis-break mark (two parallel waves) = layers left out of the drawing.
+ const breakMark=(cx,cy,len,thick,amp,period,bg)=>{
+  const wave=off=>{const pts=[];for(let t=-len/2;t<=len/2+.01;t+=Math.min(2,len/8))pts.push([r1(t),r1(off+amp*Math.sin(2*Math.PI*t/period))]);return pts;};
+  const a=wave(-thick/2),b=wave(thick/2),line=pts=>'M'+pts.map(p=>p.join(' ')).join(' L');
+  return `<g class="dc-break" transform="translate(${r1(cx)} ${r1(cy)})"><path d="${line(a)} L${b.reverse().map(p=>p.join(' ')).join(' L')} Z" fill="${bg}"/><path d="${line(a)}" fill="none" stroke="#7d8f99" stroke-width="1.2"/><path d="${line(b.reverse())}" fill="none" stroke="#7d8f99" stroke-width="1.2"/></g>`;
+ };
+ let mounted=0;
+
+ function mount(root){
+  const select=root.hasAttribute('data-case-select'),onlyLast=root.dataset.cycles==='last',uid='dc'+ ++mounted;
+  const cases=select?data.cases:[data.cases[0]];
+  // The layer just below the last is drawn too, so the final step is a single layer; measured data needs its points.
+  const rows=[...layers];
+  if(N-1>rows.at(-2)&&(illustrative||cases.every(c=>c.tokens.every(t=>t.points[String(N-1)]))))rows.splice(-1,0,N-1);
+  const count=rows.length,full=[0,...rows];
+  // Row index k whose distance from the row below skips layers (the axis break), or -1.
+  const gapK=full.findIndex((v,k)=>k>0&&v>full[k-1]+1);
+  // When layers are skipped, the top rows are named by position from the end rather than by number.
+  const layerName=L=>!L?'埋め込み':gapK>0&&L===N?'第N層':gapK>0&&L===N-1?'第N−1層':`第${L}層`;
+  const label=k=>layerName(full[k]);
+  // Phases in a cycle: embedding, each drawn layer, the output layer, then (all cycles) the choice.
+  const OUTPUT=count+1,PICK=count+2,perCycle=count+(onlyLast?2:3);
+
+  root.insertAdjacentHTML('beforeend',`<div class="dc-toolbar">${select?`<div class="dc-cases" role="group" aria-label="入力する文">${cases.map((c,i)=>`<button type="button" data-dc-case="${i}">${esc(c.label)}</button>`).join('')}</div>`:''}<div class="dc-controls" role="group" aria-label="アニメーションの操作"><button type="button" data-dc-back aria-label="1ステップ戻る">戻る</button><button type="button" data-dc-next>進む</button><span class="dc-step" aria-live="polite"></span><span class="dc-count"></span><button type="button" data-dc-reset aria-label="最初から" title="最初から"><svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path d="M4 10a8 8 0 1 1 1 7M4 4v6h6" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></button></div></div>
+<div class="dc-legend"><span><i class="dc-orange"></i>計算中のトークン</span><span><i class="dc-blue"></i>計算済みのトークン（K・Vを保存）</span><span><i class="dc-unused"></i>この段階では使わない表現</span></div>
+<div class="dc-panels"><section><div class="dc-panel-title"><h2>01　計算の経路</h2></div><svg class="dc-network" role="img"></svg></section><section class="dc-right"><div class="dc-panel-title"><h2 class="dc-right-title"></h2></div><div class="dc-right-body"><svg class="dc-space" viewBox="0 0 360 340" role="img" aria-label="層ごとの表現の変化"></svg><div class="dc-probs" role="list" aria-label="次のトークンの確率"></div></div></section></div>`);
+  const $=s=>root.querySelector(s),$$=s=>[...root.querySelectorAll(s)];
+
+  // ---- 01 network geometry: fixed across cases so switching sentences does not rescale the drawing.
+  const ROW=56,GAP=84,LEFT=76,bg='#f6f8fa';
+  const ys=[];ys[count]=34;
+  for(let k=count;k>0;k--)ys[k-1]=ys[k]+(k===gapK?GAP:ROW);
+  const y=k=>ys[k],wordY=y(0)+34,H=wordY+12,midY=(y(0)+y(count))/2;
+  const slotsOf=c=>c.tokens.length+(onlyLast?0:1);
+  const W=Math.max(360,LEFT+(Math.max(...cases.map(slotsOf))-1)*54+30);
+  // Half the node's size including its stroke: lines stop here instead of running through the node.
+  const edge=k=>k===count?12:10;
+  const CARD=[150,72],BOX=[84,52],cardLeft=12+CARD[0]/2,boxX=W-12-BOX[0]/2,arrow=[12+CARD[0]+8,W-12-BOX[0]-12];
+  const network=$('.dc-network');
+  network.setAttribute('viewBox',`0 0 ${W} ${H}`);
+  network.innerHTML=`<defs><filter id="${uid}-shadow" x="-10%" y="-15%" width="120%" height="140%"><feDropShadow dx="0" dy="2" stdDeviation="3" flood-color="#27404f" flood-opacity=".16"/></filter></defs><g class="dc-net"><g class="dc-edges"></g><g class="dc-links"></g>${gapK>0?breakMark(W/2,(y(gapK)+y(gapK-1))/2,W-12,10,3,22,bg):''}<g class="dc-nodes"></g><g class="dc-labels"></g></g><g class="dc-words"></g>
+<g class="dc-output"><g class="dc-out-arrow"><line x1="${arrow[0]}" y1="${midY}" x2="${arrow[1]}" y2="${midY}"/><path d="M${arrow[1]} ${midY-6} L${arrow[1]+9} ${midY} L${arrow[1]} ${midY+6}Z"/></g><g transform="translate(${boxX} ${midY})"><g class="dc-out-layer"><rect x="${-BOX[0]/2}" y="${-BOX[1]/2}" width="${BOX[0]}" height="${BOX[1]}" rx="10"/>${text(0,5,'出力層','text-anchor="middle"')}</g></g>
+<g class="dc-card"><rect x="${-CARD[0]/2}" y="${-CARD[1]/2}" width="${CARD[0]}" height="${CARD[1]}" rx="10" filter="url(#${uid}-shadow)"/>${text(0,-12,'','text-anchor="middle" class="dc-card-word"')}${text(0,5,`${label(count)}の表現`,'text-anchor="middle" class="dc-card-caption"')}<g class="dc-card-vector"></g></g></g>`;
+  const edges=$('.dc-edges'),links=$('.dc-links'),nodesG=$('.dc-nodes'),labelsG=$('.dc-labels'),wordsG=$('.dc-words'),card=$('.dc-card');
+  labelsG.innerHTML=full.map((_,k)=>text(8,y(k)+4,label(k),`data-row-label="${k}"`)).join('');
+
+  // ---- 02 space: measured projections are drawn as-is; illustrative ones get a context-dependent teaching layout.
+  const SW=360,SH=340;
+  const toSpace=([u,v])=>[28+u*(SW-56),22+v*(SH-50)];
+  const spaceOf=c=>{
+   if(!illustrative)return c.tokens.map(t=>full.map(L=>toSpace(t.points[String(L)])));
+   // Each token gets its own steps from a generator seeded by its text and position, so the layout is stable across reloads.
+   const rng=seed=>{let h=2166136261;for(const ch of seed)h=Math.imul(h^ch.charCodeAt(0),16777619);return()=>{h=Math.imul(h^h>>>15,2246822507);h=Math.imul(h^h>>>13,3266489909);return((h^=h>>>16)>>>0)/4294967296;};};
+   const clamp=p=>p.map(v=>Math.min(.92,Math.max(.08,v)));
+   const move=(p,r,len)=>{const a=r()*2*Math.PI;return clamp([p[0]+len*Math.cos(a),p[1]+len*Math.sin(a)]);};
+   const goals=[];
+   return c.tokens.map((t,i)=>{
+    const r=rng(t.text+'#'+i),path=[clamp(t.points[0])];
+    // Before the break (or on every row when nothing is skipped): small steps whose size and direction differ per token.
+    const last=gapK<0?count:gapK-1;
+    for(let k=1;k<=last;k++)path.push(move(path.at(-1),r,.04+.1*r()));
+    if(gapK<0)return path.map(toSpace);
+    // Across the skipped layers: a large jump to a place pulled toward the previous word, so neighbours and order change.
+    let goal,tries=0;
+    do{
+     const free=[.12+.76*r(),.12+.76*r()],prevGoal=goals[i-1];
+     goal=clamp(prevGoal?free.map((v,d)=>.65*v+.35*prevGoal[d]):free);
+    }while(tries++<60&&(Math.hypot(goal[0]-path.at(-1)[0],goal[1]-path.at(-1)[1])<.3||goals.some(g=>Math.hypot(goal[0]-g[0],goal[1]-g[1])<.16)));
+    goals.push(goal);
+    // After the break: the remaining rows reach the goal in moderate steps of their own.
+    const tail=[goal];
+    for(let k=count;k>gapK;k--)tail.unshift(move(tail[0],r,.05+.07*r()));
+    path.push(...tail);
+    return path.map(toSpace);
+   });
+  };
+  const space=$('.dc-space');
+  let grid='';
+  for(let k=0;k<=6;k++)grid+=`<line x1="${28+k*(SW-56)/6}" y1="14" x2="${28+k*(SW-56)/6}" y2="${SH-20}" stroke="#e7edf1"/><line x1="20" y1="${22+k*(SH-50)/6}" x2="${SW-20}" y2="${22+k*(SH-50)/6}" stroke="#e7edf1"/>`;
+  space.innerHTML=`<g>${grid}</g><g class="dc-trails"></g><g class="dc-heads"></g><text class="dc-space-layer" x="${SW-24}" y="${SH-30}" text-anchor="end"></text>`;
+  const heads=$('.dc-heads'),probs=$('.dc-probs');
+
+  // ---- per-case state
+  let ci=0,c,n,x,words,cycles,spacePts,total,step=0,sub=2,timers=[],builtFor='',spaceCycle=-1;
+  function build(){
+   c=cases[ci];n=c.tokens.length;
+   const col=(W-30-LEFT)/Math.max(1,slotsOf(c)-1);x=i=>LEFT+i*col;
+   words=[...c.tokens.map(t=>t.text),c.candidates[c.selectedIndex].text];
+   // Earlier prompt tokens start out computed (their K・V are cached); from the earliest position whose prediction is recorded, one token at a time.
+   let start=n-1;
+   if(!onlyLast)while(start>0&&c.tokens[start-1].candidates)start--;
+   cycles=[];
+   for(let t=start;t<n;t++){const cs=t<n-1?c.tokens[t].candidates:c.candidates;cycles.push({t,cs,chosen:t<n-1?cs.findIndex(v=>v.text===c.tokens[t+1].text):c.selectedIndex});}
+   total=cycles.length*perCycle;
+   spacePts=spaceOf(c);
+   let e='',nd='';
+   for(let i=0;i<n;i++)for(let k=0;k<=count;k++){
+    if(k)e+=`<line class="dc-edge" data-edge="${i}-${k}" x1="${r1(x(i))}" y1="${r1(y(k-1)-edge(k-1))}" x2="${r1(x(i))}" y2="${r1(y(k)+edge(k))}"/>`;
+    nd+=k===count?`<rect class="dc-node" data-node="${i}-${k}" x="${r1(x(i)-11)}" y="${y(k)-11}" width="22" height="22" rx="3"/>`:`<circle class="dc-node" data-node="${i}-${k}" cx="${r1(x(i))}" cy="${y(k)}" r="9"/>`;
    }
-   net+=text(x(i),328,esc(words[i]),'text-anchor="middle" class="dc-word"');
+   edges.innerHTML=e;nodesG.innerHTML=nd;
+   wordsG.innerHTML=words.slice(0,onlyLast?n:n+1).map((w,i)=>text(x(i),wordY,esc(w),`text-anchor="middle" class="dc-word" data-word="${i}"`)).join('');
+   heads.replaceChildren();builtFor='';spaceCycle=-1;
+   $$('[data-dc-case]').forEach(b=>b.setAttribute('aria-pressed',String(+b.dataset.dcCase===ci)));
   }
-  if(attending){
-   for(let i=0;i<active;i++)net+=`<path class="dc-flow" d="M ${x(i)+12} ${y(layer-1)} Q ${x(active)-25} ${y(layer-1)-10} ${x(active)-12} ${y(layer)+10}" fill="none" stroke="${blue}" stroke-width="2"/><rect x="${x(i)-17}" class="dc-kv-label" y="${y(layer-1)-35}" width="34" height="17" rx="4" fill="#e1edf5"/>`+text(x(i),y(layer-1)-23,'K・V','text-anchor="middle" style="font-size:9px"');
-   net+=text(x(active)+17,y(layer-1)-17,'Q','style="fill:#c36a28;font-size:10px"');
+
+  // glide: the dots move from their previous layer; a new cycle starts from the embeddings, so they are placed there directly.
+  function renderSpace(cur,lay,glide){
+   const color=i=>i<cur.t?blue:orange,at=(i,k)=>spacePts[i][k];
+   let trails='';
+   for(let i=0;i<=cur.t;i++){
+    // Only the stretch since the skipped layers stays drawn, so no trail floats away from its point.
+    const from=gapK>0&&lay>=gapK?gapK:0;
+    trails+=`<g data-space-token="${i}">`;
+    for(let k=from+1;k<=lay;k++){const [ax,ay]=at(i,k-1),[bx,by]=at(i,k);trails+=`<line x1="${r1(ax)}" y1="${r1(ay)}" x2="${r1(bx)}" y2="${r1(by)}" stroke="${color(i)}" stroke-width="1.5" opacity=".55"/>`;}
+    for(let k=from;k<lay;k++){const [px,py]=at(i,k);trails+=`<circle cx="${r1(px)}" cy="${r1(py)}" r="3" fill="${color(i)}" opacity=".45"/>`;}
+    trails+='</g>';
+   }
+   $('.dc-trails').innerHTML=trails;
+   $('.dc-space-layer').textContent=label(lay);
+   // Points may overlap; only the labels are placed around their dots to stay readable.
+   const boxes=[],dots=[...Array(cur.t+1).keys()].map(j=>at(j,lay));
+   const place=(i,[hx,hy])=>{
+    const w=words[i].trim().length*7.6+6;
+    const options=[[0,-11,'middle',hx-w/2,hy-24],[0,21,'middle',hx-w/2,hy+8],[10,5,'start',hx+8,hy-8],[-10,5,'end',hx-8-w,hy-8]];
+    const free=o=>!boxes.some(b=>o[3]<b[0]+b[2]&&b[0]<o[3]+w&&o[4]<b[1]+15&&b[1]<o[4]+15)&&!dots.some(([dx,dy],j)=>j!==i&&dx>o[3]-5&&dx<o[3]+w+5&&dy>o[4]-5&&dy<o[4]+20);
+    const o=options.find(free)||options[0];boxes.push([o[3],o[4],w]);return o;
+   };
+   [...heads.children].forEach(h=>{if(+h.dataset.head>cur.t)h.remove();});
+   for(let i=0;i<=cur.t;i++){
+    let h=heads.querySelector(`[data-head="${i}"]`);
+    const [hx,hy]=at(i,lay);
+    if(!h){
+     h=document.createElementNS(NS,'g');h.setAttribute('class','dc-head');h.dataset.head=i;
+     h.innerHTML=`<circle class="dc-ring" r="12" fill="none" stroke-width="2"/><circle class="dc-dot" r="6" stroke="#fff" stroke-width="2"/>${text(0,-11,esc(words[i]),'text-anchor="middle" style="font-weight:600"')}`;
+     heads.append(h);
+     if(!motion.matches)h.animate([{opacity:0},{opacity:1}],{duration:400});
+    }else if(!glide)h.getAnimations().forEach(a=>a.cancel());
+    else if(+h.dataset.k!==lay&&!motion.matches){
+     // Crossing the skipped layers (or any multi-row jump) is a long glide.
+     const k0=+h.dataset.k,far=Math.abs(k0-lay)>1||Math.max(k0,lay)===gapK;
+     h.getAnimations().forEach(a=>a.cancel());
+     h.animate([at(i,k0),at(i,lay)].map(([px,py])=>({transform:`translate(${r1(px)}px,${r1(py)}px)`})),{duration:far?1600:650,easing:'ease-in-out'});
+    }
+    h.dataset.k=lay;h.style.transform=`translate(${r1(hx)}px,${r1(hy)}px)`;
+    h.querySelector('.dc-dot').setAttribute('fill',color(i));
+    const tx=h.querySelector('text'),o=place(i,[hx,hy]);
+    tx.style.fill=color(i);tx.setAttribute('x',o[0]);tx.setAttribute('y',o[1]);tx.setAttribute('text-anchor',o[2]);
+    h.querySelector('.dc-ring').setAttribute('stroke',i===cur.t?orange:'none');
+   }
   }
-  net+=text(230,359,attending?'過去のK・V ＋ 現在のK・Vを参照':'過去の列はそのまま。現在の列だけ更新。','text-anchor="middle" style="font-size:11px"');
-  $('.dc-network').setAttribute('viewBox',`0 0 ${Math.max(460,x(allTokens.length-1)+65)} 370`);
-  $('.dc-network').innerHTML=net;
-  const pts=tokenPaths[active];
-  let space='';
-  for(let k=0;k<6;k++)space+=line(45,65+k*45,355,65+k*45,'#e7edf1')+line(55+k*58,55,55+k*58,300,'#e7edf1');
-  for(let i=0;i<active;i++){
-   const past=tokenPaths[i];
-   space+=`<g data-space-token="${esc(words[i])}"><polyline points="${past.map(p=>p.join(',')).join(' ')}" fill="none" stroke="${blue}" stroke-width="1.5" opacity=".45"/>`;
-   for(let l=0;l<=count;l++)space+=`<circle data-space-node="${i}-${l}" cx="${past[l][0]}" cy="${past[l][1]}" r="${l===completed?6:3.5}" fill="${blue}" opacity="${l===completed?1:.5}"/>`;
-   space+=text(past[count][0],past[count][1]-15,esc(words[i]),`text-anchor="middle" style="fill:${blue};font-weight:600"`)+'</g>';
+
+  // Restart a one-shot CSS animation on an element.
+  const replay=(el,cls)=>{if(!el)return;el.classList.remove(cls);el.getBoundingClientRect();el.classList.add(cls);};
+  function render(effect){
+   const cycle=Math.floor(step/perCycle),phase=step%perCycle,cur=cycles[cycle],t=cur.t;
+   const done=Math.min(phase,count),layerPhase=phase>=1&&phase<=count,output=phase>=OUTPUT,picked=phase===PICK;
+   // The row after the axis break is reached through the omitted layers, so no information is drawn flowing into it.
+   const flows=layerPhase&&done!==gapK;
+   const ready=picked||output&&sub===2;
+   root.dataset.step=step;root.dataset.layer=full[done];root.dataset.sub=sub;
+   root.classList.toggle('is-output',output&&!picked);root.classList.toggle('is-ready',ready);root.classList.toggle('is-picked',picked);
+   const shown=(i,k)=>i<t||i===t&&k<=done;
+   // Circles used in this step stay saturated: the new node and, while a layer is computed, every node it reads from the row below.
+   $$('.dc-node').forEach(el=>{
+    const [i,k]=el.dataset.node.split('-').map(Number),target=i===t&&k===done;
+    el.dataset.state=i<t?'cached':'active';
+    el.classList.toggle('is-hidden',!shown(i,k));
+    el.classList.toggle('is-target',target);
+    el.classList.toggle('is-source',flows&&k===done-1&&i<=t);
+    el.classList.toggle('is-pending',target&&flows&&sub<2);
+    if(!target)el.classList.remove('dc-made');
+   });
+   $$('.dc-edge').forEach(el=>{
+    const [i,k]=el.dataset.edge.split('-').map(Number);
+    el.dataset.state=i<t?'cached':'active';
+    el.classList.toggle('is-hidden',!(shown(i,k)&&shown(i,k-1)));
+    el.classList.toggle('is-self',flows&&i===t&&k===done);
+   });
+   // Information from every earlier word's node in the row below flows into the new node.
+   const key=`${ci}:${step}`;
+   if(key!==builtFor){
+    builtFor=key;
+    let l='';
+    if(flows)for(let i=0;i<t;i++){
+     const sx=x(i),sy=y(done-1)-edge(done-1),ex=x(t),ey=y(done)+edge(done),d=sy-ey;
+     l+=`<path class="dc-link" d="M${r1(sx)} ${r1(sy)} C${r1(sx)} ${r1(sy-d*.55)} ${r1(ex)} ${r1(ey+d*.45)} ${r1(ex)} ${r1(ey)}"/>`;
+    }
+    links.innerHTML=l;
+    probs.innerHTML=cur.cs.map((v,r)=>`<div class="dc-prob${v.text==='その他'?' is-other':''}" role="listitem"><span class="dc-prob-word">${esc(v.text.trim()||v.text)}</span><span class="dc-track"><span class="dc-fill"></span></span><b>${percent(v.probability)}</b></div>`).join('');
+   }
+   $$('[data-row-label]').forEach(el=>el.classList.toggle('dc-row-current',!output&&+el.dataset.rowLabel===done));
+   $$('.dc-word').forEach(el=>{
+    const i=+el.dataset.word;
+    el.classList.toggle('is-hidden',!(i<=t||picked&&i===t+1));
+    el.classList.toggle('is-active',i===t);
+    el.classList.toggle('is-picked',picked&&i===t+1);
+   });
+   // The final representation grows out of its node and moves beside the output layer.
+   const vector=t===n-1?data.ngram.features[c.key]:c.tokens[t].layers[String(N)];
+   const [vx,vy]=output?[cardLeft,midY]:[x(t),y(count)];
+   card.style.transform=`translate(${r1(vx)}px,${r1(vy)}px) scale(${output?1:.1})`;
+   card.querySelector('.dc-card-word').textContent=words[t].trim();
+   card.querySelector('.dc-card-vector').innerHTML=vector.map((v,j)=>`<rect x="${r1(j*20-vector.length*10+2)}" y="14" width="16" height="11" rx="2" opacity="${r1(Math.max(.15,Math.min(1,Math.abs(v))))}"><title>${format(v)}</title></rect>`).join('');
+   // Probabilities replace the space once only the final representation remains.
+   const best=Math.max(...cur.cs.map(v=>v.probability));
+   $('.dc-right').classList.toggle('is-probs',output);
+   $('.dc-right-title').textContent=output?'02　次のトークンの確率':'02　表現の空間';
+   [...probs.children].forEach((row,r)=>{
+    const p=cur.cs[r].probability;
+    row.classList.toggle('is-top',ready&&!picked&&p===best);
+    row.classList.toggle('is-chosen',picked&&r===cur.chosen);
+    row.classList.toggle('is-muted',picked&&r!==cur.chosen);
+    row.querySelector('.dc-fill').style.width=`${ready?p*100:0}%`;
+   });
+   const glide=spaceCycle===cycle;spaceCycle=cycle;
+   renderSpace(cur,flows&&sub<2?done-1:done,glide);
+   network.setAttribute('aria-label',output?`${words[t].trim()}の${label(count)}の表現から、次のトークンの確率を出す`:`${words[t].trim()}の${label(done)}を計算`);
+   if(effect==='made')replay($('.dc-node.is-target'),'dc-made');
+   if(effect==='enter'&&phase===0)replay($('.dc-node.is-target'),'dc-made');
+   if(effect==='enter'&&picked)replay($('.dc-word.is-picked'),'dc-drop');
+   const chip=$('.dc-step');
+   chip.textContent=picked?'選択':output?'出力':label(done);
+   chip.classList.toggle('is-output',output);
+   $('[data-dc-back]').disabled=step===0;
+   $('[data-dc-next]').disabled=step===total-1;
+   $('.dc-count').textContent=`${step+1} / ${total}`;
   }
-  space+=`<polyline points="${pts.slice(0,completed+1).map(p=>p.join(',')).join(' ')}" fill="none" stroke="${orange}" stroke-width="2" opacity=".65"/>`;
-  for(let l=0;l<=completed;l++)space+=`<circle cx="${pts[l][0]}" cy="${pts[l][1]}" r="4" fill="${orange}"/>`+text(pts[l][0],pts[l][1]+22,label(l),'text-anchor="middle" style="font-size:10px"');
-  // Keep the moving SVG node alive so changes of layer animate continuously.
-  let dot=$('.dc-dot');
-  if(!$('.dc-space-scene'))$('.dc-space').innerHTML='<g class="dc-space-scene"></g>';
-  $('.dc-space-scene').innerHTML=space+text(pts[completed][0],pts[completed][1]-16,esc(words[active]),`text-anchor="middle" style="fill:${orange};font-weight:600"`)+text(200,344,'青：過去の表現　オレンジ：現在の表現','text-anchor="middle" style="font-size:11px"');
-  if(!dot){dot=document.createElementNS('http://www.w3.org/2000/svg','circle');dot.setAttribute('class','dc-dot');dot.setAttribute('r','9');dot.setAttribute('fill',orange);dot.setAttribute('stroke','white');dot.setAttribute('stroke-width','3');}
-  if(!dot.parentNode)$('.dc-space').append(dot);
-  if(phase===0){dot.style.transition='none';}
-  dot.setAttribute('cx',pts[completed][0]);dot.setAttribute('cy',pts[completed][1]);
-  if(phase===0){dot.getBoundingClientRect();dot.style.transition='';}
-  $('.dc-space-token').textContent=`${words[active]} の表現`;
-  $('.dc-step').textContent=ready?'OUTPUT':phase===0?'INPUT':`LAYER ${layers[layer-1]}`;
-  $('.dc-title').textContent=phase===0?`${words[active]} の埋め込みからスタート`:attending?`第${layers[layer-1]}層：文脈を受け取る`:phase<count*2+1?`第${layers[layer-1]}層：表現が更新された`:selected?`${candidates[cycle][0][0]} を選んで、次の入力へ`:'最上段の表現から、候補の確率へ';
-  $('.dc-description').textContent=gap&&layer===count?'第2層の後の中間層の計算を省略して、最終層を表示しています。':'過去のK・Vを保存し、現在のトークンの表現を計算します。';
-  const frame=frames[cycle],chosen=frame.candidates[frame.selectedIndex];
-  if(selected)$('.dc-title').textContent=`${chosen.text} を選んで、次の入力へ`;
-  $('.dc-output-note').textContent=selected?frame.tokens.map(t=>t.text).join('')+chosen.text:ready?`${words[active]} の位置から続きを予測`:'最上段まで計算すると候補が現れます。';
-  $('.dc-bars').innerHTML=candidates[cycle].map(([word,p],i)=>`<div class="dc-bar ${selected&&i===frame.selectedIndex?'chosen':''}"><span>${ready?esc(word):'—'}</span><div class="dc-track"><div class="dc-fill" style="width:${ready?p*100:0}%"></div></div><span>${ready?percent(p):'—'}</span></div>`).join('');
-  $('[data-dc-back]').disabled=step===0;
-  $('[data-dc-next]').disabled=step===total-1;
-  $('.dc-count').textContent=`${step+1} / ${total}`;
+
+  const stop=()=>{timers.forEach(clearTimeout);timers=[];};
+  // Forward: a layer's new node appears first, information flows into it, then it forms; the output layer lights up once the card arrives.
+  function play(to){
+   stop();step=to;
+   const phase=step%perCycle,flows=phase>=1&&phase<=count&&phase!==gapK;
+   if(phase===gapK){sub=2;render('made');return;}
+   if(motion.matches||!(flows||phase===OUTPUT)){sub=2;render('enter');return;}
+   sub=0;render('enter');
+   const at=phase===OUTPUT?[900,1800]:[700,1900];
+   timers=[setTimeout(()=>{sub=1;render();},at[0]),setTimeout(()=>{sub=2;render('made');},at[1])];
+  }
+  // Backward, reset and sentence changes show the finished state without motion.
+  function show(to){
+   stop();step=to;sub=2;root.classList.add('dc-instant');render();
+   root.getBoundingClientRect();root.classList.remove('dc-instant');
+  }
+  $('[data-dc-next]').addEventListener('click',()=>{if(step<total-1)play(step+1);});
+  $('[data-dc-back]').addEventListener('click',()=>show(Math.max(0,step-1)));
+  $('[data-dc-reset]').addEventListener('click',()=>show(0));
+  $$('[data-dc-case]').forEach(b=>b.addEventListener('click',()=>{if(ci===+b.dataset.dcCase)return;ci=+b.dataset.dcCase;build();show(Math.min(step,total-1));}));
+  motion.addEventListener('change',()=>show(step));
+  build();show(0);
+  // Embedding pages call settle() when the diagram is hidden, so no delayed step fires off-screen.
+  return {settle:()=>show(step)};
  }
- function next(){if(step<total-1)step++;render();}
- $('[data-dc-next]').addEventListener('click',()=>{next();});
- $('[data-dc-back]').addEventListener('click',()=>{step=Math.max(0,step-1);render();});
- $('[data-dc-reset]').addEventListener('click',()=>{step=0;render();});
- $('figcaption').textContent=note()+` 埋め込み → ${layers.map(l=>'第'+l+'層').join(' → ')}。`+(gap?'第2層と最終層の間の計算は省略しています。':'');
- render();
+ document.querySelectorAll('[data-decoder]').forEach(el=>{el.decoderDiagram=mount(el);});
 })();
 </script></body></html>

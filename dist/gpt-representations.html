@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="ja"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>文章から、文脈を含む表現へ</title>
+<html lang="ja"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>文章から、文脈を含む表現へ（通常版）</title>
 <style>:root{--ink:#243b30;--muted:#657568;--green:#35664d;--paper:#ffffff;--line:#e3e7e5;--tint:#f6f8f7;--blue:#4d7897;--accent:#ba7147;--surface:#fff;--highlight:#f1dd97;--panel:#f8f9f8;--note:#f6f8f7;--th:#f5f7f6;--th-ink:#456044;font-family:Inter,"Hiragino Kaku Gothic ProN","Noto Sans JP",system-ui,sans-serif;color:var(--ink);background:var(--paper);font-synthesis:none;font-size:16px}*{box-sizing:border-box}body{margin:0}a{color:var(--green);text-underline-offset:4px}a:hover{color:#183f2b}button,input,select{font:inherit}button{cursor:pointer}button,a,input,summary,select{touch-action:manipulation}:focus-visible{outline:3px solid #7ba889;outline-offset:4px}html{scroll-padding-top:90px}p,li{line-height:1.95}p{margin:16px 0}strong{font-weight:700}li+li{margin-top:9px}ul{padding-left:1.4em}h1,h2,h3{line-height:1.55;letter-spacing:.012em}h1{font-size:clamp(30px,3.3vw,46px);font-weight:650;margin:15px 0 22px}h2{font-size:25px;margin:0 0 24px;font-weight:650}h3{font-size:19px;margin:31px 0 13px}small{font-size:12px}.skip{position:absolute;left:12px;top:-80px;background:white;padding:10px;z-index:10}.skip:focus{top:10px}.topbar{height:64px;border-bottom:1px solid var(--line);background:#fffffff5;position:sticky;top:0;z-index:5;display:flex;align-items:center;justify-content:space-between;padding:0 30px;gap:16px}.brand{font-weight:700;text-decoration:none;letter-spacing:.08em;font-size:12px}.brand span{color:var(--muted);font-weight:450;letter-spacing:0;margin-left:16px}.layout{max-width:1540px;margin:auto;display:grid;grid-template-columns:245px minmax(0,1fr) 190px;gap:40px;padding:0 32px}.sidenav{position:sticky;top:64px;align-self:start;height:calc(100dvh - 64px);overflow:auto;padding:30px 12px 30px 0;scrollbar-width:thin}.sidenav .nav-label{font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);margin:0 12px 18px}.sidenav a{display:block;text-decoration:none;font-size:12px;line-height:1.65;padding:8px 12px;border-radius:5px;margin:2px 0}.sidenav a[aria-current=page]{background:#f0f5f2;color:#244d36;font-weight:700;border-left:3px solid var(--green)}.sidenav summary{font-size:12px;font-weight:650;color:#52694f;padding:15px 10px 7px;cursor:pointer}.sidenav details a{padding-left:22px}.article{min-width:0;padding:54px 0 36px;max-width:900px;width:100%}.eyebrow{color:var(--green);font-size:11px;letter-spacing:.17em;text-transform:uppercase;font-weight:700}.lead{font-size:17px;line-height:2;color:#556b59;max-width:48em}.hero{border-bottom:1px solid var(--line);padding-bottom:32px;margin-bottom:42px}.meta{color:var(--muted);font-size:12px;margin-top:22px}.article section{margin:52px 0;scroll-margin-top:92px}.article section+section{padding-top:16px}.toc{align-self:start;position:sticky;top:96px;border-left:1px solid var(--line);padding-left:18px;margin-top:62px;font-size:11px;max-height:calc(100dvh - 125px);overflow:auto}.toc strong{font-size:10px;letter-spacing:.1em;color:var(--muted)}.toc a{display:block;color:var(--muted);text-decoration:none;line-height:1.65;margin:14px 0}.toc a.active{color:var(--green);font-weight:700}.note{background:var(--note);border-left:3px solid #91a879;padding:20px 24px;margin:25px 0}.note>strong{font-size:13px;color:#42643d}.note p{margin:8px 0 0;font-size:14px}.cards{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}.card{display:block;padding:24px;border:1px solid var(--line);border-radius:8px;background:white;text-decoration:none;color:var(--ink);transition:background .15s,border-color .15s}.card:hover{background:#f7f9f8;border-color:#a2b394}.card-kicker{font-size:10px;color:var(--muted);letter-spacing:.12em}.card h3{font-size:17px;margin:11px 0}.card h3 span{float:right;font-weight:400;color:var(--green)}.card p{font-size:13px;line-height:1.85;color:var(--muted);margin:0}.equation{background:var(--panel);border:1px solid var(--line);padding:22px 24px;overflow:auto;font-size:17px;border-radius:5px;white-space:normal}.table-scroll{max-width:100%;overflow:auto;margin:25px 0}table{width:100%;border-collapse:collapse;text-align:left;font-size:13px;line-height:1.9}th{background:var(--th);color:var(--th-ink);font-weight:650}td,th{padding:14px 16px;vertical-align:top;border-bottom:1px solid var(--line)}th:first-child,td:first-child{min-width:125px}td:first-child{font-weight:600}figure{margin:28px 0;border:1px solid var(--line);border-radius:8px;background:#fff;overflow:hidden}.figure-scroll{padding:18px 12px 4px;overflow:auto}figure svg{display:block;width:100%;height:auto;min-width:560px}figcaption{font-size:12px;line-height:1.85;color:var(--muted);padding:15px 20px;background:#fafbfa;border-top:1px solid var(--line)}figure img{display:block;max-width:100%;height:auto;margin:auto;padding:12px}.compare{display:grid;grid-template-columns:1fr 1fr;gap:15px}.compare figure{margin:0}.references{font-size:13px}.pager{border-top:1px solid var(--line);padding-top:26px;display:flex;justify-content:space-between;gap:24px;margin-top:56px}.pager a{font-size:14px;text-decoration:none;line-height:1.8;max-width:48%}.pager small{display:block;color:var(--muted);font-size:10px;letter-spacing:.09em}.footer{font-size:11px;color:var(--muted);line-height:1.9;padding-top:30px}.demo{margin:26px 0;padding:22px;background:#fafbfa;border:1px solid var(--line);border-radius:8px}.demo label{font-size:13px;display:inline-flex;align-items:center;gap:12px;flex-wrap:wrap}.demo input[type=range]{accent-color:var(--green);max-width:100%}.demo output{font-variant-numeric:tabular-nums}.demo button,.demo select{border:1px solid #b8c6af;background:white;color:var(--green);padding:8px 14px;border-radius:5px;margin:5px 4px 5px 0}.demo button[aria-pressed=true]{background:var(--green);color:white}.demo .result{font-size:14px;line-height:1.9}.matrix{display:grid;gap:5px;width:max-content;margin:20px 0}.cell{width:42px;height:42px;display:grid;place-items:center;background:white;border:1px solid #d8e0cf;font-variant-numeric:tabular-nums}.cell.selected{background:#c9debe;border-color:#5a8053}.cell.masked{background:#e8e9e5;color:#727a6f}.scene-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}.scene-grid figure{margin:0}.scene-grid img{width:100%;padding:0}.scene-grid svg{min-width:0}.stat-row{display:flex;gap:26px;padding:18px 0;color:var(--muted);font-size:12px}.stat-row strong{color:var(--ink);font-size:23px;font-weight:500;display:block}.mobile-menu{display:none}.sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0)}audio{max-width:100%;display:block;margin:15px 0}.paper-label{display:inline-block;font-size:10px;letter-spacing:.08em;color:#855329;background:#f6ebde;padding:4px 9px;border-radius:3px}.full-width{grid-column:1/-1}
 @media(min-width:1600px){.layout{gap:52px}}@media(max-width:1200px){.layout{grid-template-columns:210px minmax(0,1fr);gap:35px}.toc{display:none}}@media(max-width:820px){.topbar{padding:0 18px}.brand span{display:none}.layout{display:block;padding:0 24px}.sidenav{display:none;position:fixed;top:64px;left:0;width:285px;z-index:4;background:var(--paper);padding:24px;border-right:1px solid var(--line);box-shadow:20px 0 30px #20372f22}.sidenav.open{display:block}.mobile-menu{display:inline-block}.article{padding-top:35px}.hero{margin-bottom:32px}.lead{font-size:15px}.article section{margin:40px 0}h2{font-size:23px}.cards{gap:12px}.card{padding:19px}}@media(max-width:520px){.layout{padding:0 19px}.cards,.compare,.scene-grid{grid-template-columns:1fr}.card h3{font-size:18px}h1{font-size:31px}p,li{font-size:15px;line-height:1.95}.note{padding:16px 18px}.equation{font-size:17px;padding:18px}.demo{padding:16px}figcaption{padding:12px 15px}.stat-row{gap:22px}.scene-grid svg{min-width:0}}@media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important;transition:none!important}}@media print{.topbar,.sidenav,.toc,.pager,.demo button,.footer{display:none}.layout{display:block;padding:0}.article{max-width:none;padding:0}body{font-size:11pt;background:white}.hero{padding-bottom:10px}figure,table,.note{break-inside:avoid}figure svg{min-width:0}.article section{margin:24px 0}.cards{grid-template-columns:1fr 1fr}a{color:inherit}.equation{white-space:normal}}
 @media(max-width:820px){.figure-scroll:after{content:'図は横にスクロールできます →';display:block;font-size:10px;color:#718267;padding:8px 5px;position:sticky;left:0}figure svg{min-width:720px}.demo svg{min-width:0}}
@@ -158,7 +158,7 @@ main.article details details{background:var(--tint)}
 @media print { .ld-controls { display: none; } }
 
 /* Transformer: contextual representations across layers. */
-.tf-intro{padding:22px 24px 0}.tf-kicker{font-size:10px;letter-spacing:.16em;color:var(--muted)}.tf-intro p{font-size:23px;letter-spacing:.015em;line-height:1.5;margin:9px 0 19px;font-weight:600}.tf-controls{padding:0 24px 20px;border-bottom:1px solid var(--line);display:flex;flex-wrap:wrap;justify-content:space-between;gap:10px}.tf-steps,.tf-playback{display:flex;gap:5px}.tf-controls button{border:1px solid #b8c6af;background:white;color:var(--green);padding:7px 11px;border-radius:5px;font-size:12px}.tf-steps button[aria-pressed=true],.tf-play[aria-pressed=true]{background:var(--green);color:white}.tf-controls button:disabled{opacity:.35;cursor:default}.tf-stage{display:grid;grid-template-columns:minmax(0,1fr) 200px;align-items:center;padding:10px 20px 18px 4px;gap:6px}.tf-space svg{min-width:0;width:100%}.tf-token{transition:transform 1000ms cubic-bezier(.4,0,.2,1)}.tf-counter{font-size:10px;color:var(--green);letter-spacing:.13em;margin:0}.tf-stage-copy h3{font-size:18px;margin:8px 0 10px}.tf-stage-copy p.tf-stage-description{font-size:13px;line-height:1.9;min-height:125px;margin:0}.tf-cycle{margin-top:18px;padding:14px 12px;border-left:2px solid #b9cbae;background:#f5f7ef;font-size:12px;line-height:1.7;color:#4b674a}.tf-cycle span{color:#6f8762}.tf-static{display:grid;grid-template-columns:1fr 1fr;gap:22px;padding:24px}.tf-static>div{min-width:0}.tf-static svg{min-width:0}.tf-static p{font-size:12px;line-height:1.8}.tf-enhanced .tf-static{display:none}
+.tf-intro{padding:22px 24px 0}.tf-kicker{font-size:10px;letter-spacing:.16em;color:var(--muted)}.tf-intro p{font-size:23px;letter-spacing:.015em;line-height:1.5;margin:9px 0 19px;font-weight:600}.tf-controls{padding:0 24px 20px;border-bottom:1px solid var(--line);display:flex;flex-wrap:wrap;justify-content:space-between;gap:10px}.tf-steps,.tf-playback{display:flex;gap:5px}.tf-controls button{border:1px solid #b8c6af;background:white;color:var(--green);padding:7px 11px;border-radius:5px;font-size:12px}.tf-steps button[aria-pressed=true],.tf-play[aria-pressed=true]{background:var(--green);color:white}.tf-controls button:disabled{opacity:.35;cursor:default}.tf-stage{display:grid;grid-template-columns:minmax(0,1fr) 200px;align-items:center;padding:10px 20px 18px 4px;gap:6px}.tf-space svg{min-width:0;width:100%}.tf-token{transition:transform var(--tf-move,1.5s) cubic-bezier(.45,0,.25,1)}.tf-counter{font-size:10px;color:var(--green);letter-spacing:.13em;margin:0}.tf-stage-copy h3{font-size:18px;margin:8px 0 10px}.tf-stage-copy p.tf-stage-description{font-size:13px;line-height:1.9;min-height:125px;margin:0}.tf-cycle{margin-top:18px;padding:14px 12px;border-left:2px solid #b9cbae;background:#f5f7ef;font-size:12px;line-height:1.7;color:#4b674a}.tf-cycle span{color:#6f8762}.tf-static{display:grid;grid-template-columns:1fr 1fr;gap:22px;padding:24px}.tf-static>div{min-width:0}.tf-static svg{min-width:0}.tf-static p{font-size:12px;line-height:1.8}.tf-enhanced .tf-static{display:none}
 @media(max-width:600px){.tf-stage{grid-template-columns:1fr;padding:5px 15px 20px}.tf-stage-copy{border-top:1px solid var(--line);padding:16px 6px 0}.tf-stage-copy p.tf-stage-description{min-height:0}.tf-cycle{display:none}.tf-intro{padding:18px 18px 0}.tf-intro p{font-size:20px}.tf-controls{padding:0 18px 17px}.tf-controls button{padding:8px 10px}.tf-static{grid-template-columns:1fr}}
 @media(prefers-reduced-motion:reduce){.tf-token{transition:none}}
 @media print{.tf-live{display:none!important}.tf-enhanced .tf-static{display:grid}.tf-static{grid-template-columns:1fr 1fr}.tf-representation{break-inside:auto}.tf-static>div{break-inside:avoid}}
@@ -166,7 +166,7 @@ main.article details details{background:var(--tint)}
 
 .tf-steps{flex-wrap:wrap}.tf-sentence .tf-space ellipse,.tf-sentence .tf-token circle,.tf-sentence .tf-space svg>text{opacity:0}.tf-sentence .tf-token text{fill:#294337;stroke:none}.tf-space ellipse,.tf-token circle{transition:opacity .5s}
 
-.tf-halo{display:none}.tf-final-layer .tf-token.tf-last .tf-halo{display:block}.tf-final-layer .tf-token:not(.tf-last){opacity:.4}.tf-token{transition:transform 1000ms cubic-bezier(.4,0,.2,1),opacity .5s}.tf-ellipsis{align-self:center;padding:0 3px}.tf-output svg{width:100%;min-width:0}.tf-space[hidden],.tf-output[hidden]{display:none!important}
+.tf-halo{display:none}.tf-final-layer .tf-token.tf-last .tf-halo{display:block}.tf-final-layer .tf-token:not(.tf-last){opacity:.4}.tf-token{transition:transform var(--tf-move,1.5s) cubic-bezier(.45,0,.25,1),opacity .5s}.tf-ellipsis{align-self:center;padding:0 3px}.tf-output svg{width:100%;min-width:0}.tf-space[hidden],.tf-output[hidden]{display:none!important}
 
 /* Keep teaching diagrams at a readable scale even on very wide screens. */
 body[data-page="llm"] .figure-scroll>svg{display:block;width:100%;max-width:760px;max-height:560px;min-width:0;margin:auto}
@@ -185,7 +185,6 @@ body[data-page="llm"] #attention .figure-scroll>svg{max-width:540px;max-height:3
 @media(max-width:600px){.tf-stage{grid-template-columns:1fr}.tf-stage-copy{padding-top:10px}}
 @media(prefers-reduced-motion:reduce){.tf-token,.tf-vector-shape,.tf-numbers,.tf-word,.tf-output-chain{transition:none}}
 
-.tf-numeric .tf-token{transition:transform .35s ease}.tf-numeric .tf-column{transition:opacity .35s .25s}
 @media(prefers-reduced-motion:reduce){.tf-numeric .tf-token,.tf-numeric .tf-numbers{transition:none}}
 
 .tf-column{opacity:0;transition:opacity .35s}.tf-sentence .tf-column text{fill:inherit}
@@ -194,18 +193,65 @@ body[data-page="llm"] #attention .figure-scroll>svg{max-width:540px;max-height:3
 .tf-cycle{text-align:center}.tf-cycle>span{display:block;line-height:1;padding:8px 0;font-size:18px}.tf-cycle>div{color:#4b674a}
 
 
-.tf-pe{opacity:0;transform:translateY(130px);transition:transform .65s ease,opacity .4s;pointer-events:none}
+.tf-pe{opacity:0;transform:translateY(130px);transition:transform .7s ease,opacity .5s;pointer-events:none}
 .tf-pe-visible .tf-pe{opacity:1;transform:translateY(105px)}
 .tf-pe-plus{opacity:0;transition:opacity .15s;pointer-events:none}
 .tf-pe-visible .tf-pe-plus{opacity:1}
 .tf-pe-merge .tf-pe-plus{opacity:0}
-.tf-pe-merge .tf-pe{transform:translateY(0);opacity:0;transition:transform .65s ease .15s,opacity .65s ease .15s}
+.tf-pe-merge .tf-pe{transform:translateY(0);opacity:0;transition:transform .7s ease .15s,opacity .7s ease .15s}
 .tf-position-added .tf-pe{opacity:0;transition:none}
 .tf-vector-label{opacity:0;fill:#657568;font:14px system-ui,sans-serif;transition:opacity .3s}
 .tf-numeric .tf-vector-label{opacity:1!important}
 .tf-position-added.tf-numeric .tf-column{filter:drop-shadow(0 0 3px #91a87988)}
 @media(prefers-reduced-motion:reduce){.tf-pe,.tf-pe-plus,.tf-vector-label{transition:none}}
-.tf-stage{grid-template-columns:minmax(0,520px);padding:10px 12px 18px}.tf-negation{width:100%}.tf-input{overflow-wrap:anywhere}.tf-case-controls{display:flex;gap:6px}.tf-case-controls [aria-pressed=true]{background:#35664d;color:white}.tf-controls{padding-top:20px}.tf-pe text{fill:currentColor}
+.tf-stage{grid-template-columns:minmax(0,1fr);padding:10px 12px 18px}.tf-space svg{display:block;margin:auto}.tf-input{width:100%;overflow-wrap:anywhere}.tf-controls{padding-top:20px}.tf-pe text{fill:currentColor}
+
+/* Finish becoming a dot before starting the spatial movement. */
+.tf-dot-forming.tf-numeric .tf-column{opacity:0;transform:scale(.08);transform-origin:0 0;transition:transform .8s ease,opacity .7s ease}
+.tf-dot-forming.tf-numeric .tf-vector-shape{opacity:1;transition:opacity .8s ease}
+.tf-dot-forming .tf-word,.tf-dot-hold .tf-word{opacity:0}
+.tf-space-moving .tf-token{transition:transform var(--tf-move,1.5s) cubic-bezier(.45,0,.25,1),opacity .5s}
+@media(prefers-reduced-motion:reduce){.tf-dot-forming.tf-numeric .tf-column,.tf-dot-forming.tf-numeric .tf-vector-shape,.tf-space-moving .tf-token{transition:none}}
+
+.tf-vector-word{opacity:0;transition:opacity .4s;pointer-events:none}
+.tf-numeric .tf-vector-word,.tf-dot-hold .tf-vector-word{opacity:1}
+.tf-output-moving .tf-output-chain{opacity:1}
+.tf-linear,.tf-scores,.tf-softmax,.tf-probabilities{opacity:0;transition:opacity .7s ease}
+.tf-output-linear .tf-linear,.tf-output-scores .tf-scores,.tf-output-softmax .tf-softmax,.tf-output-ready .tf-probabilities{opacity:1}
+.tf-probabilities rect{transform:scaleX(0);transform-box:fill-box;transform-origin:left;transition:transform 1.1s ease}
+.tf-output-ready .tf-probabilities rect{transform:scaleX(1)}
+@media(prefers-reduced-motion:reduce){.tf-vector-word,.tf-linear,.tf-scores,.tf-softmax,.tf-probabilities,.tf-probabilities rect{transition:none}}
+
+/* One label survives every representation change, anchored to the same column. */
+.tf-word{opacity:1!important;font-weight:700;transform:translateY(0);transition:transform .7s ease,fill .7s ease}
+.tf-sentence .tf-word{transform:translateY(22px);fill:#294337}
+.tf-numeric .tf-word,.tf-dot-hold .tf-word{transform:translateY(-25px)}
+.tf-numeric .tf-column{transition:opacity .5s .4s}
+.tf-dot-forming.tf-numeric .tf-column{transition:transform .8s ease,opacity .7s ease}
+.tf-dot-hold .tf-space ellipse{opacity:0}
+.tf-final-layer .tf-last .tf-word{transform:translateY(-23px)}
+.tf-output-morph .tf-token.tf-last .tf-word{transform:translateY(-18px)}
+.tf-candidate rect{transition:width 1.2s cubic-bezier(.4,0,.2,1)}
+@media(prefers-reduced-motion:reduce){.tf-word,.tf-numeric .tf-column,.tf-candidate rect{transition:none}}
+/* Leaving a phase hides it immediately, including rapid replay/navigation. */
+.tf-linear,.tf-scores,.tf-softmax{transition:none}
+.tf-output-linear .tf-linear,.tf-output-scores .tf-scores,.tf-output-softmax .tf-softmax{transition:opacity .7s ease}
+@media(prefers-reduced-motion:reduce){.tf-linear,.tf-scores,.tf-softmax{transition:none!important}}
+
+.tf-initializing *{transition:none!important}
+.tf-sentence .tf-space ellipse{transition:none}
+
+/* The ellipse appears only once the dots are well inside it, so the one-line sentence never crosses its edge. */
+.tf-leaving-space .tf-space ellipse{opacity:0;transition:none}
+.tf-space-moving .tf-space ellipse{transition:opacity .6s ease calc(var(--tf-move,1.5s)*.55)}
+@media(prefers-reduced-motion:reduce){.tf-space-moving .tf-space ellipse{transition:none}}
+
+/* Keep the space title in step with the ellipse. */
+.tf-space-title{fill:#4b674a;font:600 16px system-ui,sans-serif;transition:opacity .5s}
+.tf-dot-hold .tf-space-title,.tf-leaving-space .tf-space-title{opacity:0}
+.tf-sentence .tf-space-title,.tf-leaving-space .tf-space-title{transition:none}
+.tf-space-moving .tf-space-title{transition:opacity .6s ease calc(var(--tf-move,1.5s)*.55)}
+@media(prefers-reduced-motion:reduce){.tf-space-title,.tf-space-moving .tf-space-title{transition:none}}
 
 /* Only the surrounding page is sized for standalone viewing. */
 main.article{margin:auto;padding:24px;max-width:948px}
@@ -232,7 +278,7 @@ END EDITABLE DIAGRAM DATA -->
     ],
     "positionEncoding": {
       "type": "sinusoidal",
-      "label": "Positional Encoding (sin/cos)"
+      "label": "位置エンコーディング（sin/cos）"
     },
     "extraction": {},
     "projection": {
@@ -254,8 +300,8 @@ END EDITABLE DIAGRAM DATA -->
             0.2345678
           ],
           "position": [
-            0.0,
-            1.0
+            0,
+            1
           ],
           "input": [
             0.1234567,
@@ -277,8 +323,8 @@ END EDITABLE DIAGRAM DATA -->
           },
           "points": {
             "0": [
-              0.12,
-              0.18
+              0.18,
+              0.22
             ],
             "1": [
               0.155,
@@ -325,8 +371,8 @@ END EDITABLE DIAGRAM DATA -->
           },
           "points": {
             "0": [
-              0.33999999999999997,
-              0.18
+              0.7,
+              0.33
             ],
             "1": [
               0.375,
@@ -373,8 +419,8 @@ END EDITABLE DIAGRAM DATA -->
           },
           "points": {
             "0": [
-              0.56,
-              0.18
+              0.42,
+              0.78
             ],
             "1": [
               0.5950000000000001,
@@ -421,8 +467,8 @@ END EDITABLE DIAGRAM DATA -->
           },
           "points": {
             "0": [
-              0.78,
-              0.18
+              0.72,
+              0.04
             ],
             "1": [
               0.8150000000000001,
@@ -436,7 +482,29 @@ END EDITABLE DIAGRAM DATA -->
               0.8150000000000001,
               0.404
             ]
-          }
+          },
+          "candidates": [
+            {
+              "tokenId": null,
+              "text": " is",
+              "probability": 0.64
+            },
+            {
+              "tokenId": null,
+              "text": " was",
+              "probability": 0.09
+            },
+            {
+              "tokenId": null,
+              "text": "'s",
+              "probability": 0.07
+            },
+            {
+              "tokenId": null,
+              "text": "その他",
+              "probability": 0.2
+            }
+          ]
         },
         {
           "id": null,
@@ -469,8 +537,8 @@ END EDITABLE DIAGRAM DATA -->
           },
           "points": {
             "0": [
-              0.12,
-              0.5800000000000001
+              0.3,
+              0.57
             ],
             "1": [
               0.155,
@@ -594,8 +662,8 @@ END EDITABLE DIAGRAM DATA -->
             0.2345678
           ],
           "position": [
-            0.0,
-            1.0
+            0,
+            1
           ],
           "input": [
             0.1234567,
@@ -617,8 +685,8 @@ END EDITABLE DIAGRAM DATA -->
           },
           "points": {
             "0": [
-              0.12,
-              0.18
+              0.18,
+              0.22
             ],
             "1": [
               0.155,
@@ -665,8 +733,8 @@ END EDITABLE DIAGRAM DATA -->
           },
           "points": {
             "0": [
-              0.33999999999999997,
-              0.18
+              0.7,
+              0.33
             ],
             "1": [
               0.375,
@@ -713,8 +781,8 @@ END EDITABLE DIAGRAM DATA -->
           },
           "points": {
             "0": [
-              0.56,
-              0.18
+              0.42,
+              0.78
             ],
             "1": [
               0.5950000000000001,
@@ -761,8 +829,8 @@ END EDITABLE DIAGRAM DATA -->
           },
           "points": {
             "0": [
-              0.78,
-              0.18
+              0.72,
+              0.04
             ],
             "1": [
               0.8150000000000001,
@@ -776,7 +844,29 @@ END EDITABLE DIAGRAM DATA -->
               0.8150000000000001,
               0.404
             ]
-          }
+          },
+          "candidates": [
+            {
+              "tokenId": null,
+              "text": " is",
+              "probability": 0.64
+            },
+            {
+              "tokenId": null,
+              "text": " was",
+              "probability": 0.09
+            },
+            {
+              "tokenId": null,
+              "text": "'s",
+              "probability": 0.07
+            },
+            {
+              "tokenId": null,
+              "text": "その他",
+              "probability": 0.2
+            }
+          ]
         },
         {
           "id": null,
@@ -809,8 +899,8 @@ END EDITABLE DIAGRAM DATA -->
           },
           "points": {
             "0": [
-              0.12,
-              0.5800000000000001
+              0.3,
+              0.57
             ],
             "1": [
               0.155,
@@ -857,8 +947,8 @@ END EDITABLE DIAGRAM DATA -->
           },
           "points": {
             "0": [
-              0.33999999999999997,
-              0.5800000000000001
+              0.77,
+              0.7
             ],
             "1": [
               0.375,
@@ -973,52 +1063,64 @@ END EDITABLE DIAGRAM DATA -->
   "ngram": {
     "status": "illustrative",
     "source": null,
+    "features": {
+      "positive": [0.85, 0.3, 0.62, 0.15, 0.72],
+      "negative": [0.22, 0.78, 0.4, 0.9, 0.34]
+    },
     "contexts": [
-      "France is",
-      "capital of France is",
-      "France is not"
+      "I live in",
+      "I like",
+      "I eat"
     ],
     "words": [
-      "Paris",
-      "London",
-      "Berlin",
+      "Tokyo",
+      "Kyoto",
+      "Osaka",
+      "sushi",
+      "pizza",
       "その他"
     ],
     "probabilities": [
       [
-        0.78,
-        0.06,
-        0.04,
-        0.12
-      ],
-      [
-        0.85,
-        0.04,
-        0.03,
-        0.08
-      ],
-      [
-        0.12,
         0.4,
-        0.28,
+        0.25,
+        0.2,
+        0.01,
+        0.01,
+        0.13
+      ],
+      [
+        0.1,
+        0.08,
+        0.07,
+        0.3,
+        0.25,
         0.2
+      ],
+      [
+        0.01,
+        0.01,
+        0.01,
+        0.45,
+        0.37,
+        0.15
       ]
     ],
     "matrix": {
       "status": "illustrative",
       "words": [
-        "Paris",
-        "London",
-        "Berlin",
-        "Rome",
-        "Madrid"
+        "water",
+        "soup",
+        "dough",
+        "metal",
+        "paper"
       ],
       "contexts": [
-        "is",
-        "France is",
-        "of France is",
-        "capital of France is",
-        "France is not"
+        "I pour the",
+        "I spill the",
+        "I heat the",
+        "I cut the",
+        "I fold the"
       ],
       "values": [
         [
@@ -1037,9 +1139,9 @@ END EDITABLE DIAGRAM DATA -->
         ],
         [
           3.2,
-          3.0,
+          3,
           3.4,
-          4.0,
+          4,
           3.7
         ],
         [
@@ -1052,7 +1154,7 @@ END EDITABLE DIAGRAM DATA -->
         [
           0.1,
           0.3,
-          1.0,
+          1,
           4.8,
           4.7
         ]
@@ -1093,11 +1195,10 @@ END EDITABLE DIAGRAM DATA -->
 </script>
 <figure class="tf-representation" data-transformer-layers>
  <div class="tf-live" hidden>
-  <div class="tf-controls"><div class="tf-negation"><div role="group" aria-label="notの有無" class="tf-case-controls"></div><p class="tf-input" aria-live="polite"></p></div><div class="tf-steps" role="group" aria-label="表示する層"></div></div>
-  <div class="tf-stage"><div class="tf-space"><svg role="img" viewBox="0 0 520 430" xmlns="http://www.w3.org/2000/svg"><ellipse cx="245" cy="200" rx="220" ry="165" fill="#f7f9f4" stroke="#d9e2d3"/><g class="tf-tokens"></g><g class="tf-output-chain"></g><text class="tf-vector-label" x="260" y="35" text-anchor="middle"></text></svg></div></div>
+  <div class="tf-controls"><div class="tf-steps" role="group" aria-label="表示する層"></div></div>
+  <div class="tf-stage"><div class="tf-space"><svg role="img" viewBox="0 0 520 430" xmlns="http://www.w3.org/2000/svg"><ellipse cx="260" cy="220" rx="250" ry="195" fill="#f7f9f4" stroke="#d9e2d3"/><text class="tf-space-title" x="260" y="16" text-anchor="middle"></text><g class="tf-tokens"></g><g class="tf-output-chain"></g><text class="tf-vector-label" x="260" y="35" text-anchor="middle"></text></svg></div></div>
  </div>
  <div class="tf-static"><p>文章をトークンに分け、埋め込みから各層の表現、次トークンの確率へ進みます。数値と操作を表示するにはJavaScriptを有効にしてください。</p></div>
- <figcaption></figcaption>
 </figure>
 </main><script>/* Shared reader is embedded in every standalone HTML; no fetch or external assets. */
 'use strict';
@@ -1136,6 +1237,14 @@ END EDITABLE DIAGRAM DATA -->
  for(const c of data.cases){
   if(typeof c.prompt!=='string'||typeof c.label!=='string'||!Array.isArray(c.continuation))fail('入力文・ラベル・continuationを確認してください');
   if(!c.tokens?.length)fail('tokensが空です');c.tokens.forEach(checkToken);checkCandidates(c.candidates,c.selectedIndex);
+  // Optional: candidates predicted at an earlier prompt position must contain the actual next input token.
+  c.tokens.forEach((t,i)=>{
+   if(t.candidates===undefined)return;
+   const next=c.tokens[i+1];if(!next)fail('最後の入力トークンの候補はcase.candidatesに書いてください');
+   const index=Array.isArray(t.candidates)?t.candidates.findIndex(v=>v.text===next.text):-1;
+   checkCandidates(t.candidates,index);
+   if(model.status==='measured'&&t.candidates[index].tokenId!==next.id)fail('途中位置の候補に次の入力トークンのtokenIdが必要です');
+  });
   let selected=c.candidates[c.selectedIndex];
   for(const s of c.continuation){checkToken(s.token);if(s.token.text!==selected.text||s.token.id!==selected.tokenId)fail('続きのトークンが直前の選択と一致しません');checkCandidates(s.candidates,s.selectedIndex);selected=s.candidates[s.selectedIndex];}
  }
@@ -1143,6 +1252,8 @@ END EDITABLE DIAGRAM DATA -->
  if(!['illustrative','measured'].includes(ng.status)||(ng.status==='measured'&&!ng.source))fail('N-gram実測の出典が必要です');
  if(m.status!=='illustrative')fail('並べ替え表は説明用スコアとして保持してください');
  if(ng.probabilities.length!==ng.contexts.length)fail('N-gramの列数が一致しません');
+ // Squares on the last word's card in the Transformer scene; one short list per case, each value in −1〜1.
+ for(const c of data.cases){const f=ng.features?.[c.key];if(!Array.isArray(f)||f.length<1||f.length>12||!f.every(n=>finite(n)&&n>=-1&&n<=1))fail('ngram.featuresは各条件に1〜12個、−1〜1の数値です');}
  ng.probabilities.forEach(v=>{vector(v,ng.words.length,'N-gram');if(v.some(n=>n<0||n>1)||Math.abs(v.reduce((a,b)=>a+b,0)-1)>1e-6)fail('N-gramの確率を確認してください');});
  if(m.values.length!==m.words.length)fail('スコア表の行数が一致しません');m.values.forEach(v=>vector(v,m.contexts.length,'スコア表'));
  const permutation=(v,n)=>Array.isArray(v)&&v.length===n&&new Set(v).size===n&&v.every(i=>Number.isInteger(i)&&i>=0&&i<n);
@@ -1158,34 +1269,64 @@ END EDITABLE DIAGRAM DATA -->
  const percent=p=>format(p*100)+'%';
  const vec=v=>'['+v.slice(0,2).map(format).join(', ')+', …]';
  const steps=c=>[{tokens:c.tokens,candidates:c.candidates,selectedIndex:c.selectedIndex},...c.continuation.map((s,i)=>({tokens:[...c.tokens,...c.continuation.slice(0,i+1).map(x=>x.token)],candidates:s.candidates,selectedIndex:s.selectedIndex}))];
- const note=()=> (model.status==='measured'?`モデル：${model.id}。ベクトル・確率は実測値。`:'ベクトル・確率は説明用の仮置き値で、実モデルの計算結果ではありません。')+' '+(model.projection.status==='measured'?`配置：${model.projection.method}。`:'点の座標・軌跡は説明用の配置です。')+' 表示する数値は小数3桁で切り捨てています。';
- window.Diagram={data,layers,additive,format,percent,esc,vec,steps,note};
+ window.Diagram={data,layers,additive,format,percent,esc,vec,steps};
 })();
 
 'use strict';
 (() => {
- const {data,layers,additive,format,percent,esc,vec,note}=window.Diagram;
+ const {data,layers,additive,format,percent,esc,vec}=window.Diagram;
  const d=document.querySelector('.tf-representation'),q=s=>d.querySelector(s),qa=s=>[...d.querySelectorAll(s)];
  const reduced=matchMedia('(prefers-reduced-motion: reduce)');
- let caseIndex=0,current=0,timers=[],clearMerge=null;
+ let current=0,timers=[],clearMerge=null;
+ // One tempo for every spatial move, with a brief pause after dots form.
+ const MOVE=1200,BEAT=900,DOT_HOLD=300;d.style.setProperty('--tf-move',MOVE+'ms');
  const outputStage=layers.length+2,finalStage=outputStage-1;
- const stages=['文章','ベクトル化（埋め込み）',...layers.map(l=>`第${l}層`),'出力'];
+ const layerLabel=layer=>layer===data.model.numLayers?'N':layer;
+ const stages=['文章','ベクトル化（埋め込み）',...layers.map(l=>`第${layerLabel(l)}層`),'出力'];
  const colors=['#487bb6','#725789','#198d98','#348761','#b2703c','#b34769'];
  const later=(fn,ms)=>timers.push(setTimeout(fn,ms));
- const c=()=>data.cases[caseIndex];
+ const c=()=>data.cases[0];
  const layerAt=stage=>stage<2?0:layers[Math.min(stage-2,layers.length-1)];
- const point=(t,stage,i)=>stage===0?[35+(i%5)*96,130+Math.floor(i/5)*125]:[50+t.points[layerAt(stage)][0]*390,75+t.points[layerAt(stage)][1]*260];
- const place=stage=>qa('.tf-token').forEach((el,i)=>{const [x,y]=point(c().tokens[i],stage,i);el.style.transform=`translate(${x}px,${y}px)`;});
- // Center each numerical row independently; reserve room below for position vectors.
- const vectorColumns=()=>Math.min(5,Math.ceil(c().tokens.length/Math.ceil(c().tokens.length/5)));
- const placeVectors=()=>{
-  const cols=vectorColumns(),gap=100;
-  qa('.tf-token').forEach((el,i)=>{
-   const row=Math.floor(i/cols),count=Math.min(cols,c().tokens.length-row*cols);
-   const x=260+(i%cols-(count-1)/2)*gap,y=120+row*220;
-   el.style.transform=`translate(${x}px,${y}px)`;
-  });
+ // The sentence stays on one line; the canvas widens around x=260 instead of wrapping.
+ const columnPoint=i=>[260+(i-(c().tokens.length-1)/2)*100,150];
+ const frame=height=>{
+  const width=Math.max(520,c().tokens.length*100+20),svg=q('.tf-space svg');
+  svg.setAttribute('viewBox',`${260-width/2} 0 ${width} ${height}`);svg.style.maxWidth=width+'px';
  };
+ // Map the square projection into a disk, leaving room for labels and the final halo.
+ const inSpace=([u,v],stage,i)=>{
+  const x=u*2-1,y=v*2-1;
+  let px=x*Math.sqrt(1-y*y/2),py=y*Math.sqrt(1-x*x/2);
+  if(stage>=2&&data.model.projection.status==='illustrative'){
+   // Deliberately distinct teaching layouts, never modify measured projections.
+   const angle=(stage-1)*1.05+(i%2?-.28:.28)*(stage-1);
+   const radius=Math.hypot(px,py),a=Math.atan2(py,px)+angle;
+   const spread=Math.min(.92,Math.max(.28,radius*(1+(i%3-1)*.2)));
+   px=Math.cos(a)*spread;py=Math.sin(a)*spread;
+  }
+  return [260+175*px,220+115*py];
+ };
+ const point=(t,stage,i)=>{
+  if(stage===0)return columnPoint(i);
+  const points=c().tokens.map((token,j)=>inSpace(token.points[layerAt(stage)],stage,j));
+  if(stage>=2&&data.model.projection.status==='illustrative'){
+   // Keep the teaching layout's words readable after the layer-specific change.
+   for(let pass=0;pass<20;pass++){
+    for(let a=0;a<points.length;a++)for(let b=a+1;b<points.length;b++){
+     const dx=points[b][0]-points[a][0],dy=points[b][1]-points[a][1],distance=Math.hypot(dx,dy)||.01;
+     if(distance<76){const push=(76-distance)/2;const ux=distance===.01?1:dx/distance,uy=dy/distance;
+      points[a][0]-=ux*push;points[a][1]-=uy*push;points[b][0]+=ux*push;points[b][1]+=uy*push;}
+    }
+    points.forEach(p=>{const r=Math.hypot((p[0]-260)/175,(p[1]-220)/115);if(r>1){p[0]=260+(p[0]-260)/r;p[1]=220+(p[1]-220)/r;}});
+   }
+  }
+  return points[i];
+ };
+ const place=stage=>qa('.tf-token').forEach((el,i)=>{
+  const [x,y]=point(c().tokens[i],stage,i);
+  el.style.transform=`translate(${x}px,${y}px)`;
+ });
+ const placeVectors=()=>qa('.tf-token').forEach((el,i)=>{const [x,y]=columnPoint(i);el.style.transform=`translate(${x}px,${y}px)`;});
  function values(added,stage=1){
   qa('.tf-token').forEach((el,i)=>{
    const t=c().tokens[i],v=stage>=2?t.layers[layerAt(stage)]:added?t.input:t.embedding;
@@ -1197,43 +1338,84 @@ END EDITABLE DIAGRAM DATA -->
  }
  function output(){
   const cs=c().candidates;
-  q('.tf-output-chain').innerHTML='<text x="260" y="130" text-anchor="middle" font-size="15">出力層 → softmax → 次トークンの確率</text>'+cs.map((v,i)=>`<text x="125" y="${178+i*35}" text-anchor="end" font-size="14">${esc(v.text)}</text><rect x="140" y="${164+i*35}" height="20" rx="4" width="${v.probability*235}" fill="#35664d"/><text x="385" y="${178+i*35}" font-size="13">${percent(v.probability)}</text>`).join('');
+  // Candidate data has probabilities, not logits. Reconstruct equivalent relative
+  // scores (up to a shared constant).
+  const logs=cs.map(v=>Math.log(Math.max(v.probability,1e-9))),base=Math.min(...logs)-.35;
+  const scores=logs.map(v=>v-base),max=Math.max(...scores);
+  q('.tf-output-chain').innerHTML=
+   '<g class="tf-linear"><path d="M260 98V124m-5 -7 5 7 5 -7" fill="none" stroke="#738679" stroke-width="2"/><rect x="155" y="132" width="210" height="38" rx="6" fill="#eef3f7" stroke="#9db7d3"/><text x="260" y="156" text-anchor="middle" font-size="15">出力層</text></g>'+
+   '<g class="tf-scores"><path d="M260 180V207m-5 -7 5 7 5 -7" fill="none" stroke="#738679" stroke-width="2"/><text class="tf-chart-title" x="260" y="235" text-anchor="middle" font-size="14">候補ごとのスコア</text>'+cs.map((v,i)=>`<g class="tf-candidate"><text x="120" y="${276+i*36}" text-anchor="end" font-size="14">${esc(v.text)}</text><rect x="135" y="${261+i*36}" height="21" rx="4" width="${scores[i]/max*225}" data-score-width="${scores[i]/max*225}" data-prob-width="${v.probability*225}" fill="#35664d"/><text class="tf-bar-value" x="378" y="${276+i*36}" data-score="${format(scores[i])}" font-size="13">${format(scores[i])}</text></g>`).join('')+'</g>';
+ }
+ function scaleOutput(probabilities){
+  qa('.tf-candidate').forEach((el,i)=>{
+   const bar=el.querySelector('rect'),label=el.querySelector('.tf-bar-value');
+   bar.setAttribute('width',probabilities?bar.dataset.probWidth:bar.dataset.scoreWidth);
+   label.textContent=probabilities?percent(c().candidates[i].probability):label.dataset.score;
+  });
+  q('.tf-chart-title').textContent=probabilities?'次トークンの確率':'候補ごとのスコア';
+ }
+ function formDots(){
+  // Collapse at the existing numerical positions, pause, then move through space.
+  d.classList.add('tf-dot-forming');q('.tf-vector-label').textContent='';
+  later(()=>{
+   d.classList.remove('tf-numeric','tf-pe-visible','tf-pe-merge','tf-dot-forming');
+   d.classList.add('tf-dot-hold');
+   later(()=>{
+    d.classList.remove('tf-dot-hold');d.classList.add('tf-space-moving');place(1);
+    later(()=>d.classList.remove('tf-space-moving'),MOVE+100);
+   },DOT_HOLD);
+  },800);
  }
  function show(stage){
   clearMerge?.();clearMerge=null;timers.forEach(clearTimeout);timers=[];
   const previous=current;current=stage;
-  d.classList.remove('tf-numeric','tf-output-morph','tf-output-ready','tf-output-moving','tf-pe-visible','tf-pe-merge','tf-position-added');
+  frame(stage===outputStage?280+c().candidates.length*36:430);
+  d.classList.remove('tf-numeric','tf-output-morph','tf-output-ready','tf-output-moving','tf-pe-visible','tf-pe-merge','tf-position-added','tf-dot-forming','tf-dot-hold','tf-space-moving','tf-output-linear','tf-output-scores','tf-output-softmax','tf-leaving-space');
+  scaleOutput(false);
   d.classList.toggle('tf-sentence',stage===0);d.classList.toggle('tf-final-layer',stage===finalStage);
   qa('[data-layer]').forEach(b=>b.setAttribute('aria-pressed',String(+b.dataset.layer===stage)));
   q('.tf-space svg').setAttribute('aria-label',`${c().prompt}：${stages[stage]}`);
-  q('.tf-vector-label').textContent=additive?'埋め込み':data.model.positionEncoding.label+'（埋め込みへの加算は表示しません）';
+  q('.tf-space-title').textContent=stage===1?'初期埋め込みの空間':stage>=2&&stage<=finalStage?`${layerLabel(layerAt(stage))}層の空間`:'';
+  q('.tf-vector-label').textContent=(additive?'埋め込み':data.model.positionEncoding.label+'（埋め込みへの加算は表示しません）');
   if(stage===1&&!reduced.matches){
-   placeVectors();d.classList.add('tf-numeric');values(false);
-   if(!additive){later(()=>{d.classList.remove('tf-numeric');place(1);},1800);return;}
-   later(()=>{d.classList.add('tf-pe-visible');q('.tf-vector-label').textContent='＋ '+data.model.positionEncoding.label;},1100);
-   later(()=>{
+   // Coming back from the space, return the dots to their columns before showing numbers.
+   const lead=previous>=2?MOVE:0,step=(fn,ms)=>later(fn,lead+ms);
+   if(lead)d.classList.add('tf-leaving-space');
+   placeVectors();values(false);
+   step(()=>d.classList.add('tf-numeric'),0);
+   if(!additive){step(formDots,1700);return;}
+   step(()=>{d.classList.add('tf-pe-visible');q('.tf-vector-label').textContent='＋ '+data.model.positionEncoding.label;},1700);
+   step(()=>{
     const moving=q('.tf-pe');
-    const merged=event=>{if(event.target!==moving||event.propertyName!=='transform')return;clearMerge?.();clearMerge=null;values(true);d.classList.add('tf-position-added');q('.tf-vector-label').textContent='埋め込み ＋ 位置ベクトル';later(()=>{d.classList.remove('tf-numeric','tf-pe-visible','tf-pe-merge');place(1);},650);};
+    const merged=event=>{if(event.target!==moving||event.propertyName!=='transform')return;clearMerge?.();clearMerge=null;values(true);d.classList.add('tf-position-added');q('.tf-vector-label').textContent='埋め込み ＋ 位置エンコーディング';later(formDots,BEAT);};
     moving.addEventListener('transitionend',merged);clearMerge=()=>moving.removeEventListener('transitionend',merged);d.classList.add('tf-pe-merge');
-   },2200);
+   },1700+BEAT+600);
   }else if(stage===outputStage){
    values(true,finalStage);if(previous!==finalStage)place(finalStage);d.classList.add('tf-output-moving');
    const morph=()=>{d.classList.add('tf-output-morph');q('.tf-last').style.transform='translate(260px,65px)';};
-   if(reduced.matches){morph();d.classList.add('tf-output-ready');}
-   else {later(morph,previous===finalStage?60:1000);later(()=>d.classList.add('tf-output-ready'),previous===finalStage?1200:2200);}
-  }else{place(stage);values(true,stage);if(stage===1)d.classList.add('tf-position-added');}
+   if(reduced.matches){morph();d.classList.add('tf-output-linear','tf-output-scores','tf-output-softmax','tf-output-ready');scaleOutput(true);}
+   else {
+    const delay=previous===finalStage?60:MOVE,arrive=delay+MOVE;
+    later(morph,delay);
+    later(()=>d.classList.add('tf-output-linear'),arrive);
+    later(()=>d.classList.add('tf-output-scores'),arrive+BEAT);
+    later(()=>{d.classList.add('tf-output-softmax');q('.tf-chart-title').textContent='softmax でスコアを確率に変換';},arrive+BEAT*2);
+    later(()=>{d.classList.add('tf-output-ready');scaleOutput(true);},arrive+BEAT*3);
+   }
+  }else{
+   if(stage>=2&&previous<=1&&!reduced.matches){d.classList.add('tf-space-moving');later(()=>d.classList.remove('tf-space-moving'),MOVE+100);}
+   place(stage);values(true,stage);if(stage===1)d.classList.add('tf-position-added');}
  }
  function buildTokens(){
-  q('.tf-input').textContent=c().prompt;
+  d.classList.add('tf-initializing');
   const column=cls=>`<g class="${cls}"><path d="M-37 -28H-42V32H-37M37 -28H42V32H37" fill="none" stroke="currentColor"/><text font-family="monospace" font-size="12" text-anchor="middle"><tspan x="0" y="-10"></tspan><tspan x="0" y="9"></tspan><tspan x="0" y="27">⋮</tspan></text></g>`;
-  q('.tf-tokens').innerHTML=c().tokens.map((t,i)=>`<g class="tf-token ${i===c().tokens.length-1?'tf-last':''}" data-word="${esc(t.text)}" style="color:${colors[i%colors.length]};fill:${colors[i%colors.length]}"><circle class="tf-halo" fill="none" r="22" stroke="#ba7147" stroke-width="3"/><rect class="tf-vector-shape" x="-8" y="-8" width="16" height="16" rx="8"/><text class="tf-word" x="12" y="5" font-size="16">${esc(t.text)}</text><text class="tf-numbers" text-anchor="middle" font-size="12" y="5"></text>${column('tf-column')}${column('tf-pe')}<text class="tf-pe-plus" x="0" y="60" text-anchor="middle" fill="#725789">＋</text></g>`).join('');
+  q('.tf-tokens').innerHTML=c().tokens.map((t,i)=>`<g class="tf-token ${i===c().tokens.length-1?'tf-last':''}" data-word="${esc(t.text)}" style="color:${colors[i%colors.length]};fill:${colors[i%colors.length]}"><circle class="tf-halo" fill="none" r="31" stroke="#ba7147" stroke-width="3"/><rect class="tf-vector-shape" x="-8" y="-8" width="16" height="16" rx="8"/><text class="tf-word" x="0" y="-22" text-anchor="middle" font-size="16">${esc(t.text)}</text><text class="tf-numbers" text-anchor="middle" font-size="12" y="5"></text>${column('tf-column')}${column('tf-pe')}<text class="tf-pe-plus" x="0" y="60" text-anchor="middle" fill="#725789">＋</text></g>`).join('');
   // Grow the SVG for token rows and candidate rows; do not assume a tokenizer's length.
-  q('.tf-space svg').setAttribute('viewBox',`0 0 520 ${Math.max(430,210+c().candidates.length*35,300+Math.floor((c().tokens.length-1)/vectorColumns())*220)}`);
   output();show(current);
+  // Commit new token positions before enabling transitions, including case switches.
+  void d.offsetWidth;d.classList.remove('tf-initializing');
  }
  stages.forEach((label,i)=>{if(i>=3&&i<outputStage&&layers[i-2]>layers[i-3]+1){const gap=document.createElement('span');gap.className='tf-ellipsis';gap.textContent='…';gap.title='中間の層を省略';q('.tf-steps').append(gap);}const b=document.createElement('button');b.type='button';b.dataset.layer=i;b.textContent=label;b.addEventListener('click',()=>show(i));q('.tf-steps').append(b);});
- data.cases.forEach((item,i)=>{const b=document.createElement('button');b.type='button';b.dataset.negation=i===0?'off':'on';b.textContent=item.label;b.setAttribute('aria-pressed',String(i===caseIndex));b.addEventListener('click',()=>{caseIndex=i;qa('[data-negation]').forEach((el,j)=>el.setAttribute('aria-pressed',String(i===j)));buildTokens();});q('.tf-case-controls').append(b);});
- q('figcaption').textContent=note()+` 表示する成分：${data.model.componentIndices.slice(0,2).join('・')}（0始まり）。位置情報：${data.model.positionEncoding.label}。中間の層は省略しています。`;
  reduced.addEventListener('change',()=>show(current));q('.tf-live').hidden=false;d.classList.add('tf-enhanced');buildTokens();
 })();
 </script></body></html>

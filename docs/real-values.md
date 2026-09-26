@@ -49,6 +49,7 @@ npm test
 | `case.tokens` | 入力トークン列。BOS等を含めた実際のモデル入力順 |
 | `case.candidates` | 次トークンの候補と確率 |
 | `case.selectedIndex` | 記録された選択の候補配列内の添字。最有力候補とは別の情報 |
+| `case.tokens[i].candidates` | 任意。入力途中の位置iから予測した次トークンの候補と確率。候補に次の入力トークン（i+1）を必ず含める。デコーダー図は、これがある最初の位置まで一括計算し、以降を1トークンずつ計算する。現在は `France` の位置に説明用の値がある |
 | `case.continuation` | 最初の選択後の記録。最低1件を推奨。各要素は `{token, candidates, selectedIndex}`。tokenは直前の選択と一致させる |
 
 `token` は次の形です。
@@ -87,6 +88,7 @@ npm test
 ## N-gramと並べ替えの表
 
 - `ngram.probabilities` は文脈ごとの列、列の中は `ngram.words` の順。確率は0〜1。N-gramの出現頻度を実測したい場合は別途コーパスとカウントが必要です。LLMのsoftmax確率で代用してmeasuredにしてはいけません。
+- `ngram.features` は、N-gram図の最後の場面で最後の単語の表現として並べる四角の濃さです。`positive`・`negative` の条件ごとに1〜12個、−1〜1の説明用の値です。
 - `ngram.matrix.values` は行が単語、列が文脈の**説明用スコア**です。LLMの内部行列でも学習済み重みでもありません。これはillustrativeのままにします。
 - `rowOrder` / `columnOrder` は初期配置、`rowSwap` / `columnSwap` は交換対象の元の添字、`hiddenCell` は隠すセルの `[行,列]`。説明文と正解表示はこれらから生成されます。
 - `range` は色を付けるスコア範囲。表の行列数は配列から決まります。
